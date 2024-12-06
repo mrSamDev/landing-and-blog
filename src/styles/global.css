@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-text-main: 0 71 71; /* #004747 */
+        --color-bg-main: 236 244 244; /* #ECF4F4 */
+        --color-bg-muted: 220 235 235; /* #DCEBEB */
+        --color-border-main: 0 128 128; /* #008080 */
+    }
+    html.dark {
+        --color-text-main: 236 244 244; /* #ECF4F4 */
+        --color-bg-main: 0 71 71; /* #004747 */
+        --color-bg-muted: 0 89 89; /* #005959 */
+        --color-border-main: 0 128 128; /* #008080 */
+    }
+}
