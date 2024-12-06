@@ -74,7 +74,7 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Code',
-            href: 'https://github.com/mrSamDev/sijo-sam-landing-page'
+            href: 'https://github.com/mrSamDev/landing-and-blog'
         }
     ],
     socialLinks: [
