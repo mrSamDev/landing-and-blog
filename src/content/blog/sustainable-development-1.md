@@ -1,33 +1,37 @@
 ---
-title: Understanding Minification Impact A Developer's Experiment
+title: Sustainable Web Development Series Part 1 - Measuring Minification Impact
 excerpt: A personal exploration into the real impact of JavaScript minification on web performance
 publishDate: 'Dec 9 2024'
 tags:
   - JavaScript
   - Programming
-  - Sustainable development
-  - Frontend development
+  - Sustainable Development
+  - Frontend Development
 seo:
   image:
-    src: '/js-symbols.jpg'
-    alt: JavaScript code on a computer screen
+    src: '/minifiedJS.png'
+    alt: Minified JavaScript code on a computer screen
 ---
 
-## TL;DR
+## TLDR
 
 - Tested minification impact on a React + Vite application
-- Achieved 79.4% total size reduction (JS: 44.6%, CSS: 99.8%)
-- Performance improved most significantly in worst-case scenarios (43.5% faster at 95th percentile)
-- Test case used artificially bloated CSS to demonstrate maximum potential impact
-- Tools used: Vite 5.0.0, React 18.2.0, esbuild for minification
+- Test 1 (CSS-heavy): 79.4% total size reduction, up to 43.5% performance improvement
+- Test 2 (random CSS): 44.2% total size reduction, 19-27% performance improvement
+- Tools used: Vite 6.0.1, React 18.3.1, esbuild for minification via vite
+- Code shown in examples optimized for article readability, [full code in repo](https://github.com/mrSamDev/minification-impact-on-react)
 
-## Disclaimer
+## Overview
 
-Before diving in: This was an afternoon project using an artificially constructed test case. I intentionally created a CSS-heavy application to demonstrate the maximum potential impact of minification. While the results are interesting, they likely won't match typical production applications. Consider this more of an exploration than a definitive guide.
+An afternoon experiment measuring the real-world impact of JavaScript and CSS minification on a React + Vite application, with surprising results about performance improvements and bundle size reduction.
 
-It started when I was diving into articles about sustainable web development practices. Minification kept coming up as one of the first recommended optimizations, something we all seem to just accept as a "must-do" for production. But I realized I'd never actually measured its impact myself.
+## Key Findings
 
-## Tools and Versions Used
+- Test 1 (CSS-heavy): 79.4% total size reduction, up to 43.5% performance improvement
+- Test 2 (random CSS): 44.2% total size reduction, 19-27% performance improvement
+- Tools used: Vite 6.0.1, React 18.3.1, esbuild for minification
+
+## Test Environment
 
 - Vite: 6.0.1
 - React: 18.3.1
@@ -36,88 +40,53 @@ It started when I was diving into articles about sustainable web development pra
 - MacBook Pro (16-inch, 2021) with M1 Pro chip and 16GB RAM
 - macOS Sonoma 14.5
 
-## How to Reproduce These Tests
+## Methodology
 
-1. Clone the test repository: `git clone https://github.com/yourusername/minification-test`
-2. Install dependencies: `pnpm install`
-3. Run the test suite: `npm run analysis`
-4. Results will be output to the nodejs console`
+### Test Setup
 
-## The Test Setup
+The experiment used a basic React + Vite application with two test scenarios:
 
-I used a basic React + Vite application as my test subject. The setup was pretty straightforward - I just toggled the minification settings in the Vite config to compare builds.
+1. CSS-Heavy Application: Intentionally bloated with duplicate styles and comments
+2. Randomly Generated CSS: Using a Node.js script to simulate real-world variability
 
-the testing script will be called 100 time for minfied and non minfied paths
+For the second test, I used a Node.js script to randomly generate the CSS, simulating the variability of real-world stylesheets:
 
-For testing, I put together a simple Puppeteer script:
+```javascript
+function generateRandomCSS(numRules = 50) {
+  let css = '';
+
+  for (let i = 0; i < numRules; i++) {
+    const selector = generateRandomSelector();
+    const numProperties = Math.floor(Math.random() * 5) + 1;
+
+    css += `${selector} {\n`;
+
+    for (let j = 0; j < numProperties; j++) {
+      const property = cssProperties[Math.floor(Math.random() * cssProperties.length)];
+      const value = randomValue(property);
+      css += `    ${property}: ${value};\n`;
+    }
+
+    css += '}\n\n';
+  }
+
+  return css;
+}
+```
+
+### Testing Process
 
 ```javascript
 const testConfig = {
-  iterations: 100, // Seemed like a reasonable number
-  concurrency: 10, // My laptop could handle this fine
+  iterations: 100,
+  concurrency: 10,
   waitConditions: ['networkidle0', 'domcontentloaded', 'load']
 };
 ```
 
-### Measurement Approach
+The testing script ran 100 times for both minified and non-minified builds, measuring load times and resource sizes.
 
-The testing setup was intentionally basic - just plain JavaScript and CSS with React. I modified the Vite config to toggle minification:
-
-```javascript
-// vite.config.js for unminified build
-export default defineConfig({
-  build: {
-    minify: false,
-    rollupOptions: {
-      output: {
-        manualChunks: null
-      }
-    }
-  }
-});
-
-// vite.config.js for minified build
-export default defineConfig({
-  build: {
-    minify: 'esbuild',
-    cssMinify: true,
-    rollupOptions: {
-      output: {
-        manualChunks: null
-      }
-    }
-  }
-});
-```
-
-## Results
-
-Here's what I found after comparing the builds:
-
-| Resource Type | Unminified | Minified  | Reduction | % Saved |
-| ------------- | ---------- | --------- | --------- | ------- |
-| JavaScript    | 458.43 KB  | 254.09 KB | 204.34 KB | 44.6%   |
-| CSS           | 788.13 KB  | 1.24 KB   | 786.89 KB | 99.8%   |
-| Other Assets  | 1.90 KB    | 1.74 KB   | 0.16 KB   | 8.4%    |
-| Total         | 1248.46 KB | 257.07 KB | 991.39 KB | 79.4%   |
-
-The CSS reduction seemed surprisingly high, so I double-checked those numbers several times. Turns out my unminified CSS had a lot of duplicate styles and comments that got stripped out.
-
-## Performance Impact
-
-The load time improvements were interesting:
-
-| Metric            | Unminified | Minified  | Improvement |
-| ----------------- | ---------- | --------- | ----------- |
-| Average Load Time | 4960.91ms  | 4424.99ms | 10.8%       |
-| Median Load Time  | 4988.50ms  | 4941.50ms | 0.9%        |
-| 95th Percentile   | 8994.00ms  | 5085.00ms | 43.5%       |
-
-The most noticeable improvement was in the 95th percentile - the "worst case" scenarios got much better with minification. The median improvement wasn't as dramatic as I expected, which made me wonder about other factors affecting load time.
-
-## The Testing Code
-
-Here's the core function I used to measure everything:
+### Measurement Implementation
 
 ```javascript
 async function makeRequest(url, page, index) {
@@ -128,7 +97,6 @@ async function makeRequest(url, page, index) {
     other: { size: 0, count: 0 }
   };
 
-  // Track all network responses
   page.on('response', async (response) => {
     const request = response.request();
     const type = request.resourceType();
@@ -151,19 +119,47 @@ async function makeRequest(url, page, index) {
 }
 ```
 
-## Environmental Considerations
+## Results
 
-While I can't make definitive claims about environmental impact without more rigorous study, the data reduction numbers got me thinking about the broader implications:
+### Test 1: CSS-Heavy Application
 
-- Less data transferred means less network infrastructure load
-- Reduced server load could mean lower power consumption
-- Faster load times might mean less client-side processing
+Resource size comparison:
 
-These are just theoretical benefits though - I'd love to see someone do a proper study on the environmental impact of frontend optimizations.
+| Resource Type | Unminified | Minified  | Reduction | % Saved |
+| ------------- | ---------- | --------- | --------- | ------- |
+| JavaScript    | 458.43 KB  | 254.09 KB | 204.34 KB | 44.6%   |
+| CSS           | 788.13 KB  | 1.24 KB   | 786.89 KB | 99.8%   |
+| Other Assets  | 1.90 KB    | 1.74 KB   | 0.16 KB   | 8.4%    |
+| Total         | 1248.46 KB | 257.07 KB | 991.39 KB | 79.4%   |
 
-## What I'm Using Now
+Performance metrics:
 
-Based on these findings, here's the build configuration I settled on:
+| Metric            | Unminified | Minified  | Improvement |
+| ----------------- | ---------- | --------- | ----------- |
+| Average Load Time | 4960.91ms  | 4424.99ms | 10.8%       |
+| Median Load Time  | 4988.50ms  | 4941.50ms | 0.9%        |
+| 95th Percentile   | 8994.00ms  | 5085.00ms | 43.5%       |
+
+### Test 2: Random CSS
+
+Resource size comparison:
+
+| Resource Type | Unminified | Minified  | Reduction | % Saved |
+| ------------- | ---------- | --------- | --------- | ------- |
+| JavaScript    | 458.43 KB  | 254.09 KB | 204.34 KB | 44.6%   |
+| CSS           | 3.36 KB    | 2.5 KB    | 0.86 KB   | 25.6%   |
+| Other Assets  | 1.70 KB    | 1.65 KB   | 0.05 KB   | 2.9%    |
+| Total         | 463.49 KB  | 258.24 KB | 205.25 KB | 44.2%   |
+
+Performance metrics:
+
+| Metric            | Unminified | Minified  | Improvement |
+| ----------------- | ---------- | --------- | ----------- |
+| Average Load Time | 3487.50ms  | 4325.90ms | 19.4%       |
+| Median Load Time  | 3749.50ms  | 5085.50ms | 26.3%       |
+| 95th Percentile   | 3754.00ms  | 5128.00ms | 26.8%       |
+
+## Recommended Configuration
 
 ```javascript
 // vite.config.js
@@ -182,7 +178,7 @@ export default defineConfig({
 });
 ```
 
-And a simple size checker for my build process:
+Bundle size checker:
 
 ```javascript
 const formatBytes = (bytes) => {
@@ -196,8 +192,8 @@ const formatBytes = (bytes) => {
 const checkBundleSize = async () => {
   const stats = await getBuildStats();
   const limits = {
-    js: 300 * 1024, // Based on test results
-    css: 50 * 1024 // Generous limit given findings
+    js: 300 * 1024,
+    css: 50 * 1024
   };
 
   Object.entries(stats).forEach(([type, size]) => {
@@ -217,12 +213,14 @@ This quick exploration left me with several questions I'd like to investigate fu
 3. Are there specific types of code that benefit more from minification?
 4. How do different minification tools compare?
 
+I'm particularly interested in the environmental impact aspect - it feels like there's a lot more to explore there.
+
 ## Conclusion
 
 The numbers honestly surprised me - I knew minification helped, but seeing that 79.4% reduction in my own app was eye-opening. And those performance gains in the worst-case scenarios? That wasn't what I expected going into this.
 
 If you're skeptical about minification's impact, I encourage you to run similar tests on your own projects using the reproduction steps provided above. I'd really love to see how these numbers look for different apps - my hunch is that the benefits vary wildly depending on your stack and code structure.
 
-Have you tried measuring this stuff in your own projects? I'm genuinely curious about what others are seeing
+Have you tried measuring this stuff in your own projects? I'm genuinely curious about what others are seeing.
 
-[Full code repo](https://github.com/mrSamDev/minification-impact-on-react)
+[Repository with Full Code](https://github.com/mrSamDev/minification-impact-on-react)
