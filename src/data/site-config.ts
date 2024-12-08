@@ -80,7 +80,8 @@ const siteConfig: SiteConfig = {
     socialLinks: [
         { text: 'LinkedIn', href: 'https://www.linkedin.com/in/sijo-sam/' },
         { text: 'GitHub', href: 'https://github.com/mrSamDev' },
-        { text: 'Email', href: 'mailto:dev.sijo.sam@gmail.com' }
+        { text: 'Email', href: 'mailto:dev.sijo.sam@gmail.com' },
+        { text: 'BlueSky', href: 'https://bsky.app/profile/sijosam.in' }
     ],
     hero: {
         title: 'Building Modern Web Experiences',
