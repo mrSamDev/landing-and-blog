@@ -23,7 +23,11 @@ seo:
 
 ## Overview
 
-An afternoon experiment measuring the real-world impact of JavaScript and CSS minification on a React + Vite application, with surprising results about performance improvements and bundle size reduction.
+It started when I was diving into articles about sustainable web development practices. Minification kept coming up as one of the first recommended optimizations, something we all seem to just accept as a "must-do" for production. But I realized I'd never actually measured its impact myself.
+
+With a few hours to spare and genuine curiosity about the performance claims I'd read online, I decided to run some quick tests using Puppeteer. While not exactly rigorous science, I figured some real numbers would be better than none. Plus, I was particularly interested in the sustainability angle that rarely gets discussed in optimization talks.
+
+Quick disclaimer before diving in: This was an afternoon project driven by curiosity, not a comprehensive study. I haven't cross-verified these numbers with other sources, and your results may vary significantly depending on your specific setup. Consider this more of an exploration than a definitive guide.
 
 ## Key Findings
 
