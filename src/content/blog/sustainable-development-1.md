@@ -1,6 +1,6 @@
 ---
-title: Understanding Minification Impact Sustainability and Performance Analysis
-excerpt: A personal exploration into the real impact of JavaScript minification om web performance
+title: Understanding Minification Impact A Developer's Experiment
+excerpt: A personal exploration into the real impact of JavaScript minification on web performance
 publishDate: 'Dec 9 2024'
 tags:
   - JavaScript
@@ -13,15 +13,41 @@ seo:
     alt: JavaScript code on a computer screen
 ---
 
+## TL;DR
+
+- Tested minification impact on a React + Vite application
+- Achieved 79.4% total size reduction (JS: 44.6%, CSS: 99.8%)
+- Performance improved most significantly in worst-case scenarios (43.5% faster at 95th percentile)
+- Test case used artificially bloated CSS to demonstrate maximum potential impact
+- Tools used: Vite 5.0.0, React 18.2.0, esbuild for minification
+
+## Disclaimer
+
+Before diving in: This was an afternoon project using an artificially constructed test case. I intentionally created a CSS-heavy application to demonstrate the maximum potential impact of minification. While the results are interesting, they likely won't match typical production applications. Consider this more of an exploration than a definitive guide.
+
 It started when I was diving into articles about sustainable web development practices. Minification kept coming up as one of the first recommended optimizations, something we all seem to just accept as a "must-do" for production. But I realized I'd never actually measured its impact myself.
 
-With a few hours to spare and genuine curiosity about the performance claims I'd read online, I decided to run some quick tests using Puppeteer. While not exactly rigorous science, I figured some real numbers would be better than none. Plus, I was particularly interested in the sustainability angle that rarely gets discussed in optimization talks.
+## Tools and Versions Used
 
-Quick disclaimer before diving in: This was an afternoon project driven by curiosity, not a comprehensive study. I haven't cross-verified these numbers with other sources, and your results may vary significantly depending on your specific setup. Consider this more of an exploration than a definitive guide.
+- Vite: 6.0.1
+- React: 18.3.1
+- Puppeteer: 23.10.1
+- Node.js: 23.2.0
+- MacBook Pro (16-inch, 2021) with M1 Pro chip and 16GB RAM
+- macOS Sonoma 14.5
+
+## How to Reproduce These Tests
+
+1. Clone the test repository: `git clone https://github.com/yourusername/minification-test`
+2. Install dependencies: `pnpm install`
+3. Run the test suite: `npm run analysis`
+4. Results will be output to the nodejs console`
 
 ## The Test Setup
 
-I used a basic React + Vite application as my test subject. The setup was pretty straightforward - I just toggled the minification settings in the Vite config to compare builds. All tests were run on my MacBook Pro (16-inch, 2021) with an M1 Pro chip and 16GB RAM, running macOS Sonoma 14.5.
+I used a basic React + Vite application as my test subject. The setup was pretty straightforward - I just toggled the minification settings in the Vite config to compare builds.
+
+the testing script will be called 100 time for minfied and non minfied paths
 
 For testing, I put together a simple Puppeteer script:
 
@@ -62,27 +88,6 @@ export default defineConfig({
     }
   }
 });
-
-const createConfig = (minify = true) =>
-  defineConfig({
-    plugins: [react()],
-    build: {
-      minify: minify,
-      rollupOptions: {
-        output: {
-          dir: minify ? "dist/minified" : "dist/unminified",
-        },
-      },
-    },
-  });
-
-export default ({ mode }) => {
-  if (mode === "production-unminified") {
-    return createConfig(false);
-  }
-  return createConfig(true);
-};
-
 ```
 
 ## Results
@@ -216,8 +221,8 @@ This quick exploration left me with several questions I'd like to investigate fu
 
 The numbers honestly surprised me - I knew minification helped, but seeing that 79.4% reduction in my own app was eye-opening. And those performance gains in the worst-case scenarios? That wasn't what I expected going into this.
 
-Quick confession: I should mention that my test case was pretty artificial. I basically went wild copy-pasting div styles in CSS (something I hope no real developer actually does... please tell me no one does this). While it helped demonstrate the extreme case of what minification can do, it's probably not representative of a well-structured codebase. But hey, sometimes you need to go a bit overboard to prove a point, right?
+If you're skeptical about minification's impact, I encourage you to run similar tests on your own projects using the reproduction steps provided above. I'd really love to see how these numbers look for different apps - my hunch is that the benefits vary wildly depending on your stack and code structure.
 
-If you're skeptical (like I was) about minification's impact, the test setup isn't too complex to replicate. I'd really love to see how these numbers look for different apps - my hunch is that the benefits vary wildly depending on your stack and code structure.
+Have you tried measuring this stuff in your own projects? I'm genuinely curious about what others are seeing
 
-And yeah, obvious caveat - this was just me, messing around with tests for an afternoon on one specific app. Take these results with a grain of salt. Have you tried measuring this stuff in your own projects? I'm genuinely curious about what others are seeing.
+[Full code repo](https://github.com/mrSamDev/minification-impact-on-react)
