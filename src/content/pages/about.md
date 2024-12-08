@@ -16,22 +16,19 @@ I started coding because I was curious how websites worked. My first job was at 
 
 When I'm not working, I dive into manga and anime. Here's what's currently keeping me up at night:
 
-Watching:
+Always re-watching:
 
-- Solo Leveling - both the manhwa and anime adaptation hit differently
-- One Piece - finally caught up with the Wano arc
-- Tower of God - Rachel still gets on my nerves
-- Fairy Tail - comfort anime at this point
-- Sword Art Online - for the nostalgia
-- Berserk of Gluttony
-- And many many more
+- Katekyo Hitman Reborn!
+- Solo Leveling
+- One Piece
+- Checkout [anime-list](/anime.md) [→](/anime.md)
 
-Reading:
+Currently Reading:
 
 - "I Was Mistaken as a Monstrous Genius Actor" - the plot twists keep coming
 - "The Regressed Mercenary's Machinations" - chapter 175 and counting
 
-These days, I'm learning about building faster websites and making apps that work well even with slow internet. If you want to chat about work, swap anime recommendations, or debate about the best arc in Solo Leveling, drop me a note.
+These days, I'm learning about building faster websites and sustainable frontend patterns. I'm focused on making apps that work well even with slow internet. If you want to chat about work, swap anime recommendations, or debate about the best arc in Solo Leveling, drop me a note.
 
 Living in Ernakulam has its perks - decent internet for streaming anime, lots of good food spots, and a growing community of tech folks who share similar interests.
 

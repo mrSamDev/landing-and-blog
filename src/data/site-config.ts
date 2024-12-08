@@ -73,6 +73,10 @@ const siteConfig: SiteConfig = {
             href: '/contact'
         },
         {
+            text: 'Entertainment',
+            href: '/entertainment'
+        },
+        {
             text: 'Code',
             href: 'https://github.com/mrSamDev/landing-and-blog'
         }
