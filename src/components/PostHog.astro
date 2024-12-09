@@ -50,4 +50,16 @@ const posthogKey = import.meta.env.PUBLIC_POST_HOG;
         api_host: 'https://us.i.posthog.com',
         person_profiles: 'identified_only'
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        posthog.capture('$pageview');
+    });
+
+    window.addEventListener('beforeunload', () => {
+        posthog.capture('$pageleave');
+    });
+
+    document.addEventListener('astro:page-load', () => {
+        posthog.capture('$pageview');
+    });
 </script>
