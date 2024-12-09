@@ -6,13 +6,12 @@ tags:
   - Guide
   - JavaScript
   - Programming
+isFeatured: true
 seo:
   image:
     src: '/js-symbols.jpg'
     alt: JavaScript code on a computer screen
 ---
-
-# JavaScript Symbols: A Practical Guide
 
 Symbols are primitive values in JavaScript that serve as unique identifiers. They were introduced in ES6 and help prevent naming collisions in object properties.
 
