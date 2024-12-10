@@ -75,6 +75,10 @@ const siteConfig: SiteConfig = {
         {
             text: 'Code',
             href: 'https://github.com/mrSamDev/landing-and-blog'
+        },
+        {
+            text: 'Paddle game',
+            href: '/paddle-game'
         }
     ],
     socialLinks: [

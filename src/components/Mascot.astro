@@ -1,0 +1,391 @@
+---
+// WalkingAnimal.astro
+---
+
+<div id="animalContainer" class="fixed bottom-0 left-0 w-full z-50" style="height: 120px;">
+    <div id="effectsContainer" class="absolute -top-12 left-1/2 -translate-x-1/2 flex gap-2 min-h-[3rem] pointer-events-none z-[51]">
+        <!-- Hearts will appear here -->
+    </div>
+    <div class="absolute -top-8 left-1/2 -translate-x-1/2">
+        <div id="moodIndicator" class="hidden text-2xl z-[52]">
+            <!-- Mood stars will appear here -->
+        </div>
+    </div>
+    <svg id="draggableAnimal" width="120" height="90" viewBox="0 0 120 90" class="walking cursor-pointer absolute bottom-0">
+        <defs>
+            <filter id="pixelate" x="0" y="0" width="100%" height="100%">
+                <feFlood x="4" y="4" height="2" width="2"></feFlood>
+                <feComposite width="3" height="3"></feComposite>
+                <feTile result="a"></feTile>
+                <feComposite in="SourceGraphic" in2="a" operator="in"></feComposite>
+                <feMorphology operator="dilate" radius="2"></feMorphology>
+            </filter>
+
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+
+        <style is:global>
+            #animalContainer {
+                pointer-events: none;
+            }
+
+            #animalContainer svg {
+                pointer-events: all;
+            }
+
+            #effectsContainer {
+                pointer-events: none;
+            }
+
+            @keyframes walk {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            @keyframes bounce {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(0deg);
+                }
+                50% {
+                    transform: translateY(-5px) rotate(2deg);
+                }
+            }
+
+            .walking {
+                animation: walk 1s infinite ease-in-out;
+            }
+
+            .bouncing {
+                animation: bounce 0.5s ease-in-out;
+            }
+
+            .floating {
+                animation: float 2s infinite ease-in-out;
+            }
+        </style>
+
+        <style>
+            @keyframes walk {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            @keyframes bounce {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(0deg);
+                }
+                50% {
+                    transform: translateY(-5px) rotate(2deg);
+                }
+            }
+
+            .walking {
+                animation: walk 1s infinite ease-in-out;
+            }
+
+            .bouncing {
+                animation: bounce 0.5s ease-in-out;
+            }
+
+            .floating {
+                animation: float 2s infinite ease-in-out;
+            }
+
+            .animal-part {
+                fill: white;
+                stroke: white;
+                transition: all 0.3s ease;
+                filter: url(#pixelate);
+            }
+
+            .night-mode .animal-part {
+                filter: url(#glow);
+                fill: #e0e0ff;
+                stroke: #e0e0ff;
+            }
+
+            .pixel-group {
+                filter: url(#pixelate);
+            }
+
+            .night-mode .pixel-group {
+                filter: url(#glow);
+            }
+        </style>
+
+        <g class="pixel-group">
+            <!-- Body -->
+            <ellipse class="animal-part" cx="60" cy="65" rx="25" ry="25"></ellipse>
+
+            <!-- Head -->
+            <circle class="animal-part" cx="60" cy="45" r="20"></circle>
+
+            <!-- Ears -->
+            <rect class="animal-part" x="35" y="15" width="10" height="20" rx="2"></rect>
+            <rect class="animal-part" x="75" y="15" width="10" height="20" rx="2"></rect>
+
+            <!-- Inner ears -->
+            <rect x="37" y="17" width="6" height="16" rx="1" fill="#ffcece"></rect>
+            <rect x="77" y="17" width="6" height="16" rx="1" fill="#ffcece"></rect>
+
+            <!-- Eyes -->
+            <g class="eyes">
+                <rect x="48" y="40" width="6" height="6" fill="#fff"></rect>
+                <rect x="66" y="40" width="6" height="6" fill="#fff"></rect>
+                <rect x="50" y="41" width="3" height="3" fill="#666"></rect>
+                <rect x="68" y="41" width="3" height="3" fill="#666"></rect>
+            </g>
+
+            <!-- Blush -->
+            <rect x="38" y="46" width="6" height="6" fill="#ffcece" opacity="0.7"></rect>
+            <rect x="76" y="46" width="6" height="6" fill="#ffcece" opacity="0.7"></rect>
+
+            <!-- Nose -->
+            <rect x="57" y="48" width="6" height="6" fill="#ffcece"></rect>
+
+            <!-- Whiskers -->
+            <g class="whiskers">
+                <rect x="35" y="50" width="10" height="2" fill="white"></rect>
+                <rect x="35" y="54" width="10" height="2" fill="white"></rect>
+                <rect x="35" y="58" width="10" height="2" fill="white"></rect>
+                <rect x="75" y="50" width="10" height="2" fill="white"></rect>
+                <rect x="75" y="54" width="10" height="2" fill="white"></rect>
+                <rect x="75" y="58" width="10" height="2" fill="white"></rect>
+            </g>
+
+            <!-- Feet -->
+            <rect class="animal-part" x="40" y="85" width="12" height="8" rx="2"></rect>
+            <rect class="animal-part" x="68" y="85" width="12" height="8" rx="2"></rect>
+        </g>
+    </svg>
+</div>
+
+<style>
+    #animalContainer {
+        z-index: 50;
+        min-height: 120px;
+    }
+
+    #effectsContainer {
+        min-height: 2rem;
+        z-index: 51;
+    }
+
+    #moodIndicator {
+        z-index: 52;
+    }
+</style>
+
+<script>
+    // Define interfaces for better type safety
+    interface Position {
+        x: number;
+        y: number;
+    }
+
+    interface AnimationState {
+        isWalking: boolean;
+        isBouncing: boolean;
+        isNightMode: boolean;
+    }
+
+    class WalkingAnimal {
+        private element: HTMLElement | null;
+        private container: HTMLElement | null;
+        private position: number;
+        private direction: number;
+        private speed: number;
+        private animationFrame: number | null;
+        private isNightMode: boolean;
+        private moodLevel: number;
+        private isBouncing: boolean;
+        private effectsContainer: HTMLElement | null;
+        private moodIndicator: HTMLElement | null;
+
+        constructor(elementId: string, containerId: string, speed: number = 2) {
+            // Initialize properties
+            this.element = document.getElementById(elementId);
+            this.container = document.getElementById(containerId);
+            this.effectsContainer = document.getElementById('effectsContainer');
+            this.moodIndicator = document.getElementById('moodIndicator');
+            this.position = 0;
+            this.direction = 1;
+            this.speed = speed;
+            this.animationFrame = null;
+            this.isNightMode = false;
+            this.moodLevel = 0;
+            this.isBouncing = false;
+
+            // Check if required elements exist
+            if (!this.element || !this.container) {
+                console.error('Required elements not found');
+                return;
+            }
+
+            this.setupInteractions();
+            this.startWalking();
+        }
+
+        private setupInteractions(): void {
+            if (!this.element) return;
+
+            this.element.addEventListener('dblclick', () => this.bounce());
+            this.element.addEventListener('click', () => this.showLove());
+
+            document.addEventListener('keydown', (e: KeyboardEvent) => {
+                switch (e.key) {
+                    case 'ArrowRight':
+                    case 'ArrowLeft':
+                        this.speed = 4;
+                        break;
+                    case 'n':
+                        this.toggleNightMode();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        this.bounce();
+                        break;
+                }
+            });
+
+            document.addEventListener('keyup', (e: KeyboardEvent) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    this.speed = 2;
+                }
+            });
+        }
+
+        private startWalking(): void {
+            if (!this.container) return;
+
+            const animate = (): void => {
+                if (!this.isBouncing && this.container) {
+                    this.position += this.speed * this.direction;
+                    const maxRight = window.innerWidth - (this.element?.clientWidth || 0);
+
+                    if (this.position >= maxRight) {
+                        this.position = maxRight;
+                        this.direction = -1;
+                        this.container.style.transform = 'scaleX(-1)';
+                    } else if (this.position <= 0) {
+                        this.position = 0;
+                        this.direction = 1;
+                        this.container.style.transform = 'scaleX(1)';
+                    }
+
+                    this.container.style.left = `${this.position}px`;
+                }
+                this.animationFrame = requestAnimationFrame(animate);
+            };
+
+            animate();
+        }
+
+        private bounce(): void {
+            if (this.isBouncing || !this.element) return;
+
+            this.isBouncing = true;
+            this.element.classList.add('bouncing');
+            this.element.classList.remove('walking');
+
+            setTimeout(() => {
+                if (this.element) {
+                    this.isBouncing = false;
+                    this.element.classList.remove('bouncing');
+                    this.element.classList.add('walking');
+                }
+            }, 500);
+        }
+
+        private showLove(): void {
+            if (!this.effectsContainer) return;
+
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'absolute';
+            heart.style.animation = 'float 1s ease-out forwards';
+            heart.style.opacity = '1';
+            heart.style.transition = 'opacity 1s';
+
+            this.effectsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.style.opacity = '0';
+                setTimeout(() => heart.remove(), 1000);
+            }, 500);
+
+            this.increaseMood();
+        }
+
+        private increaseMood(): void {
+            if (!this.moodIndicator) return;
+
+            this.moodLevel = Math.min(this.moodLevel + 1, 5);
+            this.moodIndicator.style.display = 'block';
+            this.moodIndicator.textContent = '🌟'.repeat(this.moodLevel);
+        }
+
+        private toggleNightMode(): void {
+            if (!this.element) return;
+
+            this.isNightMode = !this.isNightMode;
+            this.element.classList.toggle('night-mode');
+        }
+
+        public stop(): void {
+            if (this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+                this.animationFrame = null;
+            }
+        }
+
+        public setSpeed(newSpeed: number): void {
+            this.speed = newSpeed;
+        }
+    }
+
+    // Initialize only on client-side
+    if (typeof window !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', () => {
+            new WalkingAnimal('draggableAnimal', 'animalContainer');
+        });
+    }
+</script>
