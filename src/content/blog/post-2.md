@@ -7,6 +7,7 @@ tags:
   - JavaScript
   - Programming
   - Architecture
+isFeatured: true
 seo:
   image:
     src: '/js-symbols.jpg'
