@@ -1,51 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-
-interface GameState {
-    ballX: number;
-    ballY: number;
-    ballSpeedX: number;
-    ballSpeedY: number;
-    paddleX: number;
-    score: number;
-    particles: Particle[];
-    powerUps: PowerUp[];
-    combo: number;
-    paddleWidth: number;
-    ballSize: number;
-    isPaused: boolean;
-    isGameOver: boolean;
-}
-
-interface Particle {
-    x: number;
-    y: number;
-    speedX: number;
-    speedY: number;
-    life: number;
-    color: string;
-}
-
-interface PowerUp {
-    x: number;
-    y: number;
-    type: 'wider' | 'smaller' | 'faster' | 'slower';
-    speed: number;
-    color: string;
-}
-
-const POWER_UP_COLORS = {
-    wider: '#22c55e',
-    smaller: '#ef4444',
-    faster: '#3b82f6',
-    slower: '#a855f7'
-};
-
-const BASE_PADDLE_SPEED = 5;
-const MOBILE_BREAKPOINT = 768;
+import { COLORS, FONTS, GAME_SETTINGS, PARTICLE_SETTINGS } from '../data/game-config';
+import type { GameState, Particle, ParticleColors, ParticleEventType, PowerUp, PowerUpType } from '../types/paddle-game';
 
 const CanvasGame = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [highScore, setHighScore] = useState(0);
+    const [currentScore, setCurrentScore] = useState(0);
     const [speedMultiplier, setSpeedMultiplier] = useState(1);
     const [paddleSpeedMultiplier, setPaddleSpeedMultiplier] = useState(1);
     const [isMobile, setIsMobile] = useState(false);
@@ -53,17 +12,16 @@ const CanvasGame = () => {
     const keysPressed = useRef<Set<string>>(new Set());
 
     const gameState = useRef<GameState>({
-        ballX: 350,
-        ballY: 150,
-        ballSpeedX: 5,
-        ballSpeedY: 5,
-        paddleX: 310,
+        ballX: GAME_SETTINGS.CANVAS.WIDTH / 2,
+        ballY: GAME_SETTINGS.CANVAS.HEIGHT / 2,
+        ballSpeedX: GAME_SETTINGS.INITIAL_BALL_SPEED,
+        ballSpeedY: GAME_SETTINGS.INITIAL_BALL_SPEED,
+        paddleX: GAME_SETTINGS.CANVAS.WIDTH / 2 - GAME_SETTINGS.INITIAL_PADDLE_WIDTH / 2,
         score: 0,
         particles: [],
         powerUps: [],
-        combo: 1,
-        paddleWidth: 80,
-        ballSize: 10,
+        paddleWidth: GAME_SETTINGS.INITIAL_PADDLE_WIDTH,
+        ballSize: GAME_SETTINGS.INITIAL_BALL_SIZE,
         isPaused: false,
         isGameOver: false
     });
@@ -76,20 +34,20 @@ const CanvasGame = () => {
             ...gameState.current,
             ballX: canvas.width / 2,
             ballY: canvas.height / 2,
-            ballSpeedX: 5 * speedMultiplier,
-            ballSpeedY: 5 * speedMultiplier,
-            paddleX: canvas.width / 2 - 40,
+            ballSpeedX: GAME_SETTINGS.INITIAL_BALL_SPEED * speedMultiplier,
+            ballSpeedY: GAME_SETTINGS.INITIAL_BALL_SPEED * speedMultiplier,
+            paddleX: canvas.width / 2 - GAME_SETTINGS.INITIAL_PADDLE_WIDTH / 2,
             score: 0,
-            combo: 1,
-            paddleWidth: 80,
+            paddleWidth: GAME_SETTINGS.INITIAL_PADDLE_WIDTH,
             powerUps: [],
             isGameOver: false
         };
+        setCurrentScore(0);
     }, [speedMultiplier]);
 
     useEffect(() => {
         const checkDevice = () => {
-            setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+            setIsMobile(window.innerWidth <= GAME_SETTINGS.MOBILE_BREAKPOINT);
         };
 
         checkDevice();
@@ -112,18 +70,31 @@ const CanvasGame = () => {
         setPaddleSpeedMultiplier(multiplier);
     };
 
-    const createParticles = useCallback((x: number, y: number, count: number, color: string) => {
+    const createParticles = useCallback((x: number, y: number, type: ParticleEventType, powerUpType?: PowerUpType) => {
+        const count = PARTICLE_SETTINGS.COUNTS[type];
+        let color: string;
+
+        if (type === 'POWER_UP_COLLECT' && powerUpType) {
+            color = COLORS.PARTICLES.POWER_UPS.COLLECT[powerUpType];
+        } else {
+            // Type assertion is safe here because we're using a discriminated union
+            color = COLORS.PARTICLES[type as keyof Omit<ParticleColors, 'POWER_UPS'>];
+        }
+
+        const particles: Particle[] = [];
         for (let i = 0; i < count; i++) {
             const angle = (Math.PI * 2 * i) / count;
-            gameState.current.particles.push({
+            particles.push({
                 x,
                 y,
-                speedX: Math.cos(angle) * 3,
-                speedY: Math.sin(angle) * 3,
-                life: 1,
+                speedX: Math.cos(angle) * PARTICLE_SETTINGS.SPEED,
+                speedY: Math.sin(angle) * PARTICLE_SETTINGS.SPEED,
+                life: PARTICLE_SETTINGS.INITIAL_LIFE,
                 color
             });
         }
+
+        gameState.current.particles.push(...particles);
     }, []);
 
     const spawnPowerUp = useCallback(() => {
@@ -135,7 +106,7 @@ const CanvasGame = () => {
             y: 0,
             type,
             speed: 2,
-            color: POWER_UP_COLORS[type]
+            color: COLORS.POWER_UPS[type]
         });
     }, []);
 
@@ -193,7 +164,7 @@ const CanvasGame = () => {
         const canvas = canvasRef.current;
         if (!canvas || gameState.current.isPaused) return;
 
-        const currentSpeed = BASE_PADDLE_SPEED * paddleSpeedMultiplier;
+        const currentSpeed = GAME_SETTINGS.BASE_PADDLE_SPEED * paddleSpeedMultiplier;
 
         if (keysPressed.current.has('ArrowLeft')) {
             gameState.current.paddleX -= currentSpeed;
@@ -215,14 +186,14 @@ const CanvasGame = () => {
         if (!canvas || !ctx) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#1a1a1a';
+        ctx.fillStyle = COLORS.BACKGROUND;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         const state = gameState.current;
 
         if (state.isPaused) {
-            ctx.font = '30px Arial';
-            ctx.fillStyle = 'white';
+            ctx.font = `${FONTS.SIZES.LARGE} ${FONTS.PRIMARY}`;
+            ctx.fillStyle = COLORS.TEXT;
             ctx.textAlign = 'center';
             ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
             requestRef.current = requestAnimationFrame(updateGame);
@@ -254,19 +225,19 @@ const CanvasGame = () => {
 
         if (isBallHittingWall) {
             state.ballSpeedX = -state.ballSpeedX;
-            createParticles(state.ballX, state.ballY, 8, '#60a5fa');
+            createParticles(state.ballX, state.ballY, 'WALL_COLLISION');
         }
 
         if (isBallHittingCeiling) {
             state.ballSpeedY = -state.ballSpeedY;
-            createParticles(state.ballX, state.ballY, 8, '#60a5fa');
+            createParticles(state.ballX, state.ballY, 'CEILING_COLLISION');
         }
 
         if (isBallHittingPaddle) {
             state.ballSpeedY = -state.ballSpeedY;
-            state.score += 10 * state.combo;
-            state.combo += 1;
-            createParticles(state.ballX, state.ballY, 12, '#22c55e');
+            state.score += GAME_SETTINGS.SCORE_INCREMENT;
+            setCurrentScore(state.score);
+            createParticles(state.ballX, state.ballY, 'PADDLE_COLLISION');
 
             const shouldSpawnPowerUp = Math.random() < 0.2;
             if (shouldSpawnPowerUp) {
@@ -275,11 +246,8 @@ const CanvasGame = () => {
         }
 
         if (isBallBelowPaddle) {
-            if (state.score > highScore) {
-                setHighScore(state.score);
-            }
             state.isGameOver = true;
-            createParticles(state.ballX, state.ballY, 20, '#ef4444');
+            createParticles(state.ballX, state.ballY, 'GAME_OVER');
         }
 
         state.particles = state.particles.filter((particle) => {
@@ -308,7 +276,7 @@ const CanvasGame = () => {
 
             if (isPowerUpCollected) {
                 applyPowerUp(powerUp.type);
-                createParticles(powerUp.x, powerUp.y, 15, powerUp.color);
+                createParticles(powerUp.x, powerUp.y, 'POWER_UP_COLLECT', powerUp.type);
                 return false;
             }
 
@@ -322,26 +290,14 @@ const CanvasGame = () => {
 
         ctx.beginPath();
         ctx.arc(state.ballX, state.ballY, state.ballSize, 0, Math.PI * 2);
-        ctx.fillStyle = '#60a5fa';
+        ctx.fillStyle = COLORS.BALL;
         ctx.fill();
 
-        ctx.fillStyle = '#4a5568';
+        ctx.fillStyle = COLORS.PADDLE;
         ctx.fillRect(state.paddleX, canvas.height - 20, state.paddleWidth, 10);
 
-        ctx.font = '24px Arial';
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Score: ${state.score}`, 8, 26);
-        ctx.fillText(`High Score: ${highScore}`, 8, 56);
-
-        if (state.combo > 1) {
-            ctx.textAlign = 'right';
-            ctx.fillStyle = '#22c55e';
-            ctx.fillText(`Combo x${state.combo}`, canvas.width - 8, 26);
-        }
-
         requestRef.current = requestAnimationFrame(updateGame);
-    }, [createParticles, spawnPowerUp, applyPowerUp, highScore, updatePaddlePosition]);
+    }, [createParticles, spawnPowerUp, applyPowerUp, updatePaddlePosition]);
 
     useEffect(() => {
         if (!isMobile) {
@@ -363,7 +319,7 @@ const CanvasGame = () => {
         return (
             <div className=" bg-main flex items-center justify-center p-4">
                 <div className="bg-muted rounded-lg shadow-md p-6 text-center">
-                    <h1 className="text-2xl font-bold text-main font-serif mb-4">Desktop Only Game</h1>
+                    <h1 className="text-2xl font-bold text-main   mb-4">Desktop Only Game</h1>
                     <p className="text-main">Please open this game on a desktop device for the best experience.</p>
                     <p className="text-main mt-2">The game requires keyboard controls to play.</p>
                 </div>
@@ -374,7 +330,12 @@ const CanvasGame = () => {
         <div className="bg-main flex flex-col items-center justify-center p-4">
             <div className="bg-muted rounded-lg shadow-md p-6 w-full max-w-3xl border border-main/10">
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold text-main font-serif">Paddle Game</h1>
+                    <div className="space-y-2">
+                        <h1 className="text-3xl font-bold text-main">Paddle Game</h1>
+                        <div className="flex gap-4">
+                            <div className="text-main">Score: {currentScore}</div>
+                        </div>
+                    </div>
                     <div className="space-y-2">
                         <div className="flex gap-2 items-center">
                             <span className="text-main text-sm">Ball Speed:</span>
@@ -418,6 +379,31 @@ const CanvasGame = () => {
                 <div className="mt-4 space-y-2 text-center text-main prose prose-sijo">
                     <p>Use left and right arrow keys to move the paddle</p>
                     <p>Press Space to pause/resume or try again after game over</p>
+                </div>
+
+                <div className="mt-6 text-center">
+                    <a
+                        href="https://github.com/yourusername/paddle-game"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-main/80 hover:text-main hover:underline hover:underline-offset-2 hover:decoration-1 transition-colors"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="opacity-80 group-hover:opacity-100"
+                        >
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                        </svg>
+                        View on GitHub
+                    </a>
                 </div>
             </div>
         </div>
