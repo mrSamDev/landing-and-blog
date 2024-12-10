@@ -8,7 +8,7 @@ seo:
     alt: Sijo Sam
 ---
 
-![Profile image showing Sijo at work](/profile.jpg)
+![Profile image showing Sijo at work](https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818911/iotd6l0if1gixlitydpq.webp)
 
 Hi, I'm Sijo from Ernakulam. I work with the team at Diagnal Technologies, where we build video streaming apps.
 
@@ -33,4 +33,4 @@ Living in Ernakulam has its perks - decent internet for streaming anime, lots of
 
 I try to write about what I learn at work and share it here. Not because I'm an expert, but because writing helps me think better. If any of this interests you, stick around.
 
-[Download my resume](/resume.pdf)
+[Download my resume](https://drive.google.com/file/d/1aAr7PdCs66mvMawFckHUZEnwxXMu7_q0/view?usp=drive_link)

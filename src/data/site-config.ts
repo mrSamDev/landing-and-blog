@@ -42,7 +42,7 @@ const siteConfig: SiteConfig = {
     subtitle: 'Front-End Technical Lead',
     description: 'Technical leader specializing in React, AWS, and modern web development with expertise in video business product solutions',
     image: {
-        src: '/profile.jpg',
+        src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818911/iotd6l0if1gixlitydpq.webp',
         alt: 'Sijo Sam - Front-End Technical Lead'
     },
     headerNavLinks: [
@@ -87,7 +87,7 @@ const siteConfig: SiteConfig = {
         title: 'Building Modern Web Experiences',
         text: 'Sijo Sam, Front-End Technical Lead with 6+ years building web and mobile apps. Currently crafting video streaming experiences at Diagnal Technologies using React and JavaScript.',
         image: {
-            src: '/profile.webp',
+            src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818911/iotd6l0if1gixlitydpq.webp',
             alt: 'Sijo Sam - Technical Lead'
         },
         actions: [
