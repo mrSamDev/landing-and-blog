@@ -9,7 +9,7 @@ tags:
   - Programming
 seo:
   image:
-    src: https://res.cloudinary.com/example/paddle-game.jpg
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png
     alt: React Canvas Paddle Game Development
 ---
 
