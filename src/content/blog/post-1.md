@@ -6,7 +6,6 @@ tags:
   - Guide
   - JavaScript
   - Programming
-isFeatured: true
 seo:
   image:
     src: '/js-symbols.jpg'
