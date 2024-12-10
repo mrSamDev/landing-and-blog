@@ -1,0 +1,9 @@
+---
+import CanvasGame from '../components/Game';
+import siteConfig from '../data/site-config';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout showHeader={false} description={siteConfig.description} image={siteConfig.image}>
+    <CanvasGame client:load />
+</BaseLayout>
