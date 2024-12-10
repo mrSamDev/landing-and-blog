@@ -5,8 +5,8 @@ import type { GameState, Particle, ParticleColors, ParticleEventType, PowerUp, P
 const CanvasGame = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [currentScore, setCurrentScore] = useState(0);
-    const [speedMultiplier, setSpeedMultiplier] = useState(1);
-    const [paddleSpeedMultiplier, setPaddleSpeedMultiplier] = useState(1);
+    const [speedMultiplier, setSpeedMultiplier] = useState(0.5);
+    const [paddleSpeedMultiplier, setPaddleSpeedMultiplier] = useState(2);
     const [isMobile, setIsMobile] = useState(false);
     const requestRef = useRef<number>();
     const keysPressed = useRef<Set<string>>(new Set());
@@ -339,7 +339,7 @@ const CanvasGame = () => {
                     <div className="space-y-2">
                         <div className="flex gap-2 items-center">
                             <span className="text-main text-sm">Ball Speed:</span>
-                            {[1, 1.5, 2, 2.5, 3].map((speed) => (
+                            {[0.5, 1, 1.5, 2, 2.5, 3].map((speed) => (
                                 <button
                                     key={speed}
                                     onClick={() => handleSpeedChange(speed)}
@@ -383,7 +383,7 @@ const CanvasGame = () => {
 
                 <div className="mt-6 text-center">
                     <a
-                        href="https://github.com/yourusername/paddle-game"
+                        href="https://github.com/mrSamDev/landing-and-blog/blob/main/src/components/PaddleGame.tsx"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-main/80 hover:text-main hover:underline hover:underline-offset-2 hover:decoration-1 transition-colors"
@@ -403,6 +403,16 @@ const CanvasGame = () => {
                             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                         </svg>
                         View on GitHub
+                    </a>
+                </div>
+                <div className="mt-6 text-center">
+                    <a
+                        href="blog/paddle-game/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-main/80 hover:text-main hover:underline hover:underline-offset-2 hover:decoration-1 transition-colors"
+                    >
+                        Blog
                     </a>
                 </div>
             </div>
