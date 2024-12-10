@@ -87,7 +87,7 @@ const siteConfig: SiteConfig = {
         title: 'Building Modern Web Experiences',
         text: 'Sijo Sam, Front-End Technical Lead with 6+ years building web and mobile apps. Currently crafting video streaming experiences at Diagnal Technologies using React and JavaScript.',
         image: {
-            src: '/profile.jpg',
+            src: '/profile.webp',
             alt: 'Sijo Sam - Technical Lead'
         },
         actions: [
