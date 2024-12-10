@@ -1,16 +1,16 @@
 ---
 title: Paddle Game Adventures - Implementing a Canvas Game in React
 excerpt: Learn how to build a classic paddle game using React and the Canvas API. We'll cover game loops, collision detection, particle effects, and power-ups while exploring fundamental game development concepts.
-publishDate: 'Dec 10 2024'
+publishDate: 'Dec 6 2024'
 tags:
-
-Guide
-JavaScript
-Programming
+  - Guide
+  - Game
+  - JavaScript
+  - Programming
 seo:
-image:
-src: 'https://res.cloudinary.com/example/paddle-game.jpg'
-alt: 'React Canvas Paddle Game Development'
+  image:
+    src: https://res.cloudinary.com/example/paddle-game.jpg
+    alt: React Canvas Paddle Game Development
 ---
 
 The world of canvas and React Three Fiber has always been a mystery to me, as I never really tried my hand at it myself. Coming from a React background, I figured before diving into the complexities of WebGL and Three.js, I should start with something simpler - the good old Canvas API. As I started reading about the exciting WebGPU improvements coming to browsers and the possibilities with Three.js, my curiosity was piqued. But I thought, why not start with the basics? Let's call it Paddle Game (to avoid any copyright violations, of course).
