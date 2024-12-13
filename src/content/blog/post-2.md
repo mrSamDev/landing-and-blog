@@ -7,9 +7,10 @@ tags:
   - JavaScript
   - Programming
   - Architecture
+isFeatured: true
 seo:
   image:
-    src: '/js-symbols.jpg'
+    src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818933/fypxxcxg6vwf7ssjrcwf.jpg'
     alt: JavaScript code on a computer screen
 ---
 
