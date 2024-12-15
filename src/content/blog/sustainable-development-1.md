@@ -2,6 +2,7 @@
 title: Sustainable Web Development Series Part 1 - Measuring Minification Impact
 excerpt: A personal exploration into the real impact of JavaScript minification on web performance
 publishDate: 'Dec 9 2024'
+isPublished: false
 tags:
   - JavaScript
   - Programming
