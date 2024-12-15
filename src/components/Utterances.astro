@@ -1,0 +1,87 @@
+---
+interface Props {
+    theme?: 'github-light' | 'github-dark' | 'preferred-color-scheme';
+    label?: string;
+    issueTerm?: string;
+}
+
+const { theme = 'github-dark', label = 'comments', issueTerm = 'pathname' } = Astro.props;
+---
+
+<div id="utterances-container" data-theme={theme}></div>
+
+<script define:vars={{ theme, label, issueTerm }}>
+    function loadUtterances() {
+        try {
+            const existingScript = document.querySelector('#utterances-script');
+            existingScript?.remove();
+
+            const script = document.createElement('script');
+            const container = document.querySelector('#utterances-container');
+
+            if (!container) {
+                console.warn('Utterances container not found');
+                return;
+            }
+
+            container.innerHTML = '';
+
+            const config = {
+                src: 'https://utteranc.es/client.js',
+                repo: 'mrSamDev/landing-and-blog',
+                'issue-term': issueTerm,
+                label: label,
+                theme: theme,
+                crossorigin: 'anonymous'
+            };
+
+            Object.entries(config).forEach(([key, value]) => {
+                script.setAttribute(key, value);
+            });
+
+            script.id = 'utterances-script';
+
+            script.onerror = () => {
+                container.innerHTML = 'Error loading comments. Please check your configuration.';
+            };
+
+            // Append script
+            container.appendChild(script);
+        } catch (error) {
+            console.error('Error initializing Utterances:', error);
+        }
+    }
+
+    loadUtterances();
+
+    const container = document.querySelector('#utterances-container');
+    if (container) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    loadUtterances();
+                }
+            });
+        });
+
+        observer.observe(container, { attributes: true });
+    }
+</script>
+
+<style>
+    #utterances-container {
+        margin: 2rem 0;
+        width: 100%;
+        min-height: 200px;
+        transition: opacity 0.3s ease;
+    }
+
+    #utterances-container:empty::before {
+        content: 'Loading comments...';
+        display: block;
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-style: italic;
+    }
+</style>
