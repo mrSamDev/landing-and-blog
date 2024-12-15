@@ -10,7 +10,7 @@ tags:
   - Tailwind
 seo:
   image:
-    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/css-paradox/dsbfcvge59ppcdt9jwyw
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/css-paradox/sntje6rvkkjm0d3pyz7k
     alt: CSS Development Approaches Comparison
 ---
 
