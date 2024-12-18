@@ -1,58 +1,292 @@
 ---
 import siteConfig from '../data/site-config';
+import { basics } from '../../cv.json';
+import 'hotkeypad/index.css';
+import 'hotkeypad/reset.css';
 
-const socialLinks = siteConfig.socialLinks || [];
-const navLinks = siteConfig.footerNavLinks || [];
+interface SocialLink {
+    text: string;
+    href: string;
+}
+
+interface Profile {
+    network: string;
+    url: string;
+    username?: string;
+}
+
+const { profiles } = basics as { profiles: Profile[] };
+const { socialLinks, footerNavLinks, title } = siteConfig as {
+    socialLinks: SocialLink[];
+    footerNavLinks: SocialLink[];
+    title: string;
+};
+
+const currentYear = new Date().getFullYear();
+
+// Process all links for hotkey commands
+const allLinks = [
+    ...profiles,
+    ...(socialLinks || []).map((link) => ({
+        network: link.text,
+        url: link.href
+    }))
+];
+
+const hotkeyCommands = allLinks
+    .map(({ network, url }) => {
+        const firstLetter = network[0].toUpperCase();
+        return {
+            id: network.toLowerCase(),
+            section: 'Social',
+            title: `Visit my ${network}`,
+            url,
+            hotkey: `ctrl+${firstLetter}`
+        };
+    })
+    .filter((x) => !x.hotkey.match(/[TNW]$/i));
+
+// Add footer nav links to hotkey commands
+const footerCommands = (footerNavLinks || []).map((link, index) => ({
+    id: link.text.toLowerCase(),
+    section: 'Navigation',
+    title: link.text,
+    url: link.href,
+    hotkey: `ctrl+${index + 1}`
+}));
 ---
 
-<footer class="w-full max-w-4xl mx-auto pt-12 pb-10 sm:pt-24 sm:pb-14">
-    {
-        navLinks.length > 0 && (
-            <div class="mb-4 flex flex-wrap gap-x-6 gap-y-1">
-                {navLinks.map((link) => (
-                    <a class="  hover:underline hover:underline-offset-2" href={link.href}>
-                        {link.text}
-                    </a>
-                ))}
-            </div>
-        )
-    }
-    <div
-        class:list={[
-            'pt-6 flex flex-col gap-4 border-t border-dashed border-main',
-            { 'sm:flex-row-reverse sm:justify-between sm:items-center': socialLinks.length > 0 }
-        ]}
-    >
+<footer class="relative">
+    <!-- Traditional Footer - Shows on all screens -->
+    <div class="w-full max-w-4xl mx-auto pt-12 pb-20 sm:pt-24 sm:pb-28">
         {
-            socialLinks.length > 0 && (
-                <div class="flex flex-wrap gap-x-4 gap-y-1">
-                    {socialLinks.map((link) => (
-                        <a
-                            class="inline-flex items-center justify-center text-sm hover:underline hover:underline-offset-2"
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferer"
-                            data-link={link.text}
-                        >
+            (footerNavLinks || []).length > 0 && (
+                <div class="mb-4 flex flex-wrap gap-x-6 gap-y-1">
+                    {(footerNavLinks || []).map((link) => (
+                        <a class="hover:underline hover:underline-offset-2" href={link.href}>
                             {link.text}
                         </a>
                     ))}
                 </div>
             )
         }
-        <p class="text-sm">
-            &copy; {new Date().getFullYear()}&nbsp;<a class="hover:underline hover:underline-offset-2" href="/">{siteConfig.title}</a>. All rights reserved.
-        </p>
+
+        <div
+            class:list={[
+                'pt-6 flex flex-col gap-4 border-t border-dashed border-main',
+                { 'sm:flex-row-reverse sm:justify-between sm:items-center': (socialLinks || []).length > 0 }
+            ]}
+        >
+            {
+                (socialLinks || []).length > 0 && (
+                    <div class="flex flex-wrap gap-x-4 gap-y-1">
+                        {socialLinks.map((link) => (
+                            <a
+                                class="inline-flex items-center justify-center text-sm hover:underline hover:underline-offset-2"
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferer"
+                                data-link={link.text}
+                            >
+                                {link.text}
+                            </a>
+                        ))}
+                    </div>
+                )
+            }
+            <p class="text-sm">
+                &copy; {currentYear}&nbsp;
+                <a class="hover:underline hover:underline-offset-2" href="/">{title}</a>. All rights reserved.
+            </p>
+        </div>
     </div>
+
+    <!-- Hotkey Footer - Desktop Only -->
+    <div class="w-full text-center bg-main fixed bottom-0 left-0 right-0 hidden md:block md:relative md:bottom-auto md:left-auto md:right-auto p-2 md:p-0 z-50">
+        Press
+        <kbd class="bg-accent-muted px-1 py-0.5 text-xs font-mono mx-1 rounded text-main">
+            <span class="hidden mac:inline">⌘</span>
+            <span class="inline mac:hidden">Ctrl</span>
+        </kbd>
+        +
+        <kbd class="bg-accent-muted px-1 py-0.5 text-xs font-mono mx-1 rounded text-main">K</kbd>
+        to open the command palette
+    </div>
+
+    <!-- Hotkeypad Container -->
+    <div id="hotkeypad" class="bg-main" data-placeholder="Search Command" data-info={JSON.stringify([...hotkeyCommands, ...footerCommands])}></div>
 </footer>
+
+<script>
+    interface CommandInfo {
+        id: string;
+        section: string;
+        title: string;
+        url: string;
+        icon?: string;
+        hotkey: string;
+        handler?: () => void;
+    }
+
+    interface IconMap {
+        [key: string]: string;
+        github: string;
+        linkedin: string;
+        email: string;
+        bluesky: string;
+        about: string;
+        contact: string;
+        code: string;
+        game: string;
+        resume: string;
+    }
+
+    class HotKeyPad {
+        instance: Element;
+        constructor() {
+            const element = document.querySelector('#hotkeypad');
+            if (!element) throw new Error('Hotkeypad element not found');
+            this.instance = element;
+        }
+        setCommands(commands: CommandInfo[]): void {}
+    }
+
+    const hotkeypad = new HotKeyPad();
+    const info = hotkeypad.instance.getAttribute('data-info') ?? '[]';
+    const parsedInfo: CommandInfo[] = JSON.parse(info);
+
+    // Define icons for different platforms/links
+    const icons: IconMap = {
+        github: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>`,
+        linkedin: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>`,
+        email: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
+        bluesky: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L4 9l8 6 8-6-8-6z"/><path d="M4 9v6l8 6 8-6V9"/></svg>`,
+        about: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+        contact: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`,
+        code: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+        game: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>`,
+        resume: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`
+    };
+
+    // Get icon for a command
+    const getIconForCommand = (command: CommandInfo): string => {
+        const id = command.id.toLowerCase() as keyof IconMap;
+        return icons[id] || icons.code; // Default to code icon if not found
+    };
+
+    const commands: any[] = [
+        {
+            id: 'resume',
+            title: 'Open Resume',
+            icon: icons.resume,
+            hotkey: 'ctrl+P',
+            section: 'Actions',
+            handler: () => {
+                window.open('https://drive.google.com/file/d/1aAr7PdCs66mvMawFckHUZEnwxXMu7_q0/view?usp=drive_link', '_blank', 'noopener,noreferrer');
+            }
+        },
+        ...parsedInfo.map(({ url, hotkey, id, section, title }) => ({
+            id,
+            title,
+            icon: getIconForCommand({ id, section, title, url, hotkey }),
+            hotkey,
+            section,
+            handler: () => {
+                window.open(url, '_blank');
+            }
+        })),
+        {
+            id: 'source-code',
+            title: 'View Source Code',
+            icon: icons.github,
+            hotkey: 'ctrl+S',
+            section: 'Misc',
+            handler: () => {
+                window.open('https://github.com/mrSamDev/landing-and-blog', '_blank', 'noopener,noreferrer');
+            }
+        }
+    ];
+
+    hotkeypad.setCommands(commands);
+</script>
 
 <script is:inline>
     document.querySelectorAll('a[data-link]').forEach((link) => {
         link.addEventListener('click', () => {
             const linkText = link.getAttribute('data-link');
-            posthog?.capture('social_link_click', {
-                link: linkText
-            });
+            if (typeof window.posthog !== 'undefined' && linkText) {
+                window.posthog.capture('social_link_click', {
+                    link: linkText
+                });
+            }
         });
     });
 </script>
+
+<style>
+    @media (platform: apple) {
+        .mac\:inline {
+            display: inline;
+        }
+        .mac\:hidden {
+            display: none;
+        }
+    }
+
+    kbd {
+        @apply bg-accent-muted text-main;
+        border-radius: 4px;
+        padding: 2px 4px;
+        font-size: 12px;
+    }
+
+    #hotkeypad {
+        --hotkeypad-bg-kbd: rgb(var(--color-accent-muted));
+        --hotkeypad-bg-backdrop: rgb(var(--color-bg-main));
+        --hotkeypad-bg-container: rgb(var(--color-bg-main));
+        --hotkeypad-bg-item-hover: rgb(var(--color-accent-muted) / 0.1);
+        --hotkeypad-border-container: rgb(var(--color-accent-muted));
+        --hotkeypad-border-container-hover: rgb(var(--color-accent));
+        --hotkeypad-fg-muted: rgb(var(--color-text-main));
+
+        --hotkeypad-accent: rgb(var(--color-accent));
+        --hotkeypad-accent-hover: rgb(var(--color-accent-muted));
+        --hotkeypad-section-title: rgb(var(--color-text-main));
+        --hotkeypad-item-selected: rgb(var(--color-accent) / 0.15);
+        --hotkeypad-scrollbar: rgb(var(--color-accent-muted));
+        --hotkeypad-scrollbar-hover: rgb(var(--color-accent));
+
+        --hotkeypad-status-success: rgb(var(--color-success));
+        --hotkeypad-status-warning: rgb(var(--color-warning));
+        --hotkeypad-status-error: rgb(var(--color-error));
+        --hotkeypad-status-info: rgb(var(--color-info));
+    }
+
+    /* Ensure proper z-index stacking for the hotkeypad */
+    #hotkeypad {
+        z-index: 100;
+    }
+
+    /* Style overrides for the command palette */
+    #hotkeypad input {
+        @apply bg-transparent border-none outline-none;
+        color: rgb(var(--color-text-main));
+    }
+
+    #hotkeypad ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #hotkeypad ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #hotkeypad ::-webkit-scrollbar-thumb {
+        background: var(--hotkeypad-scrollbar);
+        border-radius: 3px;
+    }
+
+    #hotkeypad ::-webkit-scrollbar-thumb:hover {
+        background: var(--hotkeypad-scrollbar-hover);
+    }
+</style>

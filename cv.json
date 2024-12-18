@@ -1,0 +1,119 @@
+{
+    "basics": {
+        "name": "Sijo Sam",
+        "label": "Frontend Technical Lead",
+        "email": "sijosam1905@gmail.com",
+        "phone": "+91-9562 299 603",
+        "url": "https://sijosam.in/",
+        "summary": "Frontend Technical Lead with 6+ years of experience specializing in video business solutions and enterprise software development. Expert in React, React Native, Node.js, and modern frontend technologies, consistently delivering applications with 25-40% performance improvements.",
+        "location": {
+            "city": "Ernakulam",
+            "countryCode": "IN",
+            "region": "India"
+        },
+        "profiles": [
+            {
+                "network": "LinkedIn",
+                "url": "https://www.linkedin.com/in/sijo-sam/"
+            },
+            {
+                "network": "GitHub",
+                "username": "mrSamDev",
+                "url": "https://github.com/mrSamDev"
+            }
+        ]
+    },
+    "work": [
+        {
+            "name": "Diagnal Technologies",
+            "position": "Frontend Technical Lead",
+            "location": "India",
+            "url": "",
+            "startDate": "2022-01",
+            "endDate": "Present",
+            "highlights": [
+                "As a technical leader in video business products, encompassing lifestyle, music, and video domains",
+                "Acquired fast-track promotion from Software Engineer to Front-End Technical Lead",
+                "Successfully leading and coordinating with diverse international teams across various time zones",
+                "Spearheading the development of SEO-optimized applications",
+                "Mentored junior and mid-level developers through structured 1:1 sessions and code reviews"
+            ],
+            "technologies": ["React", "AWS", "CSS", "Redux", "Tailwind", "React Native", "HTML", "Browserstack", "Next.js"]
+        },
+        {
+            "name": "HyperBlox India Pvt Ltd",
+            "position": "Software Engineer",
+            "location": "India",
+            "startDate": "2020-12",
+            "endDate": "2022-01",
+            "highlights": [
+                "Engaged in cutting-edge 5G network solutions",
+                "Played a critical role in developing IoT Platform for 5G/4G networks",
+                "Elevated to a Senior Engineer position",
+                "Applied technical expertise to architect complex network solutions"
+            ],
+            "technologies": ["React", "Docker", "CSS", "Redux", "HTML", "JavaScript", "Node.js", "Lua"]
+        },
+        {
+            "name": "7th Pillar Ventures Private Limited",
+            "position": "Web Developer",
+            "location": "India",
+            "startDate": "2018-07",
+            "endDate": "2020-12",
+            "highlights": [
+                "Developed SaaS solutions for healthcare, property, retail, and food sectors",
+                "Pioneered customized software solutions for international clients",
+                "Designed automated email platform and coupon aggregator application",
+                "Developed garbage collection management system"
+            ],
+            "technologies": ["React", "TypeScript", "React Native", "JavaScript", "Node.js", "Firebase", "Next.js", "Git"]
+        }
+    ],
+    "education": [
+        {
+            "institution": "College of Engineering, Chengannur",
+            "area": "Computer Science",
+            "studyType": "Bachelor of Technology",
+            "startDate": "2014",
+            "endDate": "2018",
+            "country": "India"
+        }
+    ],
+    "certificates": [
+        {
+            "name": "Certified Scrum Master (CSM)",
+            "issuer": "Scrum Alliance",
+            "date": ""
+        }
+    ],
+    "skills": {
+        "keywords": [
+            "React",
+            "AWS",
+            "JavaScript",
+            "React Native",
+            "Redux",
+            "React Query",
+            "Zustand",
+            "Node.js",
+            "Next.js",
+            "Astro.js",
+            "Docker",
+            "React Testing Library",
+            "System Design",
+            "Design Patterns",
+            "CI/CD",
+            "Web Vitals",
+            "Tailwind CSS",
+            "TypeScript",
+            "HTML",
+            "CSS"
+        ]
+    },
+    "achievements": [
+        "Elevated team productivity by 35% through structured mentoring programs",
+        "Improved application load times by 30% and overall performance by 25% in SaaS projects",
+        "Led global team to deliver software projects 20% faster than industry average",
+        "Boosted web application search engine rankings by 50%"
+    ]
+}

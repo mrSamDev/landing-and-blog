@@ -8,11 +8,25 @@
         --color-bg-main: 236 244 244; /* #ECF4F4 */
         --color-bg-muted: 220 235 235; /* #DCEBEB */
         --color-border-main: 0 128 128; /* #008080 */
+
+        --color-accent: 0 150 136; /* #009688 - Brighter teal for highlighting */
+        --color-accent-muted: 178 223 219; /* #B2DFDB - Soft teal for subtle emphasis */
+        --color-success: 46 125 50; /* #2E7D32 - Green for success states */
+        --color-warning: 255 152 0; /* #FF9800 - Orange for warnings */
+        --color-error: 211 47 47; /* #D32F2F - Red for errors */
+        --color-info: 2 136 209; /* #0288D1 - Blue for info */
     }
     html.dark {
         --color-text-main: 236 244 244; /* #ECF4F4 */
         --color-bg-main: 0 71 71; /* #004747 */
         --color-bg-muted: 0 89 89; /* #005959 */
         --color-border-main: 0 128 128; /* #008080 */
+
+        --color-accent: 0 172 156; /* #00AC9C - Brighter teal for dark mode */
+        --color-accent-muted: 0 105 98; /* #006962 - Darker teal for subtle emphasis */
+        --color-success: 102 187 106; /* #66BB6A - Lighter green for dark mode */
+        --color-warning: 255 167 38; /* #FFA726 - Lighter orange for dark mode */
+        --color-error: 239 83 80; /* #EF5350 - Lighter red for dark mode */
+        --color-info: 41 182 246; /* #29B6F6 - Lighter blue for dark mode */
     }
 }
