@@ -7,6 +7,7 @@ export type Image = {
 export type Link = {
     text: string;
     href: string;
+    target?: string;
 };
 
 export type Hero = {
@@ -39,11 +40,11 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
     title: 'Sijo Sam',
-    subtitle: 'Front-End Technical Lead',
+    subtitle: 'Software engineer',
     description: 'Technical leader specializing in React, AWS, and modern web development with expertise in video business product solutions',
     image: {
-        src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818911/iotd6l0if1gixlitydpq.webp',
-        alt: 'Sijo Sam - Front-End Technical Lead'
+        src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
+        alt: 'Sijo Sam - Software engineer'
     },
     headerNavLinks: [
         {
@@ -74,11 +75,13 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Code',
-            href: 'https://github.com/mrSamDev/landing-and-blog'
+            href: 'https://github.com/mrSamDev/landing-and-blog',
+            target: '_blank'
         },
         {
             text: 'Paddle game',
-            href: '/paddle-game'
+            href: 'https://mrsamdev-paddle-game.netlify.app/',
+            target: '_blank'
         }
     ],
     socialLinks: [
@@ -89,7 +92,7 @@ const siteConfig: SiteConfig = {
     ],
     hero: {
         title: 'Building Modern Web Experiences',
-        text: 'Sijo Sam, Front-End Technical Lead with 6+ years building web and mobile apps. Currently crafting video streaming experiences at Diagnal Technologies using React and JavaScript.',
+        text: 'Sijo Sam, Software engineer with 6+ years building web and mobile apps. Currently crafting video streaming experiences at Diagnal Technologies using React and JavaScript.',
         image: {
             src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818911/iotd6l0if1gixlitydpq.webp',
             alt: 'Sijo Sam - Technical Lead'
