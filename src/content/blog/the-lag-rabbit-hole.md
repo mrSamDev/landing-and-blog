@@ -3,14 +3,14 @@ title: Understanding Frame Rate Control & The Lag Rabbit Hole - A Journey with M
 excerpt: A deep dive into frame rate control and performance optimization in a Canvas-based paddle game, featuring solutions to common timing issues and lag problems.
 publishDate: 'Dec 26 2024'
 tags:
-  - Game
+  - Paddle-Game
   - TypeScript
   - Programming
   - Performance
   - React
 seo:
   image:
-    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/w6cokjywcqdfvoauicue
     alt: Frame Rate Control in Canvas Games
 ---
 
