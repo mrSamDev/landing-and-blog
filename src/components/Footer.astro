@@ -9,11 +9,14 @@ const navLinks = siteConfig.footerNavLinks || [];
     {
         navLinks.length > 0 && (
             <div class="mb-4 flex flex-wrap gap-x-6 gap-y-1">
-                {navLinks.map((link) => (
-                    <a class="  hover:underline hover:underline-offset-2" href={link.href}>
-                        {link.text}
-                    </a>
-                ))}
+                {navLinks.map((link) => {
+                    const target = link.target || '_self';
+                    return (
+                        <a class="hover:underline hover:underline-offset-2" href={link.href} target={target}>
+                            {link.text}
+                        </a>
+                    );
+                })}
             </div>
         )
     }
