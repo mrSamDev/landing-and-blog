@@ -12,8 +12,6 @@ seo:
 
 Frontend Lead at Diagnal Technologies, where I wrestle with React but secretly love working with Svelte, making video players behave across every screen imaginable! When I'm not debugging CSS or optimizing render cycles, you'll probably find me deep in the latest manga chapter or planning my next trek (though let's be honest, lately it's been more about that WFH life 🏠).
 
-## 🌍 About Me
-
 Based in Ernakulam, where I enjoy the perfect blend of decent internet for streaming anime, great food spots, and a growing tech community. I started coding out of curiosity about how websites worked, and my journey began at 7th Pillar Ventures, where I learned that functionality trumps fancy features. Now at Diagnal, I help my team build better video players and streaming apps.
 
 I write about my learning experiences and tech adventures on my blog, not because I'm an expert, but because writing helps me think better.
@@ -33,7 +31,7 @@ const Sijo = {
   frontend: ['React', 'JavaScript', 'CSS Wizardry'],
   current_obsession: 'Making those micro-interactions juuust right',
   past_adventures: ['Healthcare apps', 'Food delivery', '5G/4G solutions'],
-  learning: 'Go (because apparently JavaScript wasn't enough of a challenge)',
+  learning: "Go (because apparently JavaScript wasn't enough of a challenge)",
   workouts: ['Running', 'Trekking', 'Debug marathons']
 };
 ```
