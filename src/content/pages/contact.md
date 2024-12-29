@@ -1,23 +1,20 @@
 ---
-title: Get in touch
+title: 📫 Let's Connect!
 seo:
   title: Contact
   description: Reach out to discuss frontend development, technical leadership, or collaborative opportunities.
 ---
 
-Thank you for your interest! I'm always excited to connect with fellow developers and potential collaborators. Here's how you can reach me:
+Drop me a line if you want to chat about:
 
-_Email:_
-You can email me at [sijosam1905@gmail.com](mailto:sijosam1905@gmail.com) for any inquiries or discussions.
+- 🎨 That pixel-perfect UI you're struggling with
+- 📚 Your favorite manga/manhwa recommendations
+- 🏃‍♂️ Cool trekking spots around Kerala and india
+- 🤓 Why Go's error handling is actually pretty neat
 
-_Social Media:_
+### Find me online
 
-- Connect on [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
-- Follow my projects on [GitHub](https://github.com/mrSamDev)
-- Follow me on [BlueSky](https://bsky.app/profile/sijosam.in)
-
-Looking forward to our conversation about web development, technical leadership, or potential collaborations.
-
-## Let's Connect
-
-_Let's build something amazing together!_
+- [Email](mailto:sijosam1905@gmail.com)
+- [BlueSky](https://bsky.app/profile/sijosam.in)
+- [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
+- [Resume](https://drive.google.com/file/d/1aAr7PdCs66mvMawFckHUZEnwxXMu7_q0/view?usp=drive_link)
