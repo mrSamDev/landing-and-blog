@@ -91,16 +91,16 @@ const siteConfig: SiteConfig = {
         { text: 'BlueSky', href: 'https://bsky.app/profile/sijosam.in' }
     ],
     hero: {
-        title: 'Sijo Sam: Software engineer',
-        text: 'Sijo Sam, Software engineer with 6+ years building web and mobile apps. Currently crafting video streaming experiences at Diagnal Technologies using React and JavaScript.',
+        title: 'Sijo Sam',
+        text: 'നദിക്ക് വള്ളവും മനുഷ്യൻക്ക് സ്വപ്നവും ഒരുപോലെയാണ്.',
         image: {
             src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
             alt: 'Sijo Sam - Technical Lead'
         },
         actions: [
-            { text: 'Me!', href: '/about' },
-            { text: 'View Projects', href: '/projects' },
-            { text: 'Get in Touch', href: '/contact' }
+            { text: 'About Me!', href: '/about' },
+            { text: 'Cool Stuff!', href: '/projects' },
+            { text: 'Say Hi!', href: '/contact' }
         ]
     },
     // subscribe: {
