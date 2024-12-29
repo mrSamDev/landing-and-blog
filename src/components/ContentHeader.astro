@@ -1,0 +1,30 @@
+---
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+    title: string;
+    publishDate?: Date;
+}
+
+const { title, publishDate } = Astro.props;
+---
+
+<header class="relative w-full flex items-center justify-center overflow-hidden p-6">
+    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        {
+            publishDate && (
+                <div class="text-sm mb-4">
+                    <FormattedDate date={publishDate} />
+                </div>
+            )
+        }
+
+        <h1
+            class="text-3xl text-center leading-relaxed font-medium sm:text-5xl lg:text-6xl
+          sm:leading-relaxed lg:leading-relaxed mb-8 text-white tracking-tight
+          max-w-4xl mx-auto break-words"
+        >
+            {title}
+        </h1>
+    </div>
+</header>
