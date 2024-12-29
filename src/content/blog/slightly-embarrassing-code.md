@@ -1,7 +1,7 @@
 ---
 title: That Time I Over-Engineered Image Loading in React
 excerpt: A deep dive into my 2018 React image loading component, what I got wrong, and how web standards have evolved to make it all unnecessary.
-publishDate: 'Dec 26 2024'
+publishDate: 'Jan 02 2025'
 tags:
   - React
   - JavaScript
@@ -11,7 +11,7 @@ tags:
 isFeatured: true
 seo:
   image:
-    src: 'https://res.cloudinary.com/yourcloud/image/upload/v1/your-image-path'
+    src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/jlakzump30s04wevtrl4'
     alt: 'React code showing image loading implementation'
 ---
 
@@ -28,7 +28,7 @@ const imgCache = {
   __cache: {}
   read(src) {
     if (!src) return;
-    
+
     if (!this.__cache[src]) {
       this.__cache[src] = new Promise((resolve) => {
         const img = new Image();
@@ -42,7 +42,7 @@ const imgCache = {
         this.__cache[src] = true;
       });
     }
-    
+
     if (this.__cache[src] instanceof Promise) {
       throw this.__cache[src];
     }
@@ -71,6 +71,7 @@ It was 2018, and React had just dropped this shiny new thing called Suspense. Ev
 - Everyone and their dog was writing custom image loading solutions
 
 So there I was, thinking I needed to solve ALL THE THINGS:
+
 1. Cache images in memory (because apparently browsers don't do that already, right?)
 2. Handle loading states with Suspense (because it was new and cool)
 3. Deal with SSR hydration (by making things more complicated)
@@ -81,23 +82,29 @@ So there I was, thinking I needed to solve ALL THE THINGS:
 Let's count the ways this was... problematic:
 
 ### 1. The Memory Leak Factory
+
 ```javascript
 this.__cache[src] = true;
 ```
+
 This cache grows forever. No cleanup. No size limits. Just an ever-expanding object that would eventually eat all the memory if the app ran long enough. Oops.
 
 ### 2. The Promise-Throwing Theater
+
 ```javascript
 if (this.__cache[src] instanceof Promise) {
   throw this.__cache[src];
 }
 ```
+
 Look at me using Suspense! I'm so modern! (Meanwhile, the browser's already handling image loading just fine, thanks.)
 
 ### 3. The Timeout of Mystery
+
 ```javascript
 setTimeout(() => resolve({}), 7000);
 ```
+
 Seven seconds, because... why not? And let's resolve with an empty object instead of properly handling the error. Future me would like to have a word with past me about this one.
 
 ## How Things Have Changed (Thank Goodness)
@@ -106,15 +113,11 @@ Fast forward to 2024, and oh boy, have things improved. Here's what we can do no
 
 ```html
 <!-- Look ma, no JavaScript! -->
-<img 
-  loading="lazy"
-  decoding="async"
-  src="picture.jpg" 
-  alt="A much simpler approach"
-/>
+<img loading="lazy" decoding="async" src="picture.jpg" alt="A much simpler approach" />
 ```
 
 That's it. Really. The browser now handles:
+
 - Lazy loading
 - Image optimization
 - Caching
@@ -125,17 +128,10 @@ And if you really need more features, modern frameworks got you covered:
 
 ```javascript
 // Next.js making life easier
-import Image from 'next/image'
+import Image from 'next/image';
 
 function MyComponent() {
-  return (
-    <Image
-      src="/my-image.jpg"
-      alt="Look how clean this is"
-      width={500}
-      height={300}
-    />
-  )
+  return <Image src="/my-image.jpg" alt="Look how clean this is" width={500} height={300} />;
 }
 ```
 
@@ -162,14 +158,7 @@ Notice how "displaying regular images on a website" isn't on that list? Yeah.
 These days, my approach is much simpler:
 
 ```javascript
-const Image = ({ src, alt }) => (
-  <img
-    src={src}
-    alt={alt}
-    loading="lazy"
-    decoding="async"
-  />
-);
+const Image = ({ src, alt }) => <img src={src} alt={alt} loading="lazy" decoding="async" />;
 ```
 
 That's it. No cache. No promises. No timeouts. Just let the browser do its thing.
@@ -180,8 +169,4 @@ If you need more features, grab an image component from your framework of choice
 
 Sometimes the best code is the code you don't write. Or in this case, the code you delete and replace with platform features that existed all along.
 
-I'd love to hear about your own "what was I thinking?" moments. Drop a comment below or reach out on Twitter. Misery loves company, especially when it comes to questionable code decisions!
-
----
-
-Want to see more of my questionable coding decisions? Check out the original code on [GitHub](https://github.com) (and maybe don't judge too harshly).
+I'd love to hear about your own "what was I thinking?" moments. Drop a comment below or reach out on [Bluesky](https://bsky.app/profile/sijosam.in). Misery loves company, especially when it comes to questionable code decisions!
