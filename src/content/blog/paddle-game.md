@@ -4,7 +4,7 @@ excerpt: Learn how to build a classic paddle game using React and the Canvas API
 publishDate: 'Dec 10 2024'
 tags:
   - Guide
-  - Game
+  - Paddle-Game
   - JavaScript
   - Programming
 seo:
@@ -278,5 +278,5 @@ Add proper frame-rate independent movement
 Implement a proper particle pool for better performance
 Maybe add some sound effects (once I figure out the Web Audio API!)
 
-The source code is available in [my blog's codebase](https://github.com/mrSamDev/landing-and-blog/blob/main/src/components/PaddleGame.tsx), and you can try the game right here on the site. This has been a great learning experience diving into Canvas game development, and I'm excited to explore more advanced topics like WebGL and Three.js in the future.
+The source code is available in [codebase](https://github.com/mrSamDev/sam-paddle-game), and you can try the game right here on the site. This has been a great learning experience diving into Canvas game development, and I'm excited to explore more advanced topics like WebGL and Three.js in the future.
 Remember, sometimes the best way to learn is to just start building, even if it's not perfect at first. Happy coding!
