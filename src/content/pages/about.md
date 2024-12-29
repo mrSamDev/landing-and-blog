@@ -8,6 +8,8 @@ seo:
     alt: Sijo Sam
 ---
 
+![Sijo Sam](https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq)
+
 Frontend Lead at Diagnal Technologies, where I wrestle with React but secretly love working with Svelte, making video players behave across every screen imaginable! When I'm not debugging CSS or optimizing render cycles, you'll probably find me deep in the latest manga chapter or planning my next trek (though let's be honest, lately it's been more about that WFH life 🏠).
 
 ## 🌍 About Me
@@ -59,22 +61,5 @@ const Sijo = {
 
 - "I Was Mistaken as a Monstrous Genius Actor" - the plot twists keep coming
 - "The Regressed Mercenary's Machinations" - chapter 175 and counting
-
-## 📫 Let's Connect!
-
-Drop me a line if you want to chat about:
-
-- 🎨 That pixel-perfect UI you're struggling with
-- 📚 Your favorite manga/manhwa recommendations
-- 🏃‍♂️ Cool trekking spots around Kerala
-- 🤓 Why Go's error handling is actually pretty neat
-
-### Find me online
-
-- [Personal Website](http://sijosam.com/)
-- [Email](mailto:sijosam1905@gmail.com)
-- [BlueSky](https://bsky.app/profile/sijosam.in)
-- [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
-- [Resume](https://drive.google.com/file/d/1aAr7PdCs66mvMawFckHUZEnwxXMu7_q0/view?usp=drive_link)
 
 _Currently accepting anime recommendations and debugging tips! 🎯_

@@ -1,5 +1,6 @@
 ---
 import FormattedDate from './FormattedDate.astro';
+import BlogDivider from './Divider.astro';
 
 interface Props {
     title: string;
@@ -26,5 +27,7 @@ const { title, publishDate } = Astro.props;
         >
             {title}
         </h1>
+
+        <BlogDivider />
     </div>
 </header>
