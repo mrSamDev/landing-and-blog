@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
 import clsx from 'clsx';
+import CarbonBadge from '../components/CarbonBadge.astro';
 
 export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean };
 
@@ -31,6 +32,7 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
             <main class={clsx('grow w-full', !fullWidth && 'max-w-4xl mx-auto')}>
                 <slot />
             </main>
+            <CarbonBadge />
             <Footer />
         </div>
     </body>
