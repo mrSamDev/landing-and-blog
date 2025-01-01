@@ -1,0 +1,165 @@
+---
+
+---
+
+<div class="relative flex flex-col items-center gap-4">
+    <button
+        id="blog-divider"
+        class="h-3 rounded-full bg-white/30 transition-all duration-500 ease-in-out hover:bg-white/40 initial-pulse"
+        aria-label="Expanding divider"
+    >
+    </button>
+    <div id="scale-effect" class="absolute top-0 w-4 h-4 rounded-full bg-white/10 opacity-0 pointer-events-none"></div>
+    <span id="random-word" class="text-white text-lg opacity-0 transition-opacity duration-500"></span>
+</div>
+
+<style>
+    @keyframes scaleUp {
+        0% {
+            opacity: 0;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.3;
+            transform: scale(20);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes initialPulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .scale-animation {
+        animation: scaleUp 1.5s ease-in-out forwards;
+    }
+
+    .initial-pulse {
+        animation: initialPulse 2s ease-in-out 1s;
+    }
+
+    .fade-in {
+        opacity: 1 !important;
+        transform: translateY(0);
+    }
+
+    #random-word {
+        transform: translateY(10px);
+        transition:
+            transform 500ms ease-in-out,
+            opacity 500ms ease-in-out;
+    }
+
+    @media (max-width: 768px) {
+        @keyframes scaleUp {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.3;
+                transform: scale(10);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+    }
+</style>
+
+<script>
+    const affirmations = [
+        'You are amazing!',
+        'You make the world better',
+        'Your potential is limitless',
+        "You're doing great today",
+        'You bring joy to others',
+        'Your creativity knows no bounds',
+        "You're making a difference",
+        'Your kindness matters',
+        "You're stronger than you know",
+        'Your ideas are valuable',
+        'You inspire others',
+        'Keep shining bright',
+        "You've got this!",
+        "You're on the right path",
+        'Your presence is a gift',
+        'You make others smile'
+    ];
+
+    let isAnimating = false;
+    const divider = document.getElementById('blog-divider');
+    const scaleEffect = document.getElementById('scale-effect');
+    const wordElement = document.getElementById('random-word');
+
+    function showRandomWord() {
+        if (!wordElement) return;
+        const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+        wordElement.textContent = randomAffirmation;
+        wordElement.classList.add('fade-in');
+    }
+
+    if (divider && scaleEffect) {
+        divider.style.width = '50px';
+
+        const resetDivider = () => {
+            divider.style.width = '50px';
+            scaleEffect.classList.remove('scale-animation');
+            if (wordElement) {
+                wordElement.classList.remove('fade-in');
+                wordElement.textContent = '';
+            }
+            isAnimating = false;
+        };
+
+        const triggerEffects = () => {
+            scaleEffect.classList.add('scale-animation');
+            showRandomWord();
+            setTimeout(() => {
+                scaleEffect.classList.remove('scale-animation');
+            }, 1500);
+        };
+
+        divider.addEventListener('click', () => {
+            if (isAnimating) return;
+
+            const currentWidth = parseInt(divider.style.width);
+
+            if (currentWidth >= 240) {
+                isAnimating = true;
+                triggerEffects();
+                setTimeout(resetDivider, 2000);
+            } else {
+                divider.style.width = `${currentWidth + 20}px`;
+            }
+        });
+
+        divider.addEventListener('animationend', (e) => {
+            if (e.animationName === 'initialPulse') {
+                divider.classList.remove('initial-pulse');
+            }
+        });
+    }
+
+    document.addEventListener('astro:page-load', () => {
+        const divider = document.getElementById('blog-divider');
+        if (divider) {
+            divider.style.width = '44px';
+        }
+    });
+</script>

@@ -1,0 +1,41 @@
+---
+import Button from '../components/Button.astro';
+
+const url = Astro.url.href;
+
+let carbonData = null;
+
+if (url) {
+    const encodedURL = encodeURIComponent(url);
+    try {
+        const response = await fetch(`https://api.websitecarbon.com/b?url=${encodedURL}`, {
+            headers: {
+                'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400'
+            }
+        });
+        const data = await response.json();
+
+        if (!data.error) {
+            carbonData = data;
+        }
+    } catch (error) {}
+}
+---
+
+{
+    carbonData && (
+        <div class="text-center">
+            <div class="inline-flex items-center justify-end gap-2 flex-col">
+                <span class="py-1 px-2 min-w-[8.2em] inline-flex items-center justify-center">
+                    {carbonData.c}g of CO<sub class="align-middle relative top-1 text-[0.7em]">2</sub>/view
+                </span>
+
+                <p class="text-sm text-white/80">Cleaner than {carbonData.p}% of pages tested</p>
+
+                <Button href="https://websitecarbon.com" target="_blank" rel="noopener">
+                    Website Carbon
+                </Button>
+            </div>
+        </div>
+    )
+}
