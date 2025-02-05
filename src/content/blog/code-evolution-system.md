@@ -285,7 +285,7 @@ Want to join the fun? Here's how to get started:
 1. Install Ollama:
 
    ```bash
-   curl https://ollama.ai/install.sh | sh
+   curl -fsSL https://ollama.com/install.sh | sh
    ```
 
 2. Pull the DeepSeek model:
