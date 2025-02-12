@@ -10,7 +10,7 @@ tags:
   - TypeScript
 seo:
   image:
-    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/jsdoc-legacy/main
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/jedoswrrvmrmac0pn9bp
     alt: JSDoc Implementation in Legacy Codebases
 ---
 
