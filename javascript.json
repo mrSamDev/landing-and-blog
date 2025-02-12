@@ -1,0 +1,10 @@
+{
+    "JSDoc Function": {
+        "prefix": "jsd",
+        "body": ["/**", " * ${1:Description}", " * @param {${2:type}} ${3:name} - ${4:description}", " * @returns {${5:type}} ${6:description}", " */", "$0"]
+    },
+    "JSDoc Class": {
+        "prefix": "jsdc",
+        "body": ["/**", " * ${1:Class description}", " * @class", " */", "class ${2:ClassName} {", "  $0", "}"]
+    }
+}
