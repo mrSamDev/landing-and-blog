@@ -19,6 +19,8 @@ You know that feeling when you discover a feature that makes your previous code 
 
 React 19's new use function dramatically reduces boilerplate for async operations and resource consumption, making quick demos and prototypes significantly easier to build. While React Query still reigns for production apps with advanced caching needs, use is a game-changer for rapid development. However, it's important to understand both its strengths and limitations before deciding which approach best fits your project. Notably, use is part of the React API and not a Hook.
 
+Simple demo: https://use-react-api-vite-demo.netlify.app/
+
 ## The Promise-Handling Revolution
 
 If you've been writing React apps for any length of time, you're familiar with the dance:
