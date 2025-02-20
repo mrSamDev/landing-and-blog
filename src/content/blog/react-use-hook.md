@@ -309,7 +309,7 @@ So when should you reach for `use` vs React Query?
 - Your application requires request cancellation when components unmount
 - You need built-in devtools for debugging data flow
 
-## "Rules are meant to be broken" - The `use` Hook Exception
+## "Rules are meant to be broken" - The `use` Hook(API) Exception
 
 _"The first rule of React Hooks is: You don't call hooks conditionally... unless it's the `use` hook!"_
 
@@ -350,14 +350,6 @@ function ProductDisplay({ category, showFeatured }) {
 
 This represents a fundamental shift in React's programming model. By allowing `use` to be called conditionally and in nested contexts, React has made data fetching much more natural and intuitive.
 
-## The Ecosystem Integration
-
-The `use` hook is designed to play well with other parts of the React ecosystem. It works seamlessly with:
-
-- [React Query Context](https://tanstack.com/query/latest/docs/react/reference/QueryClientProvider) for global configuration
-- [React Router's loaders](https://reactrouter.com/en/main/route/loader) for route-based data fetching
-- [Next.js Server Components](https://nextjs.org/docs/app/building-your-application/data-fetching) for hybrid rendering strategies
-- [Redux](https://redux.js.org/introduction/getting-started) for global state that interacts with async data
 
 ## Limitations and Considerations
 
