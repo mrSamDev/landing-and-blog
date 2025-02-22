@@ -17,7 +17,10 @@ You know that feeling when you discover a feature that makes your previous code 
 
 ## TL;DR
 
-React 19 introduces use, a function that simplifies async operations and resource handling. Unlike Hooks, use is a regular function that can be called conditionally. It reduces boilerplate for quick demos and prototypes.
+React 19 introduces use, a function that requires a promise as input and simplifies async operations and resource handling. Unlike Hooks, use is a regular function that can be called conditionally. It reduces boilerplate for quick demos and prototypes.
+Promise memoization is crucial when working with use - failing to memoize promises can lead to unexpected behavior and performance issues. Learn more about proper promise handling in the [React Compiler documentation](https://react.dev/learn/react-compiler).
+While React Query remains better for production apps needing advanced caching, use excels at rapid development. Choose between them based on your project's specific requirements.
+
 While React Query remains better for production apps needing advanced caching, use excels at rapid development. Choose between them based on your project's specific requirements.
 
 Simple demo: https://use-react-api-vite-demo.netlify.app/
