@@ -8,7 +8,7 @@ tags:
   - Telegram API
   - Performance
   - Concurrency
-isFeatured: true
+isFeatured: false
 seo:
   image:
     src: 'https://res.cloudinary.com/example/image/upload/v1/Blog/telegram-downloader'
