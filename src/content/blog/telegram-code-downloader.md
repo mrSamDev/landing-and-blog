@@ -11,7 +11,7 @@ tags:
 isFeatured: false
 seo:
   image:
-    src: 'https://res.cloudinary.com/example/image/upload/v1/Blog/telegram-downloader'
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/bua3m2jdn4scgloejhkb
     alt: 'JavaScript code showing parallel download implementation'
 ---
 
