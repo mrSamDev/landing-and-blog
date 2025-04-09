@@ -1,8 +1,8 @@
 ---
 title: Bridging the Gap - React and the Outside World with useSyncExternalStore
 excerpt: Seamlessly integrate external state into React components using useSyncExternalStore for responsive designs, localStorage syncing, and more.
-publishDate: 'April 09 2025'
-isPublished: false
+publishDate: 'April 10 2025'
+isPublished: true
 tags:
   - React
   - JavaScript
@@ -78,29 +78,29 @@ function useWindowSizeWithEffect() {
 
 ### Issues with the useEffect Pattern
 
-1. **Race Conditions:** If the external source updates during React's rendering phase, you can end up with inconsistent UI. In our production app, this manifested as different components using different window sizes during the same render.
+1.  **Race Conditions:** If the external source updates during React's rendering phase, you can end up with inconsistent UI. In our production app, this manifested as different components using different window sizes during the same render.
 
-2. **Subscription Timing Gaps:** There's a window between the initial render and when the effect runs where your component is disconnected from the external source. This caused flickering in our UI during page transitions.
+2.  **Subscription Timing Gaps:** There's a window between the initial render and when the effect runs where your component is disconnected from the external source. This caused flickering in our UI during page transitions.
 
-3. **Extra Renders:** With `useEffect`, any external update triggers a state update and then a render. With complex UIs, these cascading renders caused noticeable performance issues.
+3.  **Extra Renders:** With `useEffect`, any external update triggers a state update and then a render. With complex UIs, these cascading renders caused noticeable performance issues.
 
-4. **Difficult Synchronization:** Keeping multiple components in sync with the same external source required either prop drilling or context, adding complexity.
+4.  **Difficult Synchronization:** Keeping multiple components in sync with the same external source required either prop drilling or context, adding complexity.
 
-5. **Not Concurrent Mode Safe:** When React implements time-slicing and other concurrent features, the `useEffect` pattern can lead to tearing—different parts of the UI reflecting different states.
+5.  **Not Concurrent Mode Safe:** When React implements time-slicing and other concurrent features, the `useEffect` pattern can lead to tearing—different parts of the UI reflecting different states.
 
 ![useEffect vs useSyncExternalStore](https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/useExternalstore/uvmjtiolqx4etlsfcxmb)
 
 ### useSyncExternalStore Advantages
 
-1. **Consistency Guarantee:** React ensures all components see the same external state during a single render, eliminating tearing issues we had with event listeners.
+1.  **Consistency Guarantee:** React ensures all components see the same external state during a single render, eliminating tearing issues we had with event listeners.
 
-2. **No Timing Gaps:** Components are synchronized with the external source from the very first render, solving the flicker we experienced during transitions.
+2.  **No Timing Gaps:** Components are synchronized with the external source from the very first render, solving the flicker we experienced during transitions.
 
-3. **Reduced Render Overhead:** The hook optimizes renders by comparing snapshots, reducing the cascading render problem we faced with large component trees.
+3.  **Reduced Render Overhead:** The hook optimizes renders by comparing snapshots, reducing the cascading render problem we faced with large component trees.
 
-4. **Concurrent Mode Ready:** Built specifically to work with React's upcoming features, future-proofing our codebase.
+4.  **Concurrent Mode Ready:** Built specifically to work with React's upcoming features, future-proofing our codebase.
 
-5. **Server-Side Rendering Support:** With the optional server snapshot parameter, we could properly handle SSR, which our previous implementation couldn't do.
+5.  **Server-Side Rendering Support:** With the optional server snapshot parameter, we could properly handle SSR, which our previous implementation couldn't do.
 
 ## Real-World Examples From My Projects
 
@@ -110,57 +110,74 @@ I was working on an application that needed different layouts based on screen si
 
 ```javascript
 function useWindowSize() {
+  // Create a stable cache for storing the last value
+  // This is crucial to prevent the "maximum update depth exceeded" error
+  const cache = React.useRef({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+    isMobile: false,
+    isTablet: false,
+    isDesktop: true
+  }).current;
+
+  // The getSnapshot function that properly caches results
+  const getSnapshot = () => {
+    // For SSR or environments without window
+    if (typeof window === 'undefined') {
+      return cache;
+    }
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const isMobile = width < 768;
+    const isTablet = width >= 768 && width < 1024;
+    const isDesktop = width >= 1024;
+
+    // Only create a new value if something changed
+    if (width !== cache.width || height !== cache.height || isMobile !== cache.isMobile || isTablet !== cache.isTablet || isDesktop !== cache.isDesktop) {
+      // Update cache with new values
+      cache.width = width;
+      cache.height = height;
+      cache.isMobile = isMobile;
+      cache.isTablet = isTablet;
+      cache.isDesktop = isDesktop;
+    }
+
+    // Return the same object reference if nothing changed
+    return cache;
+  };
+
   return useSyncExternalStore(
     (callback) => {
-      // Throttling the resize event - a lesson learned after seeing
-      // performance issues in production
-      let timeoutId = null;
+      // Don't try to add listeners during SSR
+      if (typeof window === 'undefined') {
+        return () => {};
+      }
+
+      // Proper throttling implementation
+      let lastExecTime = 0;
+      const throttleInterval = 100;
       const throttledCallback = () => {
-        if (timeoutId === null) {
-          timeoutId = setTimeout(() => {
-            timeoutId = null;
-            callback();
-          }, 100);
+        const now = Date.now();
+        if (now - lastExecTime >= throttleInterval) {
+          lastExecTime = now;
+          callback();
         }
       };
 
       window.addEventListener('resize', throttledCallback);
       return () => {
         window.removeEventListener('resize', throttledCallback);
-        // Clear any pending timeout when unmounting
-        if (timeoutId !== null) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
-        }
       };
     },
-    // Memoize the size object to prevent unnecessary renders
-    () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      // Return size category rather than raw pixels to reduce renders
-      return {
-        width,
-        height,
-        isMobile: width < 768,
-        isTablet: width >= 768 && width < 1024,
-        isDesktop: width >= 1024
-      };
-    },
-    // Server snapshot function (new)
-    () => ({
-      width: 0,
-      height: 0,
-      isMobile: false,
-      isTablet: false,
-      isDesktop: true // or whatever default you prefer
-    })
+    getSnapshot,
+    // Server snapshot function
+    () => cache
   );
 }
 
 function AppLayout() {
-  const { isMobile, isTablet, isDesktop } = useWindowSize();
+  const { isMobile, isTablet } = useWindowSize();
 
   // We realized during testing that we needed to be very explicit about
   // which layout to show, as there were edge cases where none would render
@@ -172,9 +189,12 @@ function AppLayout() {
 
 This approach solved several real problems we had with our previous implementation:
 
-1. No more torn UI where half the components thought we were on mobile and half on desktop
-2. Predictable, controlled renders that weren't firing on every pixel change
-3. Proper cleanup that prevented potential memory leaks related to event listeners.
+1.  No more torn UI where half the components thought we were on mobile and half on desktop
+2.  Predictable, controlled renders that weren't firing on every pixel change
+3.  Proper cleanup that prevented potential memory leaks related to event listeners
+4.  Avoiding the dreaded "maximum update depth exceeded" error by properly caching snapshot results
+
+**Note on Throttling:** The `throttledCallback` in the above example is a true throttle implementation, ensuring the callback is executed at most once within the defined interval. The previous version incorrectly implemented a debounce.
 
 ### 2. localStorage Synchronization Across Tabs
 
@@ -182,23 +202,56 @@ I once had to build a multi-tab application where user preferences needed to sta
 
 ```javascript
 function useLocalStorage(key, initialValue) {
+  // Use a cached value to maintain reference equality
+  const cache = React.useRef(null);
+
   // Parse and stringify with error handling
   const getSnapshot = () => {
+    // Handle SSR case
+    if (typeof window === 'undefined') {
+      return cache.current ?? initialValue;
+    }
+
     try {
+      // Try to get from localStorage
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      const parsedItem = item ? JSON.parse(item) : initialValue;
+
+      // Only update the cache if we have a new value
+      if (cache.current === null || !isEqual(cache.current, parsedItem)) {
+        cache.current = parsedItem;
+      }
+
+      return cache.current;
     } catch (error) {
       console.error(`Storage error for "${key}"`, error);
-      return initialValue;
+      // Fallback to cache or initial value on error
+      if (cache.current === null) {
+        cache.current = initialValue;
+      }
+      return cache.current;
     }
   };
 
   const subscribe = (callback) => {
+    // SSR handling
+    if (typeof window === 'undefined') {
+      return () => {};
+    }
+
     // Listen for changes in other tabs
-    const handleStorageEvent = (e) => e.key === key && callback();
+    const handleStorageEvent = (e) => {
+      if (e.key === key) {
+        callback();
+      }
+    };
 
     // Listen for changes in current tab
-    const handleCustomEvent = (e) => e.detail?.key === key && callback();
+    const handleCustomEvent = (e) => {
+      if (e.detail?.key === key) {
+        callback();
+      }
+    };
 
     window.addEventListener('storage', handleStorageEvent);
     window.addEventListener('local-storage-update', handleCustomEvent);
@@ -209,7 +262,12 @@ function useLocalStorage(key, initialValue) {
     };
   };
 
-  const value = useSyncExternalStore(subscribe, getSnapshot);
+  const value = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    // Server snapshot
+    () => initialValue
+  );
 
   const setValue = (newValue) => {
     try {
@@ -219,14 +277,33 @@ function useLocalStorage(key, initialValue) {
       // Update localStorage
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
 
-      // Notify current tab about the change
-      window.dispatchEvent(new CustomEvent('local-storage-update', { detail: { key } }));
+      // Update our cache
+      cache.current = valueToStore;
+
+      // Notify current tab about the change, include the new value
+      window.dispatchEvent(
+        new CustomEvent('local-storage-update', {
+          detail: { key, value: valueToStore }
+        })
+      );
     } catch (error) {
       console.error(`Failed to update "${key}"`, error);
     }
   };
 
   return [value, setValue];
+}
+
+// Simple deep equality check for objects
+function isEqual(a, b) {
+  if (a === b) return true;
+  if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
+    return false;
+  }
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  if (keysA.length !== keysB.length) return false;
+  return keysA.every((key) => isEqual(a[key], b[key]));
 }
 
 function UserPreferencesPanel() {
@@ -261,55 +338,86 @@ function UserPreferencesPanel() {
 
 Learning points from my localStorage implementation:
 
-1. The `storage` event only triggers in _other_ tabs. Our first version didn't update the current tab until a refresh.
-2. Custom events were necessary to make the current tab update immediately.
-3. Error handling wasn't optional—in production, we encountered all sorts of edge cases with users who had browser extensions that interfered with localStorage.
+1.  The `storage` event only triggers in _other_ tabs. Our first version didn't update the current tab until a refresh.
+2.  Custom events were necessary to make the current tab update immediately.
+3.  Error handling wasn't optional—in production, we encountered all sorts of edge cases with users who had browser extensions that interfered with localStorage.
+4.  Properly implementing caching to prevent infinite render loops was critical.
+
+**Important Considerations:**
+
+- **Deep Equality:** The `isEqual` function provided is a basic implementation and doesn't handle circular references or different object types correctly. For more robust equality checks, consider using a library like Lodash's `isEqual` or implementing a visited objects `Map` to prevent infinite recursion.
+
+- **Custom Events Data:** The `localStorage` example now dispatches a custom event that includes the updated value in the `detail` property. This avoids the need for other components to read directly from `localStorage`, improving performance.
+
+- **Error Handling in `getSnapshot`:** The `getSnapshot` function includes error handling for `JSON.parse` to prevent issues if the stored data is corrupted. It falls back to the cached value or initial value to prevent the application from crashing.
 
 ## Common Pitfalls I've Encountered
 
 After using `useSyncExternalStore` in multiple projects, I've collected a list of mistakes to avoid:
 
-1. **Forgetting to call the callback:** In my first implementation, I set up event listeners but forgot to actually call the callback when events occurred. The components never updated.
+1.  **Forgetting to call the callback:** In my first implementation, I set up event listeners but forgot to actually call the callback when events occurred. The components never updated.
 
-2. **Creating new objects in getSnapshot:** I initially returned a new object on every call to `getSnapshot`, causing React to think the data had changed even when it hadn't. This led to infinite render loops until I started memoizing the result.
+2.  **Creating new objects in getSnapshot:** This was the most insidious problem that led to infinite render loops. Every time React calls `getSnapshot`, you need to return the same object reference if the data hasn't actually changed.
 
-   ```javascript
-   // BAD - creates a new object each time
-   const getSnapshot = () => ({ width: window.innerWidth });
+```javascript
+// BAD - creates a new object each time, causing infinite loops
+const getSnapshot = () => ({ width: window.innerWidth });
 
-   // GOOD - uses memoization or primitive values
-   const widthCache = { value: window.innerWidth };
-   const getSnapshot = () => {
-     const current = window.innerWidth;
-     if (current !== widthCache.value) {
-       widthCache.value = current;
-     }
-     return widthCache.value;
-   };
-   ```
+// GOOD - uses stable object reference
+const cache = { value: window.innerWidth };
+const getSnapshot = () => {
+  const current = window.innerWidth;
+  if (current !== cache.value) {
+    cache.value = current;
+  }
+  return cache.value;
+};
 
-3. **Expensive computations in getSnapshot:** On a project, I initially did data filtering inside `getSnapshot`, causing major performance issues. I learned to keep `getSnapshot` lightweight and move computations elsewhere.
+// EVEN BETTER - complete deep comparison for complex objects
+const cache = useRef({ data: initialData }).current;
+const getSnapshot = () => {
+  const newData = getExternalData();
+  if (!isDeepEqual(cache.data, newData)) {
+    cache.data = newData;
+  }
+  return cache;
+};
+```
 
-4. **Ignoring server-side rendering:** Our first deployment broke in production because our `getSnapshot` function referenced `window`, which doesn't exist during SSR. We had to add a server snapshot:
+3.  **Expensive computations in getSnapshot:** On a project, I initially did data filtering inside `getSnapshot`, causing major performance issues. I learned to keep `getSnapshot` lightweight and move computations elsewhere.
 
-   ```javascript
-   useSyncExternalStore(
-     subscribe,
-     // Client snapshot
-     () => window.innerWidth,
-     // Server snapshot
-     () => 1024 // Default to desktop size on server
-   );
-   ```
+4.  **Ignoring server-side rendering:** Our first deployment broke in production because our `getSnapshot` function referenced `window`, which doesn't exist during SSR. We had to add a server snapshot:
 
-## Looking Forward
+```javascript
+// Initial cache that's safe for SSR
+const cache = useRef({
+  width: 0,
+  height: 0,
+  isMobile: false,
+  isTablet: false,
+  isDesktop: true
+}).current;
 
-As my team moves more of our application to React concurrent mode features, `useSyncExternalStore` has become even more valuable. It provides a safe way to integrate external data while respecting React's rendering model.
+useSyncExternalStore(
+  subscribe,
+  // Client snapshot with safety check
+  () => {
+    if (typeof window === 'undefined') return cache;
+    // Rest of logic here
+  },
+  // Server snapshot
+  () => cache
+);
+```
 
-In one recent project retrospective, we identified that adopting `useSyncExternalStore` early would have prevented many bugs that had made it to production. The cost of fixing those bugs after the fact was significant—both in engineering time and user experience.
+5.  **Not handling cleanup properly:** In our throttled implementations, we initially forgot to clear timeouts when unmounting components, potentially leading to memory leaks.
 
 ## Conclusion
 
 Real React apps need to work smoothly with things outside React's control—browser features, external libraries, and sometimes older code. After struggling with these connections, I've found useSyncExternalStore to be incredibly helpful.
+
 I was skeptical at first, but seeing how it solved actual problems in our apps made me a believer. Now it's become our go-to solution when connecting React with external data sources.
+
 If you remember just one thing: when you're about to use useEffect for subscribing to external events or data, consider trying useSyncExternalStore instead. It might save you hours of troubleshooting and keep your application consistent across components.
+
+Just be careful to properly implement snapshot caching and use robust equality checks to avoid the "maximum update depth exceeded" error and other subtle issues that have tripped up so many developers—myself included!
