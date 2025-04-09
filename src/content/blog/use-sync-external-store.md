@@ -17,8 +17,7 @@ seo:
 
 Last month, I spent my time debugging a React application that was randomly displaying different values across components that should have been in sync. The culprit? We were directly subscribing to window events in multiple components, creating a mess of state inconsistencies. That experience led me down the rabbit hole of React's `useSyncExternalStore` hook—a tool I wish I'd known about much earlier.
 
-<strong>
-Important Note:</strong> This post reflects my personal experience. There are often multiple solutions to any given problem, and it's always best to research and evaluate different approaches before implementing a feature.
+Disclaimer: This is my personal experience, and other solutions exist. Research and evaluate different approaches, such as React Query or SWR for data fetching, before implementing any feature.
 
 React excels at managing its own ecosystem of components and state, but real applications don't live in isolation. They need to communicate with browser APIs, third-party libraries, and sometimes even legacy code that's completely outside React's control. This is the gap that `useSyncExternalStore` was designed to bridge.
 
@@ -45,6 +44,8 @@ At its core, the hook takes two essential functions:
 - **`subscribe(callback)`:** Your subscription method that connects to the external data source. When I first implemented this, I kept forgetting that the callback must be called whenever the external data changes.
 
 - **`getSnapshot()`:** A function that returns the current value from your external source. The key detail I missed in my first implementation: this needs to be fast and return referentially stable values when the data hasn't changed. Otherwise, you'll trigger renders unnecessarily.
+
+![useSyncExternalStore architecture](https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/useExternalstore/ka2mgxsndhlyswecb27q)
 
 ## useEffect vs. useSyncExternalStore: Why Make the Switch?
 
@@ -87,6 +88,8 @@ function useWindowSizeWithEffect() {
 
 5. **Not Concurrent Mode Safe:** When React implements time-slicing and other concurrent features, the `useEffect` pattern can lead to tearing—different parts of the UI reflecting different states.
 
+![useEffect vs useSyncExternalStore](https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/useExternalstore/uvmjtiolqx4etlsfcxmb)
+
 ### useSyncExternalStore Advantages
 
 1. **Consistency Guarantee:** React ensures all components see the same external state during a single render, eliminating tearing issues we had with event listeners.
@@ -98,8 +101,6 @@ function useWindowSizeWithEffect() {
 4. **Concurrent Mode Ready:** Built specifically to work with React's upcoming features, future-proofing our codebase.
 
 5. **Server-Side Rendering Support:** With the optional server snapshot parameter, we could properly handle SSR, which our previous implementation couldn't do.
-
-In one performance test comparing the two approaches on our dashboard with 50+ components, the `useSyncExternalStore` implementation reduced total render time by 27% and eliminated all instances of tearing that were previously visible to users.
 
 ## Real-World Examples From My Projects
 
