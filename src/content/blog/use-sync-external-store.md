@@ -2,7 +2,7 @@
 title: Bridging the Gap - React and the Outside World with useSyncExternalStore
 excerpt: Seamlessly integrate external state into React components using useSyncExternalStore for responsive designs, localStorage syncing, and more.
 publishDate: 'April 09 2025'
-isPublished: true
+isPublished: false
 tags:
   - React
   - JavaScript
