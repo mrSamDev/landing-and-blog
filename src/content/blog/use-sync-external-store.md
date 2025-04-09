@@ -15,7 +15,10 @@ seo:
     alt: 'React component interacting with external state using useSyncExternalStore'
 ---
 
-Last month, I spent three days debugging a React application that was randomly displaying different values across components that should have been in sync. The culprit? We were directly subscribing to window events in multiple components, creating a mess of state inconsistencies. That painful experience led me down the rabbit hole of React's `useSyncExternalStore` hook—a tool I wish I'd known about much earlier.
+Last month, I spent my time debugging a React application that was randomly displaying different values across components that should have been in sync. The culprit? We were directly subscribing to window events in multiple components, creating a mess of state inconsistencies. That experience led me down the rabbit hole of React's `useSyncExternalStore` hook—a tool I wish I'd known about much earlier.
+
+<strong>
+Important Note:</strong> This post reflects my personal experience. There are often multiple solutions to any given problem, and it's always best to research and evaluate different approaches before implementing a feature.
 
 React excels at managing its own ecosystem of components and state, but real applications don't live in isolation. They need to communicate with browser APIs, third-party libraries, and sometimes even legacy code that's completely outside React's control. This is the gap that `useSyncExternalStore` was designed to bridge.
 
@@ -29,7 +32,7 @@ Here's what we struggled with:
 
 - **Performance Bottlenecks:** We'd either update too frequently (causing unnecessary renders) or miss critical updates entirely. A developer on the team optimistically debounced an event listener, only to discover that key data updates were being delayed.
 
-- **Memory Leaks:** During a performance audit, we discovered dozens of abandoned event listeners after component unmounts. In one instance, a tab left open overnight crashed browsers because a resize handler kept accumulating.
+- **Subscription Management:** Ensuring that subscriptions to external data sources were properly managed (subscribed on mount, unsubscribed on unmount) proved challenging.
 
 We needed a systematic approach to connect React to these external systems, which is exactly what `useSyncExternalStore` provides.
 
@@ -170,7 +173,7 @@ This approach solved several real problems we had with our previous implementati
 
 1. No more torn UI where half the components thought we were on mobile and half on desktop
 2. Predictable, controlled renders that weren't firing on every pixel change
-3. Proper cleanup that prevented the memory leaks we'd experienced
+3. Proper cleanup that prevented potential memory leaks related to event listeners.
 
 ### 2. localStorage Synchronization Across Tabs
 
