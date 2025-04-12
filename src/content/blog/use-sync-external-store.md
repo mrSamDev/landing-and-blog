@@ -1,27 +1,24 @@
 ---
-
 title: Bridging the Gap - My Journey Understanding React's useSyncExternalStore
 excerpt: How I tackled state inconsistencies by diving deep into useSyncExternalStore, moving beyond useEffect for safer external state integration in React.
 publishDate: 'April 10 2025'
 isPublished: true
 tags:
-
-- React
-- JavaScript
-- useSyncExternalStore
-- Front-end Development
-- State Management
-- Learning Journey
-  seo:
+  - React
+  - JavaScript
+  - useSyncExternalStore
+  - Front-end Development
+  - State Management
+  - Learning Journey
+seo:
   image:
-  src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/bemskg1cumn1x9z07wym
-  alt: 'React component interacting with external state using useSyncExternalStore'
-
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/bemskg1cumn1x9z07wym
+    alt: 'React component interacting with external state using useSyncExternalStore'
 ---
 
 Last month, I found myself deep in debugging hell with a React application. Components that _should_ have displayed the same data were randomly showing different values, leading to frustrating inconsistencies. The culprit? We were directly subscribing to `window` events in multiple components, bypassing React's state management and creating a synchronization nightmare.
 
-That painful experience didn't just lead me to _a_ solution; it sparked a desire to **truly understand the underlying mechanics** of how React handles external state changes safely, especially with concurrent features. Instead of immediately reaching for a state management library (which often uses this hook under the hood), I decided to **roll up my sleeves and learn React's `useSyncExternalStore` hook directly**. It felt crucial to "hardware" this concept myself. This hook is the tool I wish I'd understood much earlier, not just to fix the immediate bug, but to grasp _how_ React can reliably interact with the world outside its own rendering cycle.
+That painful experience didn't just lead me to _a_ solution; it sparked a desire to **truly understand the underlying mechanics** of how React handles external state changes safely, especially with concurrent features. Instead of immediately reaching for a state management library (which often uses this hook under the hood), I decided to **roll up my sleeves and deeply internalize React's `useSyncExternalStore` hook directly**. It felt crucial to "hard-wire" this concept in my understanding. This hook is the tool I wish I'd understood much earlier, not just to fix the immediate bug, but to grasp _how_ React can reliably interact with the world outside its own rendering cycle.
 
 **Disclaimer:** This post focuses on my journey learning and applying the `useSyncExternalStore` hook directly. While powerful for understanding and specific use cases, remember that excellent libraries and abstractions exist. Always research and evaluate different approaches (like state management libraries for complex state, or React Query/SWR for data fetching) before implementing any feature.
 
@@ -31,7 +28,7 @@ React excels at managing its own ecosystem, but real applications don't live in 
 
 The specific project that sent me down this rabbit hole involved displaying real-time data from WebSockets while also respecting user preferences stored in `localStorage`. Our initial approach felt like the "React way" at first – a combination of `useEffect` hooks, various event listeners, and manual state updates scattered across components. It quickly became apparent this wasn't sustainable.
 
-Here’s a taste of the chaos we (mostly I) wrestled with:
+Here's a taste of the chaos we (mostly I) wrestled with:
 
 - **UI Inconsistencies (Tearing):** This was the most visible symptom. Different components would literally show conflicting data _during the same render_. One part of the UI might react to a WebSocket message while another was still showing stale `localStorage` data. The React team calls this "tearing," and believe me, users notice. It was exactly the kind of random value display I mentioned fighting with earlier.
 - **Performance Headaches:** We swung between two extremes. Sometimes, components updated far too often, triggered by noisy external events, leading to sluggishness. Other times, a well-intentioned attempt by a teammate to debounce an event listener meant critical updates were noticeably delayed. Finding the right balance felt like guesswork.
@@ -57,7 +54,7 @@ Before showing how I applied the hook, let's compare it to the `useEffect` appro
 
 ### The Familiar (and Flawed) `useEffect` Way
 
-Here’s a typical custom hook for tracking window size using `useEffect`, similar to what we initially had:
+Here's a typical custom hook for tracking window size using `useEffect`, similar to what we initially had:
 
 ```javascript
 function useWindowSizeWithEffect() {
@@ -107,24 +104,36 @@ Switching my mindset and implementation to `useSyncExternalStore` felt like a di
 
 ## Putting Theory Into Practice: Examples From My Learning Curve
 
-Okay, enough theory. Here’s how I applied `useSyncExternalStore` to solve the real problems I was facing, including the mistakes and refinements along the way.
+Okay, enough theory. Here's how I applied `useSyncExternalStore` to solve the real problems I was facing, including the mistakes and refinements along the way.
 
 ### 1. Responsive Layouts That Finally Behaved
 
-We needed components to adapt dynamically based on screen size, going beyond simple CSS media queries for more complex layout logic. My first `useEffect` attempt led straight to the tearing issues mentioned earlier. Here’s the `useSyncExternalStore` version I landed on after some trial and error:
+We needed components to adapt dynamically based on screen size, going beyond simple CSS media queries for more complex layout logic. My first `useEffect` attempt led straight to the tearing issues mentioned earlier. Here's the `useSyncExternalStore` version I landed on after some trial and error:
 
 ```javascript
 // Helper for deep equality check (important later!)
 function isEqual(a, b) {
-  // Basic implementation - consider a library for production
+  // If the same object reference or same primitive value
   if (a === b) return true;
+
+  // If either is null or not an object
   if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
     return false;
   }
+
+  // Handle arrays
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    return a.every((item, index) => isEqual(item, b[index]));
+  }
+
+  // For regular objects
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
+
   if (keysA.length !== keysB.length) return false;
-  return keysA.every((key) => isEqual(a[key], b[key]));
+
+  return keysA.every((key) => Object.prototype.hasOwnProperty.call(b, key) && isEqual(a[key], b[key]));
 }
 
 function useWindowSize() {
@@ -185,16 +194,31 @@ function useWindowSize() {
     }
 
     // Throttling to avoid excessive updates on resize spam
-    let lastExecTime = 0;
-    const throttleInterval = 100; // ms
-    const throttledCallback = () => {
-      const now = Date.now();
-      if (now - lastExecTime >= throttleInterval) {
-        lastExecTime = now;
-        // This is the callback React gave us!
+    const throttledCallback = (() => {
+      let lastExecTime = 0;
+      const throttleInterval = 100; // ms
+
+      return () => {
+        const now = Date.now();
+        if (now - lastExecTime >= throttleInterval) {
+          lastExecTime = now;
+          callback();
+        }
+      };
+    })();
+
+    /* 
+    // For comparison, here's what a debounce implementation would look like:
+    // Debouncing - waits until activity stops before executing
+    // This would potentially delay UI updates making the app feel less responsive
+    let debounceTimer;
+    const debouncedCallback = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
         callback();
-      }
+      }, 100);
     };
+    */
 
     window.addEventListener('resize', throttledCallback);
     // Return the cleanup function!
@@ -226,178 +250,48 @@ Key things I learned building this:
 
 ### 2. Syncing `localStorage` Across Tabs (The Real Test)
 
-This was tougher. The goal: change a setting in one tab, and have all other open tabs reflect it instantly. The `storage` event is designed for this, but it _only fires in other tabs_, not the one that made the change. This required a combined approach.
-
-```javascript
-// Re-use the isEqual function from the previous example
-
-function useLocalStorage(key, initialValue) {
-  // Server snapshot is just the initial value
-  const getServerSnapshot = () => initialValue;
-
-  // Cache for reference equality and error fallback
-  const cache = React.useRef(null);
-
-  const getSnapshot = () => {
-    // Handle SSR/no window
-    if (typeof window === 'undefined') {
-      return cache.current ?? initialValue;
-    }
-
-    try {
-      const item = window.localStorage.getItem(key);
-      const parsedItem = item ? JSON.parse(item) : initialValue;
-
-      // Update cache only if value differs (using deep equality)
-      if (cache.current === null || !isEqual(cache.current, parsedItem)) {
-        cache.current = parsedItem;
-      }
-      return cache.current;
-    } catch (error) {
-      console.error(`Error reading localStorage key “${key}”:`, error);
-      // Fallback strategy on error
-      if (cache.current === null) {
-        cache.current = initialValue;
-      }
-      return cache.current;
-    }
-  };
-
-  const subscribe = (callback) => {
-    if (typeof window === 'undefined') {
-      return () => {};
-    }
-
-    // Listener for changes originating from *other* tabs
-    const handleStorageEvent = (event) => {
-      if (event.storageArea === window.localStorage && event.key === key) {
-        // Storage event occurred for our key, notify React
-        callback();
-      }
-    };
-
-    // Listener for changes originating from *this* tab (via custom event)
-    const handleCustomEvent = (event) => {
-      if (event.detail?.key === key) {
-        // Our custom event fired, notify React
-        callback();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageEvent);
-    window.addEventListener('local-storage-update', handleCustomEvent);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('storage', handleStorageEvent);
-      window.removeEventListener('local-storage-update', handleCustomEvent);
-    };
-  };
-
-  // The hook itself
-  const storedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  // Function to update the value
-  const setValue = React.useCallback(
-    (valueOrFn) => {
-      try {
-        // Allow functional updates like useState
-        const newValue = typeof valueOrFn === 'function' ? valueOrFn(storedValue) : valueOrFn;
-
-        // Update localStorage
-        window.localStorage.setItem(key, JSON.stringify(newValue));
-
-        // **Crucially, dispatch a custom event so *this* tab's hook updates**
-        window.dispatchEvent(
-          new CustomEvent('local-storage-update', {
-            detail: { key, value: newValue } // Pass data if needed elsewhere
-          })
-        );
-
-        // Note: We don't call `callback` directly here.
-        // The event dispatch triggers the `subscribe` listener, which calls `callback`.
-        // This keeps the update flow consistent.
-      } catch (error) {
-        console.error(`Error setting localStorage key “${key}”:`, error);
-      }
-    },
-    [key, storedValue]
-  ); // Include storedValue if functional updates depend on it
-
-  return [storedValue, setValue];
-}
-
-// Example Usage
-function UserPreferencesPanel() {
-  const [preferences, setPreferences] = useLocalStorage('user-preferences', {
-    theme: 'light',
-    fontSize: 'medium'
-  });
-
-  // ... UI to change preferences using setPreferences ...
-  return (
-    <div>
-      <label>
-        Theme:
-        <select value={preferences.theme} onChange={(e) => setPreferences((prev) => ({ ...prev, theme: e.target.value }))}>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
-      {/* ... other settings ... */}
-      <pre>Current: {JSON.stringify(preferences)}</pre>
-    </div>
-  );
-}
-```
-
-My key takeaways from building the `localStorage` hook:
-
-1.  **The `storage` Event Limitation:** Realizing it didn't fire in the originating tab was a major "aha!" moment. The custom event (`local-storage-update`) became necessary to bridge that gap for instant updates in the current tab.
-2.  **Error Handling is Mandatory:** `localStorage` can fail (quota exceeded, security restrictions, corrupted data). Wrapping `getItem` and `setItem` in `try...catch` blocks was essential for production stability. `getSnapshot` needs a fallback.
-3.  **Deep Equality Matters for Objects:** Since `localStorage` stores strings, parsing JSON means you get new object references. A simple `===` check in `getSnapshot` wasn't enough; I needed a deep equality check (`isEqual`) to avoid unnecessary updates when the object _content_ was the same.
-4.  **Caching Prevents Loops:** Just like with `useWindowSize`, caching the snapshot (`cache.current`) and returning the cached reference when the deep equality check passes was vital to prevent render loops.
-
-**Important Considerations:**
-
-- **Deep Equality Robustness:** The `isEqual` function here is basic. For complex objects, edge cases (like `Date` objects, `RegExp`, circular references), using a battle-tested library function (e.g., from Lodash, `fast-deep-equal`) is highly recommended in production.
-- **Custom Event Data:** Passing the `key` and `value` in the custom event's `detail` isn't strictly needed for _this_ hook (as it re-reads from `localStorage` via `getSnapshot`), but it can be useful if other parts of your application need to react to the change without hitting `localStorage` again.
-- **Error Handling in `getSnapshot`:** The added `try...catch` around `JSON.parse` is crucial. If the data in `localStorage` gets corrupted, you don't want your entire app to crash.
-
-Okay, that's an excellent point! The `BroadcastChannel` API is indeed a more modern and arguably cleaner way to handle same-origin communication between browsing contexts (like tabs) compared to dispatching custom events on the `window` object. It's specifically designed for this kind of task.
-
-Let's integrate that idea into the `localStorage` section, presenting it as an alternative or refinement to the custom event approach.
-
-### 2. Syncing `localStorage` Across Tabs (The Real Test)
-
 This was tougher. The goal: change a setting in one tab, and have all other open tabs reflect it instantly. The standard `storage` event is designed for cross-tab communication, but it has a quirk: it _only fires in other tabs_, not in the tab that actually made the change. My initial thought was to use a custom event dispatched on the `window` object to notify the current tab, which works, but felt a bit like a workaround.
 
 While debugging and researching this, I came across the **`BroadcastChannel` API**. This browser API provides a much more direct and standard way for different browser contexts (tabs, windows, iframes) from the **same origin** to send messages to each other. It seemed like a perfect fit to elegantly solve the "notify the current tab" problem, potentially replacing the custom event approach.
 
-Here’s how I refactored the `useLocalStorage` hook to leverage `BroadcastChannel` alongside the necessary `storage` event:
+Here's how I refactored the `useLocalStorage` hook to leverage `BroadcastChannel` alongside the necessary `storage` event:
 
 ```javascript
 import React, { useRef, useCallback, useSyncExternalStore } from 'react';
 
-// Re-use or import a robust isEqual function
-// function isEqual(a, b) { ... }
-
 // Create a unique channel name - perhaps based on app name or a constant
 const LOCAL_STORAGE_SYNC_CHANNEL = 'myAppLocalStorageSync'; // Or generate dynamically
+
+// Create a singleton factory for BroadcastChannel instances
+const channelRegistry = {
+  _channels: {},
+  _refCounts: {},
+
+  getChannel(channelName) {
+    if (!this._channels[channelName]) {
+      this._channels[channelName] = new BroadcastChannel(channelName);
+      this._refCounts[channelName] = 0;
+    }
+    this._refCounts[channelName]++;
+    return this._channels[channelName];
+  },
+
+  releaseChannel(channelName) {
+    if (this._channels[channelName]) {
+      this._refCounts[channelName]--;
+      if (this._refCounts[channelName] <= 0) {
+        this._channels[channelName].close();
+        delete this._channels[channelName];
+        delete this._refCounts[channelName];
+      }
+    }
+  }
+};
 
 function useLocalStorage(key, initialValue) {
   const getServerSnapshot = () => initialValue;
   const cache = useRef(null);
-
-  // Memoize the BroadcastChannel instance per hook instance
-  const channelRef = useRef(null);
-  const getChannel = () => {
-    if (channelRef.current === null) {
-      // Create the channel only once
-      channelRef.current = new BroadcastChannel(LOCAL_STORAGE_SYNC_CHANNEL);
-    }
-    return channelRef.current;
-  };
+  const channelName = `${LOCAL_STORAGE_SYNC_CHANNEL}_${key}`;
 
   const getSnapshot = () => {
     if (typeof window === 'undefined') {
@@ -411,7 +305,7 @@ function useLocalStorage(key, initialValue) {
       }
       return cache.current;
     } catch (error) {
-      console.error(`Error reading localStorage key “${key}”:`, error);
+      console.error(`Error reading localStorage key "${key}":`, error);
       if (cache.current === null) cache.current = initialValue;
       return cache.current;
     }
@@ -423,7 +317,7 @@ function useLocalStorage(key, initialValue) {
         return () => {};
       }
 
-      const channel = getChannel();
+      const channel = channelRegistry.getChannel(channelName);
 
       // Listener for standard 'storage' event (fired in other tabs)
       const handleStorageEvent = (event) => {
@@ -435,7 +329,10 @@ function useLocalStorage(key, initialValue) {
       // Listener for BroadcastChannel messages (fired in *all* tabs, including current)
       const handleChannelMessage = (event) => {
         // Check if the message is relevant to this key
-        if (event.data?.key === key) {
+        if (event.data?.type === 'localStorage-update' && event.data?.key === key) {
+          // You could potentially use event.data.newValue directly here
+          // if you want to avoid the localStorage read, but reading from
+          // localStorage ensures consistency across tabs
           callback();
         }
       };
@@ -443,20 +340,16 @@ function useLocalStorage(key, initialValue) {
       window.addEventListener('storage', handleStorageEvent);
       channel.addEventListener('message', handleChannelMessage);
 
-      // Cleanup: remove listeners and crucially close the channel instance
-      // if this hook unmounts. Note: Closing might affect other hooks if
-      // channel management isn't careful. Consider ref counting if sharing channels globally.
+      // Cleanup: remove listeners and release channel reference
       return () => {
         window.removeEventListener('storage', handleStorageEvent);
         channel.removeEventListener('message', handleChannelMessage);
-        // If this is the last listener for this channel instance, maybe close it.
-        // For simplicity here, we might leak channel handles if not managed globally.
-        // A safer approach might be *not* closing it here if it's shared.
-        // channel.close(); // Be cautious with closing shared channels
+        // Let the registry handle proper channel cleanup
+        channelRegistry.releaseChannel(channelName);
       };
     },
-    [key]
-  ); // Depend on key
+    [key, channelName]
+  ); // Depend on key and channelName
 
   const storedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
@@ -468,31 +361,36 @@ function useLocalStorage(key, initialValue) {
         const newValue = typeof valueOrFn === 'function' ? valueOrFn(storedValue) : valueOrFn;
         window.localStorage.setItem(key, JSON.stringify(newValue));
 
-        // **Use BroadcastChannel to notify ALL tabs (including this one)**
-        const channel = getChannel();
-        channel.postMessage({ key: key, newValue: newValue }); // Send relevant info
-
-        // We no longer need to dispatch a custom event!
+        try {
+          // Separate try/catch for channel operations
+          const channel = channelRegistry.getChannel(channelName);
+          channel.postMessage({
+            type: 'localStorage-update',
+            key: key,
+            newValue: newValue
+          });
+        } catch (channelError) {
+          console.error(`Error broadcasting localStorage change for key "${key}":`, channelError);
+          // Operation can still succeed even if broadcasting fails
+          // Other tabs won't be notified, but current tab state is correct
+        }
       } catch (error) {
-        console.error(`Error setting localStorage key “${key}”:`, error);
+        console.error(`Error setting localStorage key "${key}":`, error);
       }
     },
-    [key, storedValue] // Include storedValue for functional updates
+    [key, storedValue, channelName]
   );
 
-  // Effect to close the channel when the component unmounts
-  // This is a slightly better place to manage the channel lifecycle per hook instance
+  // Effect to ensure channel is properly registered
   React.useEffect(() => {
-    // Ensure channel is created if needed (e.g., if setValue hasn't been called)
-    getChannel();
-    // Return cleanup function to close the channel
+    // Ensure channel is created even if setValue hasn't been called
+    channelRegistry.getChannel(channelName);
+
+    // Return cleanup function
     return () => {
-      if (channelRef.current) {
-        channelRef.current.close();
-        channelRef.current = null;
-      }
+      channelRegistry.releaseChannel(channelName);
     };
-  }, []); // Run only once on mount/unmount
+  }, [channelName]);
 
   return [storedValue, setValue];
 }
@@ -519,12 +417,33 @@ function UserPreferencesPanel() {
 }
 ```
 
+How the cache gets refreshed:
+
+1. When any tab updates localStorage, it calls `channel.postMessage()`
+   with the updated value.
+
+2. All tabs (including the one that made the change) receive this message
+   via their `handleChannelMessage` event listener.
+
+3. When the message is received, the listener calls the `callback()`
+   that React provided to our `subscribe` function.
+
+4. This callback triggers React to re-run the `getSnapshot()` function
+   to get the latest value.
+
+5. `getSnapshot()` reads from localStorage, updates our cache if the
+   value has changed, and returns either the updated value or the
+   cached value if nothing changed.
+
+This ensures that all tabs stay in sync with the latest value,
+whether they made the change themselves or another tab did.
+
 My key takeaways from building the `localStorage` hook, now incorporating `BroadcastChannel`:
 
 1.  **`storage` Event Limitation:** Still true – it only notifies _other_ tabs.
 2.  **`BroadcastChannel` for Unified Notification:** This API elegantly solves the problem of notifying _all_ relevant contexts (including the current tab) about a change. Posting a message after `setItem` triggers the `onmessage` listener in the `subscribe` function of _all_ active hook instances using the same channel name.
 3.  **Cleaner Than Custom Events:** It avoids polluting the global `window` object with custom events and feels more idiomatic for cross-context communication.
-4.  **Channel Management:** You need to create and manage the `BroadcastChannel` instance. Using `useRef` ensures a stable instance per hook mount, and `useEffect` provides a clean place to handle closing the channel on unmount. Be mindful if you plan to share channel instances more globally.
+4.  **Channel Management:** You need to create and manage the `BroadcastChannel` instance. The registry pattern ensures proper instance sharing and cleanup, preventing memory leaks even when multiple components use the same key.
 5.  **Error Handling & Deep Equality:** These remain just as crucial as before for robustness and performance.
 
 Using `BroadcastChannel` felt like a more "correct" solution once I understood the limitations of the `storage` event. You can learn more about it on [MDN Web Docs: BroadcastChannel API](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel).
@@ -532,8 +451,9 @@ Using `BroadcastChannel` felt like a more "correct" solution once I understood t
 **Important Considerations:**
 
 - **Browser Support:** While good in modern browsers, `BroadcastChannel` isn't supported in older browsers like IE. If you need legacy support, the custom event approach might be necessary as a fallback.
-- **Channel Naming/Management:** Choose channel names carefully to avoid collisions. Decide on a strategy for managing channel lifecycles (per hook instance vs. global). The example uses per-instance management with `useRef` and `useEffect` for cleanup.
-- **Deep Equality & Error Handling:** These points remain critical for the reasons discussed previously.
+- **Channel Naming/Management:** Choose channel names carefully to avoid collisions. The registry pattern helps manage channel lifecycles properly.
+- **Deep Equality Robustness:** The `isEqual` function shown here properly handles arrays and nested objects. For even more complex cases (like `Date` objects, `RegExp`, circular references), using a battle-tested library function (e.g., from Lodash, `fast-deep-equal`) is highly recommended in production.
+- **Error Handling in `getSnapshot`:** The added `try...catch` around `JSON.parse` is crucial. If the data in `localStorage` gets corrupted, you don't want your entire app to crash.
 
 ## Pitfalls I Stumbled Into (So You Don't Have To)
 
