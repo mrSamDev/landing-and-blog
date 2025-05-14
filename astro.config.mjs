@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import partytown from '@astrojs/partytown';
 import vercel from '@astrojs/vercel';
-import { Copier } from './files-copier.ts';
+// import { Copier } from './files-copier.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,9 +19,10 @@ export default defineConfig({
         sitemap(),
         tailwind({
             applyBaseStyles: false
-        }),
-        Copier()
+        })
+        // Copier()
     ],
 
+    output: 'static',
     adapter: vercel()
 });
