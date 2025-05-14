@@ -7,7 +7,6 @@ import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
 import siteConfig from '../data/site-config';
 import { sortItemsByDateDesc } from '../utils/data-utils';
-import SpeedInsights from '@vercel/speed-insights/astro';
 
 const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
 const featuredPosts = posts.filter(({ data }) => data.isFeatured);
@@ -16,7 +15,6 @@ const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 const featuredProjects = projects.filter(({ data }) => data.isFeatured);
 ---
 
-<SpeedInsights />
 <BaseLayout description={siteConfig.description} image={siteConfig.image}>
     <Hero />
     {
