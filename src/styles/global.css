@@ -1,6 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --primary: 236 244 244; /* #ECF4F4 */
+    --color-bg-main: 0 71 71; /* #004747 */
+    --color-bg-muted: 0 89 89; /* #005959 */
+    --color-border-main: 0 128 128; /* #008080 */
+}
 
 @layer base {
     :root {
@@ -10,9 +16,5 @@
         --color-border-main: 0 128 128; /* #008080 */
     }
     html.dark {
-        --color-text-main: 236 244 244; /* #ECF4F4 */
-        --color-bg-main: 0 71 71; /* #004747 */
-        --color-bg-muted: 0 89 89; /* #005959 */
-        --color-border-main: 0 128 128; /* #008080 */
     }
 }
