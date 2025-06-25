@@ -1,4 +1,5 @@
 ---
+import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -15,7 +16,7 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="antialiased break-words">
+<html lang="en" class="antialiased break-words dark">
     <head>
         <BaseHead {...head} />
         <script>
@@ -29,7 +30,7 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
         <link rel="sitemap" href="/sitemap-index.xml" />
         <ClientRouter />
     </head>
-    <body class="bg-main text-main">
+    <body class="bg-main text-text text-fontPrimary">
         <div class="flex flex-col min-h-screen px-4 md:px-8">
             <Nav />
 
