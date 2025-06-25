@@ -6,19 +6,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-fontPrimary: rgb(236, 244, 244); /* #ECF4F4 */
-    --color-main: rgb(0, 71, 71); /* #004747 */
-    --color-muted: rgb(0 89 89); /* #005959 */
-    --color-borderPrimary: rgb(0 128 128); /* #008080 */
+    --color-fontPrimary: rgb(0, 71, 71);
+    --color-main: rgb(236 244 244);
+    --color-muted: rgb(220 235 235);
+    --color-borderprimary: rgb(0 128 128);
 }
 
 @layer theme {
     * {
         @variant dark {
-            --color-fontPrimary: rgb(0, 71, 71);
-            --color-main: rgb(236 244 244);
-            --color-muted: rgb(220 235 235);
-            --color-borderprimary: rgb(0 128 128);
+            --color-fontPrimary: rgb(236, 244, 244); /* #ECF4F4 */
+            --color-main: rgb(0, 71, 71); /* #004747 */
+            --color-muted: rgb(0 89 89); /* #005959 */
+            --color-borderPrimary: rgb(0 128 128); /* #008080 */
         }
     }
 }
