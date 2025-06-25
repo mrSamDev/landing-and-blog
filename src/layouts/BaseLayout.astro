@@ -19,6 +19,7 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
 <html lang="en" class="antialiased break-words dark">
     <head>
         <BaseHead {...head} />
+        <ClientRouter />
         <script>
             if (localStorage.theme === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -28,13 +29,12 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
         <PostHog />
         <SpeedInsights />
         <link rel="sitemap" href="/sitemap-index.xml" />
-        <ClientRouter />
     </head>
     <body class="bg-main text-text text-fontPrimary">
         <div class="flex flex-col min-h-screen px-4 md:px-8">
             <Nav />
 
-            <main class={clsx('grow w-full', !fullWidth && 'max-w-5xl mx-auto')}>
+            <main transition:animate="slide" class={clsx('grow w-full', !fullWidth && 'max-w-5xl mx-auto')}>
                 <slot />
             </main>
             <CarbonBadge />
