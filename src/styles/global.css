@@ -1,20 +1,37 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+@config "./tailwind.config.js";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-    --primary: 236 244 244; /* #ECF4F4 */
-    --color-bg-main: 0 71 71; /* #004747 */
-    --color-bg-muted: 0 89 89; /* #005959 */
-    --color-border-main: 0 128 128; /* #008080 */
+    --color-fontPrimary: rgb(236, 244, 244); /* #ECF4F4 */
+    --color-main: rgb(0, 71, 71); /* #004747 */
+    --color-muted: rgb(0 89 89); /* #005959 */
+    --color-borderPrimary: rgb(0 128 128); /* #008080 */
 }
 
-@layer base {
+@layer theme {
+    * {
+        @variant dark {
+            --color-fontPrimary: rgb(0, 71, 71);
+            --color-main: rgb(236 244 244);
+            --color-muted: rgb(220 235 235);
+            --color-borderprimary: rgb(0 128 128);
+        }
+    }
+}
+
+/* @theme {
+    
+  
+} */
+
+/* @layer base {
     :root {
-        --color-text-main: 0 71 71; /* #004747 */
-        --color-bg-main: 236 244 244; /* #ECF4F4 */
-        --color-bg-muted: 220 235 235; /* #DCEBEB */
-        --color-border-main: 0 128 128; /* #008080 */
+       
     }
     html.dark {
     }
-}
+} */
