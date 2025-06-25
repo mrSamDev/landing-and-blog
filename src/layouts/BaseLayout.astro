@@ -7,8 +7,6 @@ import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
 import clsx from 'clsx';
 import CarbonBadge from '../components/CarbonBadge.astro';
-import SpeedInsights from '@vercel/speed-insights/astro';
-import Analytics from '@vercel/analytics/astro';
 
 export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean };
 
@@ -25,9 +23,9 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
                 document.documentElement.classList.add('dark');
             }
         </script>
-        <Analytics />
+
         <PostHog />
-        <SpeedInsights />
+
         <link rel="sitemap" href="/sitemap-index.xml" />
     </head>
     <body class="bg-main text-text text-fontPrimary">

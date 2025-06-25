@@ -19,7 +19,7 @@ export default defineConfig({
         sitemap()
     ],
 
-    output: 'server',
+    output: 'static',
     adapter: vercel(),
     vite: {
         plugins: [tailwindcss()]
