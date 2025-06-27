@@ -1,0 +1,45 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+
+type Props = { post: CollectionEntry<'aitips'> };
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<style>
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+            max-height 0.3s ease-out,
+            opacity 0.2s ease-out;
+        opacity: 0;
+    }
+
+    details[open] .accordion-content {
+        max-height: 500px; /* Adjust based on your content */
+        opacity: 1;
+        overflow-y: auto; /* Ensure scroll works */
+    }
+</style>
+
+<details class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
+    <summary class="p-4 cursor-pointer flex justify-between items-center">
+        <h2 class="text-xl font-semibold">{post.data.title}</h2>
+        <span class="transform transition-transform group-open:rotate-180">&#9660;</span>
+    </summary>
+    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base">
+        <Content />
+        {
+            post.data.reference && (
+                <div class="mt-4 text-sm text-gray-500">
+                    Original post:{' '}
+                    <a href={post.data.reference} target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">
+                        Read here
+                    </a>
+                </div>
+            )
+        }
+    </div>
+</details>
