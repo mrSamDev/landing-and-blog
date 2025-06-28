@@ -1,10 +1,12 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
+import Button from './Button.astro';
 
 type Props = { post: CollectionEntry<'aitips'> };
 const { post } = Astro.props;
 const { Content } = await render(post);
+const postBody = post.body || '';
 ---
 
 <style>
@@ -15,6 +17,7 @@ const { Content } = await render(post);
             max-height 0.3s ease-out,
             opacity 0.2s ease-out;
         opacity: 0;
+        max-width: unset !important;
     }
 
     details[open] .accordion-content {
@@ -26,10 +29,14 @@ const { Content } = await render(post);
 
 <details class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
     <summary class="p-4 cursor-pointer flex justify-between items-center">
-        <h2 class="text-xl font-semibold">{post.data.title}</h2>
+        <div class="flex items-center gap-2">
+            <h2 class="text-xl font-semibold mr-2">{post.data.title}</h2>
+            <Button id="copy-button">Copy</Button>
+        </div>
         <span class="transform transition-transform group-open:rotate-180">&#9660;</span>
     </summary>
-    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base">
+
+    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
         <Content />
         {
             post.data.reference && (
@@ -43,3 +50,28 @@ const { Content } = await render(post);
         }
     </div>
 </details>
+
+<script define:vars={{ postBody }}>
+    const copyButton = document.getElementById('copy-button');
+    if (copyButton) {
+        copyButton.addEventListener('click', () => {
+            const accordionContent = document.querySelector('.accordion-content');
+            if (accordionContent) {
+                navigator.clipboard
+                    .writeText(postBody)
+                    .then(() => {
+                        const originalText = copyButton.innerText;
+                        copyButton.innerText = 'Copied';
+                        setTimeout(() => {
+                            copyButton.innerText = originalText;
+                        }, 1000);
+                    })
+                    .catch((err) => {
+                        console.error('Failed to copy:', err);
+                    });
+            } else {
+                console.error('Accordion content not found');
+            }
+        });
+    }
+</script>

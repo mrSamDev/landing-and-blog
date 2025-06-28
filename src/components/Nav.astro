@@ -21,10 +21,7 @@ const navLinks = siteConfig.headerNavLinks || [];
                 <ul id="menu-items" class="menu flex gap-6">
                     {navLinks.map((link) => (
                         <li class="py-1">
-                            <NavLink
-                                class="text-xl   text-fontPrimary hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base"
-                                href={link.href}
-                            >
+                            <NavLink class="text-xl text-fontPrimary hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base" href={link.href}>
                                 {link.text}
                             </NavLink>
                         </li>
@@ -41,46 +38,66 @@ const navLinks = siteConfig.headerNavLinks || [];
 <style>
     @media (max-width: 767px) {
         .menu {
-            @reference flex-col gap-1 absolute -top-2.5 -left-2.5 max-w-64 px-3 pt-16 pb-10 z-20 bg-main border border-dashed border-borderPrimary invisible opacity-0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            position: absolute;
+            top: -0.625rem;
+            left: -0.625rem;
+            max-width: 16rem;
+            padding: 1rem 0.75rem 2.5rem;
+            z-index: 20;
+            background-color: var(--color-main);
+            border: 1px dashed var(--color-borderprimary);
+            visibility: hidden;
+            opacity: 0;
             width: calc(100% + 1.25rem);
         }
         .menu.is-visible {
-            @reference visible opacity-100;
+            visibility: visible;
+            opacity: 1;
             transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
         .menu-toggle-icon {
             transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
         }
         .menu-toggle.is-active .menu-toggle-icon {
-            @reference w-0;
+            width: 0;
             transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .menu-toggle-icon:before,
         .menu-toggle-icon:after {
-            @reference w-6 h-px absolute left-1/2 top-0 origin-center -translate-x-1/2 bg-current;
+            width: 1.5rem;
+            height: 1px;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform-origin: center;
+            transform: translateX(-50%);
+            background-color: currentColor;
             content: '';
             transition:
                 transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
                 margin 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
         .menu-toggle-icon:before {
-            @reference -mt-1.5;
+            margin-top: -0.375rem;
         }
         .menu-toggle-icon:after {
-            @reference mt-1.5;
+            margin-top: 0.375rem;
         }
         .menu-toggle.is-active .menu-toggle-icon:before,
         .menu-toggle.is-active .menu-toggle-icon:after {
-            @reference mt-0;
+            margin-top: 0;
             transition:
                 margin 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.1s,
                 transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
         }
         .menu-toggle.is-active .menu-toggle-icon:before {
-            @reference rotate-45;
+            transform: rotate(45deg);
         }
         .menu-toggle.is-active .menu-toggle-icon:after {
-            @reference -rotate-45;
+            transform: rotate(-45deg);
         }
     }
 </style>

@@ -1,6 +1,6 @@
 ---
-title: Humaniser Prompt
-publishDate: 'Jan 31 2025'
+title: Text Humaniser Prompt
+publishDate: 'Jun 27 2025'
 isPublished: true
 reference: https://substack.com/home/post/p-164573563
 ---
