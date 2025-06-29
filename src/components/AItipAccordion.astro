@@ -7,6 +7,7 @@ type Props = { post: CollectionEntry<'aitips'> };
 const { post } = Astro.props;
 const { Content } = await render(post);
 const postBody = post.body || '';
+const postKey = post.data.key || `tip-${post.id}`; // Fallback to id if key is not defined
 ---
 
 <style>
@@ -30,13 +31,13 @@ const postBody = post.body || '';
 <details class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
     <summary class="p-4 cursor-pointer flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <h2 class="text-xl font-semibold mr-2">{post.data.title}</h2>
-            <Button id="copy-button">Copy</Button>
+            <h2 class="text-md md:text-xl font-semibold mr-2">{post.data.title}</h2>
+            <Button id={'copy-button-' + postKey}>Copy</Button>
         </div>
-        <span class="transform transition-transform group-open:rotate-180">&#9660;</span>
+        <span class="ml-2 transform transition-transform group-open:rotate-180">&#9660;</span>
     </summary>
 
-    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
+    <div id={postKey} class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
         <Content />
         {
             post.data.reference && (
@@ -51,11 +52,12 @@ const postBody = post.body || '';
     </div>
 </details>
 
-<script define:vars={{ postBody }}>
-    const copyButton = document.getElementById('copy-button');
+<script define:vars={{ postBody, postKey }}>
+    const copyButton = document.getElementById('copy-button-' + postKey);
     if (copyButton) {
         copyButton.addEventListener('click', () => {
-            const accordionContent = document.querySelector('.accordion-content');
+            const accordionContent = document.getElementById(postKey);
+            console.log('accordionContent: ', accordionContent);
             if (accordionContent) {
                 navigator.clipboard
                     .writeText(postBody)

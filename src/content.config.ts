@@ -52,7 +52,8 @@ const aitips = defineCollection({
         title: z.string(),
         publishDate: z.coerce.date(),
         isPublished: z.boolean().default(true),
-        reference: z.string().optional()
+        reference: z.string().optional(),
+        key: z.string()
     })
 });
 
