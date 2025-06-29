@@ -46,4 +46,15 @@ const projects = defineCollection({
     })
 });
 
-export const collections = { blog, pages, projects };
+const aitips = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/ai-tips' }),
+    schema: z.object({
+        title: z.string(),
+        publishDate: z.coerce.date(),
+        isPublished: z.boolean().default(true),
+        reference: z.string().optional(),
+        key: z.string()
+    })
+});
+
+export const collections = { blog, pages, projects, aitips };
