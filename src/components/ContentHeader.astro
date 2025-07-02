@@ -20,13 +20,14 @@ const { title, publishDate } = Astro.props;
             )
         }
 
-        <h1
+        <h2
+            transition:name="blog-title"
             class="text-3xl text-center leading-relaxed font-medium sm:text-5xl lg:text-6xl
-          sm:leading-relaxed lg:leading-relaxed mb-8 text-main tracking-tight
+          sm:leading-relaxed lg:leading-relaxed mb-8 text-fontPrimary tracking-tight
           max-w-4xl mx-auto break-words"
         >
             {title}
-        </h1>
+        </h2>
 
         <BlogDivider />
     </div>

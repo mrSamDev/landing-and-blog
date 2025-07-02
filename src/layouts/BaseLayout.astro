@@ -1,4 +1,5 @@
 ---
+import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -6,8 +7,6 @@ import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
 import clsx from 'clsx';
 import CarbonBadge from '../components/CarbonBadge.astro';
-import SpeedInsights from '@vercel/speed-insights/astro';
-import Analytics from '@vercel/analytics/astro';
 
 export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean };
 
@@ -15,25 +14,25 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="antialiased break-words">
+<html lang="en" class="antialiased break-words dark">
     <head>
         <BaseHead {...head} />
+        <ClientRouter />
         <script>
             if (localStorage.theme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
         </script>
-        <Analytics />
+
         <PostHog />
-        <SpeedInsights />
+
         <link rel="sitemap" href="/sitemap-index.xml" />
-        <ClientRouter />
     </head>
-    <body class="bg-main text-main">
+    <body class="bg-main text-text text-fontPrimary">
         <div class="flex flex-col min-h-screen px-4 md:px-8">
             <Nav />
 
-            <main class={clsx('grow w-full', !fullWidth && 'max-w-5xl mx-auto')}>
+            <main transition:animate="fade" class={clsx('grow w-full', !fullWidth && 'max-w-5xl mx-auto')}>
                 <slot />
             </main>
             <CarbonBadge />
