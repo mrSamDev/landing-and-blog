@@ -11,7 +11,7 @@ tags:
   - Frontend
 seo:
   image:
-    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/v1/Blog/s69jwwumjobewujuqg1i
+    src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1751474667/server-sent-events-explained--t3chat--1_jofecy.png
     alt: 'Server-Sent Events implementation diagram'
 ---
 
