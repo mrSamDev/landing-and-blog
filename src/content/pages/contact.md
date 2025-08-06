@@ -17,4 +17,4 @@ Drop me a line if you want to chat about:
 - [Email](mailto:sijosam1905@gmail.com)
 - [BlueSky](https://bsky.app/profile/sijosam.in)
 - [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
-- [Resume](https://drive.google.com/file/d/1aAr7PdCs66mvMawFckHUZEnwxXMu7_q0/view?usp=drive_link)
+- [Resume](https://resume.mrsamdev.xyz/)
