@@ -2,7 +2,7 @@
 title: 👋 Hello! I'm Sijo
 seo:
   title: About Me - Sijo Sam
-  description: Building video streaming apps at Diagnal. Based in Ernakulam.
+  description: Building React team @ Gadgeon. Based in Ernakulam.
   image:
     src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq'
     alt: Sijo Sam
@@ -10,54 +10,38 @@ seo:
 
 ![Sijo Sam](https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq)
 
-Frontend Lead at Diagnal Technologies, where I wrestle with React but secretly love working with Svelte, making video players behave across every screen imaginable! When I'm not debugging CSS or optimizing render cycles, you'll probably find me deep in the latest manga chapter or planning my next trek (though let's be honest, lately it's been more about that WFH life 🏠).
+Lead at Gadgeon, running point for the SaaS Products team in Kochi. Since May 2025, I've led our jump to React 19. We moved a mountain of Angular code, rewrote 100,000+ lines, tied off loose ends, and yes, I'm still waiting for my wrist to recover. I run regular code reviews and knowledge-sharing sessions so everybody’s on the same page, not just playing keyboard roulette. I pushed for AI tools—Claude Code and Windsurf—set real rules, got hands dirty with workshops. That nudged our developer output up by 10 percent, which is the only reason people forgive me for my table-flip moments.
 
-Based in Ernakulam, where I enjoy the perfect blend of decent internet for streaming anime, great food spots, and a growing tech community. I started coding out of curiosity about how websites worked, and my journey began at 7th Pillar Ventures, where I learned that functionality trumps fancy features. Now at Diagnal, I help my team build better video players and streaming apps.
+Before Gadgeon, I led the frontend squad at Diagnal Technologies in London. I flushed out legacy React code, refactored for functional components, and we all watched app performance leap—30 percent faster loading, 25 percent improvement overall. Guiding teams across continents brought interesting timezone math and a rapid bump to Front-End Lead. One-on-ones and code reviews curbed buggy commits and hiked productivity by a third. On the SEO front, I moved us to server-side rendering, wrangled meta tags, and got our apps climbing search rankings by 50 percent.
 
-I write about my learning experiences and tech adventures on my blog, not because I'm an expert, but because writing helps me think better.
+I started as a developer at 7th Pillar Ventures, mostly asking the question: why build bells and whistles if basic stuff barely works? That thinking stuck. I still believe no one cares how clever your solution is if it doesn't work well.
 
-## 🚀 What I'm up to
+These days, you'll find me somewhere between debating anime plot twists and debugging CSS edge cases. Ernakulam isn't a bad place for that—solid internet for streaming, good food, and a handful of developers always up for coffee and complaining about state management.
 
-- 🎥 Building cool OTT stuff at Diagnal Technologies
-- 📱 Making video players work smoothly (or at least trying to!)
-- 🦦 Getting cozy with Go
-- 🏃‍♂️ Attempting to balance code life with actual running
-- 📺 Always down to chat about that new anime season
+On my blog, I jot down what I'm learning, not because I'm trying to show off, but because trying to explain something is usually the only way I understand it myself.
 
-## 💻 Tech I vibe with
+## Here’s What Fills My Days
+
+I build SaaS platforms at Gadgeon. At Diagnal, I wrangled OTT apps and kept video players halfway sane on a mess of devices. I try to squeeze in Go tutorials when JS gives me too much déjà vu. If I'm not slouched over a laptop, I might be jogging, although my running app wishes I'd lie less about my pace.
+
+## Tech Stack and Other Fixations
 
 ```javascript
 const Sijo = {
-  frontend: ['React', 'JavaScript', 'CSS Wizardry'],
-  current_obsession: 'Making those micro-interactions juuust right',
-  past_adventures: ['Healthcare apps', 'Food delivery', '5G/4G solutions'],
-  learning: "Go (because apparently JavaScript wasn't enough of a challenge)",
+  frontend: ['React', 'JavaScript', 'CSS (minor dark art)'],
+  current_obsession: 'Micro-interactions behaving the way I actually intend',
+  past_adventures: ['Healthcare apps', 'Food delivery', 'Telecom solutions'],
+  learning: "Go (just to keep life spicy)",
   workouts: ['Running', 'Trekking', 'Debug marathons']
 };
 ```
 
-## 🎯 Fun facts
+## Some Facts They Don’t Print on CVs
 
-- Professional pixel-pusher with a love for clean animations
-- Can debate about manga storylines as passionately as code architecture
-- Will definitely overengineer a solution if you let me
-- Surprisingly good at explaining tech stuff (or so my team tells me)
+I care a ridiculous amount about animation staying smooth. I’ll get carried away over code structure or whether a manga arc flopped. If you want someone to overcomplicate a problem, I’m your person. Apparently, my explanations help—it’s not just me saying so.
 
-## 📺 My Manga & Anime Corner
+## Manga & Anime: The Real Priorities
 
-### Forever Favorites
+Favorites? The list's long, but squeeze in Fairy Tail, One Piece, Solo Leveling, Bleach, Katekyo Hitman Reborn, Haikyu, and a rotating door of others. Latest binge: "I Was Mistaken as a Monstrous Genius Actor"—hasn't run out of twists yet. "The Regressed Mercenary's Machinations" is still going strong; I’m somewhere around chapter 175.
 
-- Fairy Tail
-- Katekyo Hitman Reborn!
-- One Piece
-- Solo Leveling
-- Bleach
-- Haikyu
-- Many Many More
-
-### Currently Reading
-
-- "I Was Mistaken as a Monstrous Genius Actor" - the plot twists keep coming
-- "The Regressed Mercenary's Machinations" - chapter 175 and counting
-
-_Currently accepting anime recommendations and debugging tips! 🎯_
+If you want to trade anime picks or drop a tip for debugging, I’m all ears. Assuming you catch me between browser restarts.
