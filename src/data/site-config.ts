@@ -60,8 +60,8 @@ const siteConfig: SiteConfig = {
             href: '/blog'
         },
         {
-            text: 'Tags',
-            href: '/tags'
+            text: 'Guides',
+            href: '/guides'
         },
         {
             text: 'AI Tips',

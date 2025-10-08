@@ -1,6 +1,7 @@
 ---
 import FormattedDate from './FormattedDate.astro';
 import BlogDivider from './Divider.astro';
+import { slugify } from '../utils/common-utils';
 
 interface Props {
     title: string;
@@ -21,7 +22,7 @@ const { title, publishDate } = Astro.props;
         }
 
         <h2
-            transition:name="blog-title"
+            transition:name={slugify(title) + '-title'}
             class="text-3xl text-center leading-relaxed font-medium sm:text-5xl lg:text-6xl
           sm:leading-relaxed lg:leading-relaxed mb-8 text-fontPrimary tracking-tight
           max-w-4xl mx-auto break-words"

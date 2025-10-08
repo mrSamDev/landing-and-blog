@@ -2,18 +2,19 @@
 import { type CollectionEntry } from 'astro:content';
 import ArrowRight from '../icons/ArrowRight.astro';
 import FormattedDate from './FormattedDate.astro';
+import { slugify } from '../utils/common-utils';
 
-type Props = { post: CollectionEntry<'blog'>; class?: string; headingLevel?: 'h2' | 'h3' };
+type Props = { post: CollectionEntry<'blog' | 'guides'>; class?: string; headingLevel?: 'h2' | 'h3'; isGuide?: boolean };
 
-const { post, class: className } = Astro.props;
+const { post, class: className, isGuide = false } = Astro.props;
 const { title, publishDate, updatedDate, excerpt } = post.data;
 // const TitleTag = headingLevel;
 ---
 
-<a class:list={['flex justify-between items-start gap-8 group', className]} href={`/blog/${post.id}/`}>
+<a class:list={['flex justify-between items-start gap-8 group', className]} href={isGuide ? `/guides/${post.id}/` : `/blog/${post.id}/`}>
     <div class="grow">
         <h2
-            transition:name="blog-title"
+            transition:name={slugify(title) + '-title'}
             class="text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:underline-offset-4 group-hover:decoration-1 sm:text-2xl"
         >
             {title}
