@@ -6,6 +6,7 @@ export function sortItemsByDateDesc(itemA: CollectionEntry<'blog' | 'projects' |
 }
 
 export function getAllTags(posts: CollectionEntry<'blog' | 'projects' | 'guides'>[]) {
+    //@ts-ignore
     const tags: string[] = [...new Set(posts.flatMap((post) => post.data.tags || []).filter(Boolean))];
     return tags
         .map((tag) => {
