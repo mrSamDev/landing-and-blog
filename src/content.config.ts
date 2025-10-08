@@ -14,7 +14,7 @@ const seoSchema = z.object({
 });
 
 const blog = defineCollection({
-    loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
     schema: z.object({
         title: z.string(),
         excerpt: z.string().optional(),
@@ -24,6 +24,19 @@ const blog = defineCollection({
         tags: z.array(z.string()).default([]),
         seo: seoSchema.optional(),
         isPublished: z.boolean().default(true)
+    })
+});
+
+const guides = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/guides' }),
+    schema: z.object({
+        title: z.string(),
+        excerpt: z.string().optional(),
+        publishDate: z.coerce.date(),
+        updatedDate: z.coerce.date().optional(),
+        seo: seoSchema.optional(),
+        isPublished: z.boolean().default(true),
+        tags: z.array(z.string()).default([])
     })
 });
 
@@ -57,4 +70,4 @@ const aitips = defineCollection({
     })
 });
 
-export const collections = { blog, pages, projects, aitips };
+export const collections = { blog, pages, guides, projects, aitips };
