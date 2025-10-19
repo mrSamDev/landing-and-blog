@@ -13,8 +13,6 @@ seo:
     alt: 'Visualization of React component re-renders caused by unstable object references'
 ---
 
-
-
 Fireship nailed it in his React Conf 2025 recap: "The greatest trick the devil ever pulled was making referential stability a prerequisite to writing React apps that don't blow up." That's not hyperbole. It's the truth about modern React development.
 
 ### The Core Problem
@@ -38,7 +36,7 @@ graph TD
 
 Cloudflare had a major outage because their dashboard kept hammering their own API with unnecessary calls. The culprit? Unstable references in useEffect dependencies. This wasn't a junior dev mistake on a side project. This was a production incident at a company that keeps half the internet running.
 
-React's useEffect compares dependencies with shallow equality. Pass it an unstable object and the effect fires every single render. You get infinite loops, memory leaks, or API spam. Pick your poison.
+React's useEffect compares dependencies with shallow equality. Pass it an unstable object and the effect fires every single render. You get infinite loops, memory leaks, or API spam.
 
 ### What Not to Do
 
@@ -157,7 +155,7 @@ function ExpensiveList({ data }) {
 
 ### The useEffectEvent Solution
 
-React 19.2 introduced [useEffectEvent](https://react.dev/reference/react/useEffectEvent), which Fireship mentioned as a workaround for the useEffect complexity. This hook solves a specific problem: when you need to read the latest props or state inside an Effect without making those values reactive.
+React 19.2 introduced useEffectEvent, which Fireship mentioned as a workaround for useEffect complexity. This hook solves a specific problem: when you need to read the latest props or state inside an effect without making those values reactive.
 
 Here's the classic problem it solves:
 
@@ -201,7 +199,7 @@ function ChatRoom({ roomId, theme }) {
 }
 ```
 
-This is particularly powerful for logging and analytics:
+This shines for logging and analytics:
 
 ```jsx
 // ✅ Log visits with cart count without re-running on cart changes
@@ -240,15 +238,15 @@ graph TD
 
 Important rules for useEffectEvent:
 
-**Only call it inside Effects.** Don't pass Effect Events to other components or hooks. The eslint-plugin-react-hooks linter (version 6.1.1 or higher) enforces this.
+Only call it inside effects. Don't pass Effect Events to other components or hooks. The eslint-plugin-react-hooks linter (version 6.1.1 or higher) enforces this.
 
-**Not a dependency shortcut.** Don't use useEffectEvent just to avoid listing dependencies. That hides bugs. Use it only when you genuinely need the latest value without reactivity.
+It's not a dependency shortcut. Don't use useEffectEvent just to avoid listing dependencies. That hides bugs. Use it only when you genuinely need the latest value without reactivity.
 
-**For non-reactive logic only.** If the logic should respond to changes, keep it in the dependency array. useEffectEvent is for reading current values, not for controlling when effects run.
+For non-reactive logic only. If the logic should respond to changes, keep it in the dependency array. useEffectEvent is for reading current values, not controlling when effects run.
 
 ### The Compiler Changes Everything
 
-[React Compiler 1.0](https://react.dev/learn/react-compiler) shipped in October 2025. Fireship's take: "It'll auto-optimize your app for you so you can stop pretending you care about how many times it re-renders." He's right.
+React Compiler 1.0 shipped in October 2025. Fireship's take: "It'll auto-optimize your app for you so you can stop pretending you care about how many times it re-renders." He's right.
 
 The compiler runs at build time. It analyzes your component's control flow, spots unstable references, and inserts memoization automatically. You write clean code. It handles the performance work. This is fine-grained reactivity without the ceremony.
 
@@ -327,7 +325,7 @@ module.exports = {
 
 Write normal React code and let it optimize. Done.
 
-Existing codebases need patience. Keep your current useMemo, useCallback, and React.memo calls for now. The compiler works alongside them just fine:
+Existing codebases need patience. Keep your current useMemo, useCallback, and React.memo calls for now. The compiler works alongside them:
 
 ```jsx
 // This is fine during migration
@@ -399,7 +397,7 @@ If you're syncing with an external system and need to guarantee when side effect
 
 Reference instability comes from JavaScript's memory model, not React's architecture. Shallow comparison is fast. Deep comparison is expensive. React chose speed.
 
-The compiler shifts the burden from you to the build tool. useEffectEvent solves the non-reactive value problem elegantly. Together, they prove the React team learned something from 15 years of developer complaints.
+The compiler shifts the burden from you to the build tool. useEffectEvent solves the non-reactive value problem cleanly. Together, they prove the React team learned something from 15 years of developer complaints.
 
-Write clean, pure components. Enable the compiler. Use useEffectEvent when you need the latest values without reactivity. Stop micromanaging render cycles. That's how you win with modern React.
+Write pure components. Enable the compiler. Use useEffectEvent when you need the latest values without reactivity. Stop micromanaging render cycles.
 
