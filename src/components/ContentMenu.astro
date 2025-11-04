@@ -1,0 +1,400 @@
+---
+interface Props {
+    title: string;
+    contentSelector?: string;
+}
+
+const { title, contentSelector = '.prose' } = Astro.props;
+---
+
+<div class="content-menu-container">
+    <button
+        class="content-menu-button"
+        aria-label="Content menu"
+        aria-expanded="false"
+        aria-haspopup="true"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="19" cy="12" r="1"></circle>
+            <circle cx="5" cy="12" r="1"></circle>
+        </svg>
+    </button>
+
+    <div class="content-menu-dropdown" role="menu" hidden>
+        <button class="menu-item copy-markdown-btn" data-title={title} data-selector={contentSelector} role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+            Copy page as Markdown for LLMs
+        </button>
+        <button class="menu-item view-markdown-btn" data-selector={contentSelector} role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            View as Markdown
+        </button>
+        <a class="menu-item open-claude-btn" target="_blank" rel="noopener noreferrer" role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Open from Claude
+        </a>
+        <a class="menu-item open-chatgpt-btn" target="_blank" rel="noopener noreferrer" role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Open from ChatGPT
+        </a>
+    </div>
+</div>
+
+<style>
+    .content-menu-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .content-menu-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        background: transparent;
+        border: 1px solid var(--color-borderprimary);
+        border-radius: 4px;
+        cursor: pointer;
+        color: var(--color-fontPrimary);
+        transition: all 0.2s ease;
+    }
+
+    .content-menu-button:hover {
+        background-color: var(--color-muted);
+    }
+
+    .content-menu-button:active {
+        background-color: var(--color-main);
+    }
+
+    .content-menu-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background-color: var(--color-main);
+        border: 1px solid var(--color-borderprimary);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        min-width: 280px;
+        overflow: hidden;
+    }
+
+    .content-menu-dropdown[hidden] {
+        display: none;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px 16px;
+        background: transparent;
+        border: none;
+        color: var(--color-fontPrimary);
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    .menu-item:hover {
+        background-color: var(--color-muted);
+    }
+
+    .menu-item:active {
+        background-color: var(--color-borderprimary);
+    }
+
+    .menu-item svg {
+        flex-shrink: 0;
+        opacity: 0.7;
+    }
+</style>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        initContentMenu();
+    });
+
+    function initContentMenu() {
+        const menuButton = document.querySelector('.content-menu-button') as HTMLButtonElement;
+        const menuDropdown = document.querySelector('.content-menu-dropdown') as HTMLDivElement;
+        const copyMarkdownBtn = document.querySelector('.copy-markdown-btn') as HTMLButtonElement;
+        const viewMarkdownBtn = document.querySelector('.view-markdown-btn') as HTMLButtonElement;
+        const openClaudeBtn = document.querySelector('.open-claude-btn') as HTMLAnchorElement;
+        const openChatGPTBtn = document.querySelector('.open-chatgpt-btn') as HTMLAnchorElement;
+
+        if (!menuButton || !menuDropdown) return;
+
+        // Set up dynamic URLs for Claude and ChatGPT buttons
+        const currentUrl = window.location.href;
+        const encodedUrl = encodeURIComponent(currentUrl);
+
+        if (openClaudeBtn) {
+            openClaudeBtn.href = `https://claude.ai/new?q=Read%20from%20${encodedUrl}%20so%20I%20can%20ask%20questions%20about%20it.`;
+        }
+
+        if (openChatGPTBtn) {
+            openChatGPTBtn.href = `https://chatgpt.com/?hints=search&prompt=Read+from+${encodedUrl}+so+I+can+ask+questions+about+it.`;
+        }
+
+        // Toggle menu visibility
+        menuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = menuDropdown.hasAttribute('hidden');
+            if (isHidden) {
+                menuDropdown.removeAttribute('hidden');
+                menuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                menuDropdown.setAttribute('hidden', '');
+                menuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', () => {
+            menuDropdown.setAttribute('hidden', '');
+            menuButton.setAttribute('aria-expanded', 'false');
+        });
+
+        // Copy markdown functionality
+        copyMarkdownBtn?.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const title = copyMarkdownBtn.getAttribute('data-title') || '';
+            const selector = copyMarkdownBtn.getAttribute('data-selector') || '.prose';
+            const contentEl = document.querySelector(selector);
+
+            if (!contentEl) return;
+
+            const markdown = extractMarkdown(contentEl as HTMLElement, title);
+            await copyToClipboard(markdown);
+
+            const originalText = copyMarkdownBtn.textContent;
+            copyMarkdownBtn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                copyMarkdownBtn.textContent = originalText;
+            }, 2500);
+
+            menuDropdown.setAttribute('hidden', '');
+            menuButton.setAttribute('aria-expanded', 'false');
+        });
+
+        // View as markdown functionality
+        viewMarkdownBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const title = copyMarkdownBtn.getAttribute('data-title') || '';
+            const selector = copyMarkdownBtn.getAttribute('data-selector') || '.prose';
+            const contentEl = document.querySelector(selector);
+
+            if (!contentEl) return;
+
+            const markdown = extractMarkdown(contentEl as HTMLElement, title);
+            showMarkdownModal(markdown);
+
+            menuDropdown.setAttribute('hidden', '');
+            menuButton.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    function extractMarkdown(contentEl: HTMLElement, title: string): string {
+        let markdown = title ? `# ${title}\n\n` : '';
+        markdown += contentEl.innerText;
+        return markdown;
+    }
+
+    async function copyToClipboard(text: string) {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    }
+
+    function showMarkdownModal(markdown: string) {
+        const modal = document.createElement('div');
+        modal.className = 'markdown-modal';
+        modal.innerHTML = `
+            <div class="markdown-modal-overlay"></div>
+            <div class="markdown-modal-content">
+                <div class="markdown-modal-header">
+                    <h2>Markdown View</h2>
+                    <button class="markdown-modal-close" aria-label="Close">×</button>
+                </div>
+                <textarea class="markdown-modal-textarea" readonly>${escapeHtml(markdown)}</textarea>
+                <div class="markdown-modal-footer">
+                    <button class="markdown-modal-copy-btn">Copy All</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const closeBtn = modal.querySelector('.markdown-modal-close') as HTMLButtonElement;
+        const copyBtn = modal.querySelector('.markdown-modal-copy-btn') as HTMLButtonElement;
+        const textarea = modal.querySelector('.markdown-modal-textarea') as HTMLTextAreaElement;
+
+        closeBtn?.addEventListener('click', () => modal.remove());
+        modal.querySelector('.markdown-modal-overlay')?.addEventListener('click', () => modal.remove());
+
+        copyBtn?.addEventListener('click', async () => {
+            await copyToClipboard(textarea.value);
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✓ Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+            }, 2500);
+        });
+
+        // Close on Escape key
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+    }
+
+    function escapeHtml(text: string): string {
+        const map: { [key: string]: string } = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, (m) => map[m]);
+    }
+</script>
+
+<style is:global>
+    .markdown-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .markdown-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    .markdown-modal-content {
+        position: relative;
+        z-index: 2;
+        background: var(--color-main);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        max-width: 800px;
+        max-height: 80vh;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .markdown-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 1px solid var(--color-borderprimary);
+    }
+
+    .markdown-modal-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--color-fontPrimary);
+    }
+
+    .markdown-modal-close {
+        background: transparent;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--color-fontPrimary);
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s;
+    }
+
+    .markdown-modal-close:hover {
+        opacity: 0.7;
+    }
+
+    .markdown-modal-textarea {
+        flex: 1;
+        padding: 20px;
+        background: var(--color-muted);
+        border: none;
+        color: var(--color-fontPrimary);
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.875rem;
+        resize: none;
+        overflow-y: auto;
+    }
+
+    .markdown-modal-textarea::placeholder {
+        color: var(--color-fontPrimary);
+        opacity: 0.5;
+    }
+
+    .markdown-modal-footer {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        border-top: 1px solid var(--color-borderprimary);
+        justify-content: flex-end;
+    }
+
+    .markdown-modal-copy-btn {
+        padding: 8px 16px;
+        background: var(--color-main);
+        border: 1px solid var(--color-borderprimary);
+        border-radius: 4px;
+        color: var(--color-fontPrimary);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .markdown-modal-copy-btn:hover {
+        background: var(--color-muted);
+    }
+
+    .markdown-modal-copy-btn:active {
+        transform: translateY(1px);
+    }
+</style>
