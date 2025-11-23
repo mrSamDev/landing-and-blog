@@ -3,7 +3,7 @@ title: Text Humaniser Prompt
 publishDate: 'Jun 27 2025'
 isPublished: true
 reference: https://substack.com/home/post/p-164573563
-key: tip-1
+key: tip-2
 ---
 
 Rewrite the text below so it reads like one incisive professional talking to another.

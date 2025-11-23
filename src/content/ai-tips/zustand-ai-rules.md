@@ -2,7 +2,7 @@
 title: Zustand Structure coding tools rule
 publishDate: 'Jun 28 2025'
 isPublished: true
-key: tip-2
+key: tip-3
 ---
 
 ## Structuring Application State with Zustand
