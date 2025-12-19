@@ -7,6 +7,7 @@ import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
 import clsx from 'clsx';
 import CarbonBadge from '../components/CarbonBadge.astro';
+import Snowfall from '../components/Snowflow.astro';
 
 export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean };
 
@@ -38,5 +39,12 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
             <CarbonBadge />
             <Footer />
         </div>
+        <Snowfall
+            snowflakeCount={150}
+            radius={[2.0, 6.0]}
+            speed={[0.5, 1.5]}
+            color="#e8f4f8"
+            enable3DRotation={true}
+        />
     </body>
 </html>
