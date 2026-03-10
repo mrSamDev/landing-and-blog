@@ -13,7 +13,12 @@ export default defineConfig({
     integrations: [
         mermaid({
             theme: 'dark',
-            autoTheme: true
+            autoTheme: true,
+            mermaidConfig: {
+                flowchart: {
+                    htmlLabels: true
+                }
+            }
         }),
         mdx(),
         partytown({
