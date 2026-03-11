@@ -15,13 +15,9 @@ seo:
     alt: 'Architecture diagram of an AI assistant running as an Apollo Federation subgraph alongside users, movies, reviews, and search services'
 ---
 
-Most teams bolt an AI assistant onto the side of their app: a floating widget, a separate `/api/chat` endpoint, something outside the core architecture. In this system, the AI is a proper Apollo Federation subgraph, sitting alongside users, movies, reviews, and search.
+Most AI assistants live at `/api/chat` — outside your architecture, outside your graph, outside your auth model.
 
-This came out of rebuilding familiarity with Federation — and realizing partway through that the same patterns that make it worth using for microservices make it worth using for AI too.
-
----
-
-## The Setup
+In this system, the AI is a first-class Apollo Federation subgraph, sitting alongside users, movies, reviews, and search. The frontend doesn't know there's an AI service. It calls `sendMessage` the same as any other mutation.
 
 The platform is a movie catalog with five subgraphs behind an Apollo Router gateway:
 
@@ -80,7 +76,7 @@ sequenceDiagram
     GW-->>FE: response
 ```
 
-An AI message takes a different path. The gateway hands off to the AI subgraph, the agent decides which tools to call, and those tools talk directly to the target subgraphs - bypassing the gateway entirely:
+An AI message takes a different path. The gateway hands off to the AI subgraph, the agent decides which tools to call, and those tools talk directly to the target subgraphs — bypassing the gateway entirely (direct calls avoid an extra hop when the agent chains 3–5 tools per message):
 
 ```mermaid
 sequenceDiagram
@@ -416,7 +412,7 @@ The AI service needs `GROQ_API_KEY`, `MOVIES_SERVICE_URL`, `REVIEWS_SERVICE_URL`
 
 ---
 
-Treating the AI as a subgraph instead of a sidecar costs almost nothing extra, and you get shared auth, typed schema, and a single API surface for free. If you're already running Federation, there's no good reason to put the AI anywhere else.
+Treating the AI as a subgraph instead of a sidecar costs almost nothing extra, and you get shared auth, typed schema, and a single API surface for free. If you're already running Federation, the AI belongs in the graph.
 
 The full code is on GitHub: [mrSamDev/GraphQL-Federation](https://github.com/mrSamDev/GraphQL-Federation)
 
