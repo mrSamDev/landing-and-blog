@@ -5,12 +5,17 @@ publishDate: 'Dec 8 2024'
 tags:
   - Guide
   - JavaScript
+  - TypeScript
   - Programming
   - Architecture
+  - React
+  - TanStack Query
+  - Performance
+  - Web Development
 isFeatured: true
 seo:
   image:
-    src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733818933/fypxxcxg6vwf7ssjrcwf.jpg'
+    src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/Gemini_Generated_Image_340mt6340mt6340m_1_vot8ug.png'
     alt: JavaScript code on a computer screen
 ---
 
