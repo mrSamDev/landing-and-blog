@@ -5,16 +5,13 @@ seo:
   description: Reach out to discuss frontend development, technical leadership, or collaborative opportunities.
 ---
 
-Drop me a line if you want to chat about:
+If you’ve got something worth discussing, I’m listening.
 
-- 🎨 That pixel-perfect UI you're struggling with
-- 📚 Your favorite manga/manhwa recommendations
-- 🏃‍♂️ Cool trekking spots around Kerala and india
-- 🤓 Why Go's error handling is actually pretty neat
+Reach out if you want to talk about fixing a pixel-perfect UI that refuses to behave, trading manga or manhwa picks, or finding trekking spots around Kerala or anywhere else in India. If you think Go’s error handling gets a bad rap, we’ll get along just fine.
 
 ### Find me online
 
 - [Email](mailto:sijosam1905@gmail.com)
 - [BlueSky](https://bsky.app/profile/sijosam.in)
 - [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
-- [Resume]([https://resume.mrsamdev.xyz/](https://docs.google.com/document/d/e/2PACX-1vSW3MXO5ES1URp10X3VgZthVVgNC7c2jQtsYWAEIK7j3G9K1Z5Saqu6EuOBNedzei7ORzvHSQiDrte8/pub))
+- [Resume](https://docs.google.com/document/d/e/2PACX-1vSW3MXO5ES1URp10X3VgZthVVgNC7c2jQtsYWAEIK7j3G9K1Z5Saqu6EuOBNedzei7ORzvHSQiDrte8/pub)
