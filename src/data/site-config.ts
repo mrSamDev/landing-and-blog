@@ -66,6 +66,10 @@ const siteConfig: SiteConfig = {
         {
             text: 'AI Tips',
             href: '/ai-tips'
+        },
+        {
+            text: 'Resume',
+            href: '/resume'
         }
     ],
     footerNavLinks: [
