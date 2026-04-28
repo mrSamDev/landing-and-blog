@@ -9,9 +9,9 @@ import clsx from 'clsx';
 import CarbonBadge from '../components/CarbonBadge.astro';
 import Snowfall from '../components/Snowflow.astro';
 
-export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean };
+export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean; chrome?: boolean };
 
-const { showHeader = true, fullWidth = false, ...head } = Astro.props;
+const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.props;
 ---
 
 <!doctype html>
@@ -31,20 +31,22 @@ const { showHeader = true, fullWidth = false, ...head } = Astro.props;
     </head>
     <body class="bg-main text-text text-fontPrimary">
         <div class="flex flex-col min-h-screen px-4 md:px-8">
-            <Nav />
+            {chrome && <Nav />}
 
             <main transition:animate="fade" class={clsx('grow w-full', !fullWidth && 'max-w-5xl mx-auto')}>
                 <slot />
             </main>
-            <CarbonBadge />
-            <Footer />
+            {chrome && <CarbonBadge />}
+            {chrome && <Footer />}
         </div>
-        <Snowfall
-            snowflakeCount={150}
-            radius={[2.0, 6.0]}
-            speed={[0.5, 1.5]}
-            color="#e8f4f8"
-            enable3DRotation={true}
-        />
+        {chrome && (
+            <Snowfall
+                snowflakeCount={150}
+                radius={[2.0, 6.0]}
+                speed={[0.5, 1.5]}
+                color="#e8f4f8"
+                enable3DRotation={true}
+            />
+        )}
     </body>
 </html>
