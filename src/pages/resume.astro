@@ -2,27 +2,220 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Resume" description="Sijo Sam's resume">
-    <article class="mb-16 sm:mb-24">
-       
-        <div class="w-full">
-            <iframe
-                src="https://docs.google.com/document/d/e/2PACX-1vTlds-VrcgsjzqxprzoACiJ8nkRTB3u27l6qGFA48dcHcYVlxNLnvXBN48UzDH4v23OzhPZEj3NJzP8/pub?embedded=true"
-                class="w-full border-0"
-                style="height: 850px;"
-                title="Sijo Sam Resume"
-                loading="lazy"
-            ></iframe>
-            <p class="mt-4 text-sm text-center">
-                <a
-                    href="https://docs.google.com/document/d/e/2PACX-1vTlds-VrcgsjzqxprzoACiJ8nkRTB3u27l6qGFA48dcHcYVlxNLnvXBN48UzDH4v23OzhPZEj3NJzP8/pub"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="underline"
-                >
-                    Open in Google Docs
-                </a>
+<BaseLayout title="Resume" description="Sijo Sam's resume — Technical Lead & Full-Stack Engineer">
+    <article class="max-w-3xl mx-auto mb-16 sm:mb-24 px-2">
+
+        <header class="mb-8 pt-6">
+    
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-fontPrimary">Sijo Sam</h1>
+                    <p class="text-lg text-fontPrimary/70 mt-0.5">Technical Lead &amp; Full-Stack Engineer</p>
+
+                    <div class="mt-3 space-y-0.5 text-sm text-fontPrimary/70">
+                        <p>Kerala, India</p>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm">
+                        <a href="mailto:dev.sijo.sam@gmail.com" class="text-fontPrimary/70 hover:text-fontPrimary underline decoration-dashed">dev.sijo.sam@gmail.com</a>
+                        <a href="https://www.sijosam.com/" target="_blank" rel="noopener noreferrer" class="text-fontPrimary/70 hover:text-fontPrimary underline decoration-dashed">sijosam.com</a>
+                        <a href="https://www.linkedin.com/in/sijo-sam/" target="_blank" rel="noopener noreferrer" class="text-fontPrimary/70 hover:text-fontPrimary underline decoration-dashed">LinkedIn</a>
+                        <a href="https://github.com/mrSamDev" target="_blank" rel="noopener noreferrer" class="text-fontPrimary/70 hover:text-fontPrimary underline decoration-dashed">GitHub</a>
+                    </div>
+                </div>
+
+            
+            </div>
+        </header>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-4">Professional Summary</h2>
+            <p class="text-base text-fontPrimary/85 leading-relaxed">
+                Technical Lead and Full-Stack Engineer with 8+ years of experience designing and delivering scalable web platforms across frontend and backend systems. Skilled in React, TypeScript, Node.js, and Python, with expertise in building data-driven dashboards, distributed APIs, and high-performance applications. Experienced in leading engineering teams, modernizing legacy systems, and driving performance improvements that increased search visibility by 50% and reduced development time by 30%.
             </p>
-        </div>
+            <p class="mt-3 text-sm text-fontPrimary/70">Open to international relocation.</p>
+        </section>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-4">Technologies &amp; Skills</h2>
+            <div class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Languages</span>
+                <span class="text-fontPrimary/80">JavaScript, TypeScript, Go, Python, Lua</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Frontend</span>
+                <span class="text-fontPrimary/80">React, Vue, TypeScript, React Native; Next.js, Tailwind CSS, Webpack, Vite</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Backend</span>
+                <span class="text-fontPrimary/80">Node.js, REST APIs, GraphQL, Microservices</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Data / Infra</span>
+                <span class="text-fontPrimary/80">PostgreSQL, MongoDB, AWS, GCP, Docker, Terraform, Kubernetes, Grafana, Ollama</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Testing</span>
+                <span class="text-fontPrimary/80">Jest, Vitest, Cypress; React Testing Library; Storybook</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Practices</span>
+                <span class="text-fontPrimary/80">CSR, SSR, ISR, CI/CD, TDD, SOLID, Technical Leadership, Team Mentoring, Agile (CSM)</span>
+
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Performance</span>
+                <span class="text-fontPrimary/80">LCP, INP, FCP Optimization, Lighthouse, Technical SEO</span>
+            </div>
+        </section>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-5">Work Experience</h2>
+
+            <div class="space-y-8">
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
+                        <div>
+                            <span class="font-semibold text-fontPrimary">Technical Lead</span>
+                            <span class="text-fontPrimary/40 mx-1.5">·</span>
+                            <span class="font-medium text-fontPrimary/70">Gadgeon</span>
+                        </div>
+                        <span class="text-xs text-fontPrimary/50 shrink-0">2025 – Present</span>
+                    </div>
+                    <p class="text-xs text-fontPrimary/50 mb-3">SaaS Products Team · Kochi, Kerala</p>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Led adoption of React 19 across the SaaS organization, managing a team of 8 engineers across multiple products</li>
+                        <li>Directed incremental migration of a 100k+ line Angular monolith to React 19 using a strangler-fig approach, delivering zero downtime across 3 product teams</li>
+                        <li>Established code review and knowledge-sharing practices that improved delivery quality and reduced onboarding friction for new team members</li>
+                        <li>Championed AI tooling adoption (Claude Code, Windsurf) with hands-on workshops, boosting developer productivity by 35%</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: React, Vue, Zustand, MUI, Python, TanStack, Docker, Node.js, GCP, AWS, Terraform</p>
+                </article>
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
+                        <div>
+                            <span class="font-semibold text-fontPrimary">Technical Lead</span>
+                            <span class="text-fontPrimary/40 mx-1.5">·</span>
+                            <span class="font-medium text-fontPrimary/70">Diagnal Technologies</span>
+                        </div>
+                        <span class="text-xs text-fontPrimary/50 shrink-0">2022 – 2025</span>
+                    </div>
+                    <p class="text-xs text-fontPrimary/50 mb-3">Digital Media &amp; Streaming Products · Remote (London, UK)</p>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Modernized legacy React codebases into functional-component architecture, improving load times by 30% and overall frontend performance by 25%</li>
+                        <li>Led distributed engineering teams across time zones and earned fast-track promotion to Front-End Technical Lead</li>
+                        <li>Mentored engineers through code reviews and 1:1 coaching, reducing defects and improving team productivity by 35%</li>
+                        <li>Boosted app search rankings by 50% via technical SEO, SSE platform migration, and content/meta tag optimisation</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: React, React Native, GraphQL, Node.js, Next.js, Tailwind CSS, Redux, AWS, Netlify, Astro</p>
+                </article>
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
+                        <div>
+                            <span class="font-semibold text-fontPrimary">Software Developer</span>
+                            <span class="text-fontPrimary/40 mx-1.5">·</span>
+                            <span class="font-medium text-fontPrimary/70">HyperBlox</span>
+                        </div>
+                        <span class="text-xs text-fontPrimary/50 shrink-0">2020 – 2022</span>
+                    </div>
+                    <p class="text-xs text-fontPrimary/50 mb-3">IDE Products Team · Bangalore, India</p>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Architected a web-based IDE for the company&apos;s IoT and 5G platform, reducing application development time by 30%</li>
+                        <li>Partnered with the CTO on compiler workflows and IDE integration for core platform capabilities</li>
+                        <li>Served as Project Owner and Scrum Master, improving sprint execution and cross-functional delivery</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: React, Node.js, MUI, Redux, Docker, Lua, Shell Script, Kubernetes, MongoDB</p>
+                </article>
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 mb-1">
+                        <div>
+                            <span class="font-semibold text-fontPrimary">Software Developer</span>
+                            <span class="text-fontPrimary/40 mx-1.5">·</span>
+                            <span class="font-medium text-fontPrimary/70">7th Pillar Ventures</span>
+                        </div>
+                        <span class="text-xs text-fontPrimary/50 shrink-0">2018 – 2020</span>
+                    </div>
+                    <p class="text-xs text-fontPrimary/50 mb-3">SaaS Products Team · Kochi, India</p>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Built scalable SaaS solutions for healthcare, retail, and travel industries</li>
+                        <li>Designed business-critical applications that improved operational efficiency by 20% and reduced manual cost through automation</li>
+                        <li>Accelerated product delivery for startup clients across multiple domains through reusable frontend and backend systems</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: React, React Native, Node.js, Next.js, MUI, SCSS, Redux, AWS, GCP, Firebase, MongoDB</p>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-4">Education</h2>
+            <div class="pl-4 border-l-2 border-fontPrimary/15 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5">
+                <div>
+                    <p class="font-semibold text-fontPrimary text-sm">Bachelor of Technology in Computer Science</p>
+                    <p class="text-sm text-fontPrimary/70 mt-0.5">University of Cochin, India</p>
+                </div>
+                <span class="text-xs text-fontPrimary/50 shrink-0">2014 – 2018</span>
+            </div>
+        </section>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-5">Projects &amp; Open Source</h2>
+
+            <div class="space-y-6">
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="font-semibold text-fontPrimary">llm-moat</span>
+                        <span class="text-xs text-fontPrimary/50">LLM Security Toolkit · Open Source</span>
+                        <a href="https://github.com/mrSamDev/llm-moat" target="_blank" rel="noopener noreferrer" class="text-xs text-fontPrimary/50 hover:text-fontPrimary underline decoration-dashed ml-auto">GitHub ↗</a>
+                    </div>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Built an open-source TypeScript security toolkit for production LLM applications, focused on prompt injection defense and trust-boundary enforcement</li>
+                        <li>TypeScript toolkit to detect and mitigate prompt injection in production LLM systems</li>
+                        <li>Hybrid detection pipeline combining rule-based filters and semantic classification (OpenAI, Anthropic, Ollama)</li>
+                        <li>Input sanitisation and trust boundary enforcement to prevent tool misuse and data exfiltration</li>
+                        <li>Streaming-aware detection for large, real-time inputs with extensible adapters and telemetry hooks</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: TypeScript, LLM Security, Prompt Injection Detection, OpenAI, Anthropic, Ollama</p>
+                </article>
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="font-semibold text-fontPrimary">PromptRange</span>
+                        <span class="text-xs text-fontPrimary/50">LLM Security Training Platform</span>
+                        <a href="https://prompt-range.mrsamdev.xyz/" target="_blank" rel="noopener noreferrer" class="text-xs text-fontPrimary/50 hover:text-fontPrimary underline decoration-dashed ml-auto">Live ↗</a>
+                    </div>
+                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
+                        <li>Interactive platform to simulate prompt injection attacks with real tool execution</li>
+                        <li>Attack scenarios covering privilege escalation, data exfiltration, and tool misuse</li>
+                        <li>RBAC-based tool access, input validation, and context isolation; exposed execution traces and prompt diffs</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-fontPrimary/65">Technologies: RBAC, Tool Execution Controls, Input Validation, Prompt Diffing, Trace Inspection</p>
+                </article>
+
+                <article class="pl-4 border-l-2 border-fontPrimary/15">
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="font-semibold text-fontPrimary">My Silent Thoughts</span>
+                        <span class="text-xs text-fontPrimary/50">Technical Blog</span>
+                        <a href="https://sijosam.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-fontPrimary/50 hover:text-fontPrimary underline decoration-dashed ml-auto">Live ↗</a>
+                    </div>
+                    <p class="text-sm text-fontPrimary/85 leading-relaxed">Frontend architecture and performance articles focused on practical trade-offs — including <em>Why Your Frontend Needs a Safety Net</em> and <em>Network-Aware Development</em>.</p>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="mb-9">
+            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/50 border-b border-fontPrimary/20 pb-2 mb-4">Certifications</h2>
+            <ul class="space-y-2 text-sm text-fontPrimary/85">
+                <li class="pl-4 border-l-2 border-fontPrimary/15">Certified Scrum Master (CSM) — Scrum Alliance</li>
+                <li class="pl-4 border-l-2 border-fontPrimary/15">Certified Secure Web Application Engineer (CSWAE) — Mile2</li>
+            </ul>
+        </section>
+
     </article>
 </BaseLayout>
+
+<style>
+    @media print {
+        button { display: none !important; }
+        article { max-width: 100% !important; }
+    }
+</style>
