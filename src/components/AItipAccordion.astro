@@ -7,7 +7,7 @@ type Props = { post: CollectionEntry<'aitips'> };
 const { post } = Astro.props;
 const { Content } = await render(post);
 const postBody = post.body || '';
-const postKey = post.data.key || `tip-${post.id}`; // Fallback to id if key is not defined
+const postKey = post.data.key || `tip-${post.id}`;
 ---
 
 <style>
@@ -22,13 +22,13 @@ const postKey = post.data.key || `tip-${post.id}`; // Fallback to id if key is n
     }
 
     details[open] .accordion-content {
-        max-height: 500px; /* Adjust based on your content */
+        max-height: 500px;
         opacity: 1;
-        overflow-y: auto; /* Ensure scroll works */
+        overflow-y: auto;
     }
 </style>
 
-<details class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
+<details id={postKey} class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
     <summary class="p-4 cursor-pointer flex justify-between items-center">
         <div class="flex items-center gap-2">
             <h2 class="text-md md:text-xl font-semibold mr-2">{post.data.title}</h2>
@@ -37,7 +37,7 @@ const postKey = post.data.key || `tip-${post.id}`; // Fallback to id if key is n
         <span class="ml-2 transform transition-transform group-open:rotate-180">&#9660;</span>
     </summary>
 
-    <div id={postKey} class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
+    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
         <Content />
         {
             post.data.reference && (
@@ -54,10 +54,17 @@ const postKey = post.data.key || `tip-${post.id}`; // Fallback to id if key is n
 
 <script define:vars={{ postBody, postKey }}>
     const copyButton = document.getElementById('copy-button-' + postKey);
+    const accordion = document.getElementById(postKey);
+
+    if (window.location.hash === '#' + postKey && accordion instanceof HTMLDetailsElement) {
+        accordion.open = true;
+    }
+
     if (copyButton) {
-        copyButton.addEventListener('click', () => {
-            const accordionContent = document.getElementById(postKey);
-            console.log('accordionContent: ', accordionContent);
+        copyButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const accordionContent = accordion?.querySelector('.accordion-content');
             if (accordionContent) {
                 navigator.clipboard
                     .writeText(postBody)

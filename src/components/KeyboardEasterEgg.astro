@@ -1,0 +1,121 @@
+<div class="keyboard-easter-egg" data-keyboard-easter-egg hidden aria-live="polite">
+    <p class="keyboard-easter-egg__eyebrow">Shortcut found</p>
+    <p class="keyboard-easter-egg__title">Goblin mode unlocked</p>
+    <p class="keyboard-easter-egg__copy">Cmd/Ctrl + G woke up the tiny UI gremlin.</p>
+</div>
+
+<style>
+    .keyboard-easter-egg {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 4500;
+        width: min(20rem, calc(100vw - 2rem));
+        padding: 0.9rem 1rem;
+        border: 1px dashed var(--color-borderprimary);
+        border-radius: 1.25rem;
+        background:
+            radial-gradient(circle at top left, color-mix(in srgb, #f7d774 32%, transparent), transparent 48%),
+            color-mix(in srgb, var(--color-main) 88%, white 12%);
+        box-shadow: 0 1rem 2rem color-mix(in srgb, var(--color-fontPrimary) 14%, transparent);
+        color: var(--color-fontPrimary);
+        opacity: 0;
+        transform: translateY(1rem) scale(0.96) rotate(-1deg);
+        transition:
+            opacity 0.2s ease,
+            transform 0.2s ease;
+        pointer-events: none;
+    }
+
+    .keyboard-easter-egg.is-visible {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0);
+    }
+
+    .keyboard-easter-egg__eyebrow {
+        margin: 0;
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.7;
+    }
+
+    .keyboard-easter-egg__title,
+    .keyboard-easter-egg__copy {
+        margin: 0;
+    }
+
+    .keyboard-easter-egg__title {
+        padding-top: 0.2rem;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .keyboard-easter-egg__copy {
+        padding-top: 0.2rem;
+        font-size: 0.84rem;
+        line-height: 1.4;
+    }
+</style>
+
+<script>
+    (() => {
+        const w = window as typeof window & { __keyboardEasterEggInitialized?: boolean };
+        if (w.__keyboardEasterEggInitialized) {
+            return;
+        }
+
+        w.__keyboardEasterEggInitialized = true;
+
+        const VISIBLE_CLASS = 'is-visible';
+        const HIDE_DELAY_MS = 2200;
+        let hideTimer = 0;
+
+        function isEditableTarget(target: EventTarget | null) {
+            if (!(target instanceof HTMLElement)) {
+                return false;
+            }
+
+            return (
+                target.isContentEditable ||
+                target instanceof HTMLInputElement ||
+                target instanceof HTMLTextAreaElement ||
+                target instanceof HTMLSelectElement
+            );
+        }
+
+        function getEgg() {
+            return document.querySelector('[data-keyboard-easter-egg]');
+        }
+
+        function showEgg() {
+            const egg = getEgg();
+            if (!(egg instanceof HTMLElement)) {
+                return;
+            }
+
+            window.clearTimeout(hideTimer);
+            egg.hidden = false;
+            requestAnimationFrame(() => egg.classList.add(VISIBLE_CLASS));
+            hideTimer = window.setTimeout(() => {
+                egg.classList.remove(VISIBLE_CLASS);
+                window.setTimeout(() => {
+                    egg.hidden = true;
+                }, 220);
+            }, HIDE_DELAY_MS);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (isEditableTarget(event.target)) {
+                return;
+            }
+
+            if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'g') {
+                return;
+            }
+
+            event.preventDefault();
+            showEgg();
+        });
+    })();
+</script>

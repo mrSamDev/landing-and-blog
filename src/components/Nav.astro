@@ -18,7 +18,7 @@ const navLinks = siteConfig.headerNavLinks || [];
                 >
                     <span class="menu-toggle-icon w-6 h-px relative bg-current" />
                 </button>
-                <ul id="menu-items" class="menu flex gap-6">
+                <ul id="menu-items" class="menu flex gap-6" data-menu-items>
                     {navLinks.map((link) => (
                         <li class="py-1">
                             <NavLink class="text-xl text-fontPrimary hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base" href={link.href}>
@@ -30,12 +30,70 @@ const navLinks = siteConfig.headerNavLinks || [];
             </div>
         )
     }
-    <div class="absolute right-0 top-4 z-10 md:top-8">
+    <div class="absolute right-0 top-4 z-10 flex items-center gap-2 md:top-8">
+        <button
+            type="button"
+            class="search-trigger hidden md:inline-flex"
+            aria-label="Open search"
+            data-open-command-palette
+        >
+            <span>Search</span>
+            <span class="search-trigger-shortcut">Cmd/Ctrl K</span>
+        </button>
+        <button type="button" class="search-trigger search-trigger-icon md:hidden" aria-label="Open search" data-open-command-palette>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M10.5 4a6.5 6.5 0 1 0 4.06 11.58l4.43 4.43 1.41-1.41-4.43-4.43A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
+                    fill="currentColor"
+                />
+            </svg>
+        </button>
         <ThemeToggle />
     </div>
 </nav>
 
 <style>
+    .search-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2rem;
+        padding: 0.35rem 0.75rem;
+        border: 1px dashed var(--color-borderprimary);
+        border-radius: 999px;
+        background-color: color-mix(in srgb, var(--color-main) 82%, transparent);
+        color: var(--color-fontPrimary);
+        font-size: 0.85rem;
+        line-height: 1;
+        transition:
+            transform 0.2s ease,
+            background-color 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .search-trigger:hover,
+    .search-trigger:focus-visible {
+        background-color: var(--color-muted);
+        transform: translateY(-1px);
+    }
+
+    .search-trigger-shortcut {
+        opacity: 0.7;
+        font-size: 0.75rem;
+    }
+
+    .search-trigger-icon {
+        width: 2rem;
+        height: 2rem;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .search-trigger-icon svg {
+        width: 1rem;
+        height: 1rem;
+    }
+
     @media (max-width: 767px) {
         .menu {
             display: flex;
@@ -57,6 +115,10 @@ const navLinks = siteConfig.headerNavLinks || [];
             visibility: visible;
             opacity: 1;
             transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+        .menu a:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
         }
         .menu-toggle-icon {
             transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
@@ -103,17 +165,93 @@ const navLinks = siteConfig.headerNavLinks || [];
 </style>
 
 <script>
-    function menuToggle() {
-        const menu = document.querySelector('.menu');
-        const menuToggleBtn = document.querySelector('.menu-toggle');
-        menuToggleBtn?.addEventListener('click', () => {
-            const isMenuExpanded = menuToggleBtn.getAttribute('aria-expanded') === 'true';
-            menuToggleBtn.classList.toggle('is-active');
-            menuToggleBtn.setAttribute('aria-expanded', isMenuExpanded ? 'false' : 'true');
-            menuToggleBtn.setAttribute('aria-label', isMenuExpanded ? 'Open Menu' : 'Close Menu');
-            menu?.classList.toggle('is-visible');
+    (() => {
+        const w = window as typeof window & { __siteNavInitialized?: boolean };
+        if (w.__siteNavInitialized) {
+            return;
+        }
+
+        w.__siteNavInitialized = true;
+
+        const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+        function getNodes() {
+            const toggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('[data-menu-items]');
+
+            return { toggle, menu };
+        }
+
+        function setMenuState(expanded: boolean) {
+            const { toggle, menu } = getNodes();
+            if (!toggle || !menu) return;
+
+            toggle.classList.toggle('is-active', expanded);
+            toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            toggle.setAttribute('aria-label', expanded ? 'Close Menu' : 'Open Menu');
+            menu.classList.toggle('is-visible', expanded);
+
+            if (expanded) {
+                const firstLink = menu.querySelector('a');
+                if (firstLink instanceof HTMLElement) {
+                    requestAnimationFrame(() => firstLink.focus());
+                }
+            }
+        }
+
+        function isMenuOpen() {
+            const { toggle } = getNodes();
+            return toggle?.getAttribute('aria-expanded') === 'true';
+        }
+
+        document.addEventListener('click', (event) => {
+            const target = event.target instanceof Element ? event.target : null;
+            const toggle = target?.closest('.menu-toggle');
+            const menu = target?.closest('[data-menu-items]');
+
+            if (toggle) {
+                event.preventDefault();
+                setMenuState(!isMenuOpen());
+                return;
+            }
+
+            if (!menu && isMenuOpen()) {
+                setMenuState(false);
+            }
         });
-    }
-    menuToggle();
-    document.addEventListener('astro:after-swap', menuToggle);
+
+        document.addEventListener('keydown', (event) => {
+            if (!isMenuOpen()) return;
+
+            const { toggle, menu } = getNodes();
+            if (!toggle || !menu) return;
+
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setMenuState(false);
+                if (toggle instanceof HTMLElement) toggle.focus();
+                return;
+            }
+
+            if (event.key !== 'Tab') return;
+
+            const focusable = [...menu.querySelectorAll(focusableSelector)] as HTMLElement[];
+            if (!focusable.length) return;
+
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        });
+
+        document.addEventListener('astro:after-swap', () => {
+            setMenuState(false);
+        });
+    })();
 </script>

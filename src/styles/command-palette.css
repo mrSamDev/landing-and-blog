@@ -1,0 +1,170 @@
+.command-palette-root {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: grid;
+    place-items: start center;
+    padding: 10vh 1rem 2rem;
+}
+
+.command-palette-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(1, 26, 26, 0.45);
+    backdrop-filter: blur(8px);
+}
+
+.command-palette {
+    position: relative;
+    width: min(100%, 44rem);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--color-borderprimary) 75%, white 25%);
+    border-radius: 1.5rem;
+    background: color-mix(in srgb, var(--color-main) 88%, white 12%);
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.command-palette-shell {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.command-palette-header {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.command-palette-search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 4rem;
+    padding: 0 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-borderprimary) 60%, transparent);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-main) 75%, white 25%);
+}
+
+.command-palette-search svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.command-palette-input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--color-fontPrimary);
+    font-size: 1.05rem;
+    outline: 0;
+}
+
+.command-palette-input::placeholder,
+.command-palette-help,
+.command-palette-status,
+.command-palette-footer {
+    color: color-mix(in srgb, var(--color-fontPrimary) 75%, transparent);
+}
+
+.command-palette-input::placeholder {
+    font-size: 1rem;
+}
+
+.command-palette-help,
+.command-palette-status,
+.command-palette-footer {
+    font-size: 0.82rem;
+}
+
+.command-palette-status {
+    min-height: 1.2rem;
+    padding: 0 0.25rem;
+}
+
+.command-palette-results {
+    display: grid;
+    gap: 0.35rem;
+    max-height: min(26rem, 60vh);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow: auto;
+}
+
+.command-palette-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    color: var(--color-fontPrimary);
+    text-align: left;
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.command-palette-option:hover,
+.command-palette-option.is-active {
+    background: color-mix(in srgb, var(--color-muted) 84%, white 16%);
+    border-color: color-mix(in srgb, var(--color-borderprimary) 55%, transparent);
+    transform: translateY(-1px);
+}
+
+.command-palette-option-main {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.command-palette-option-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+.command-palette-option-meta {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.72;
+    font-size: 0.82rem;
+}
+
+.command-palette-option-type {
+    flex-shrink: 0;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--color-borderprimary) 45%, transparent);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.command-palette-empty {
+    padding: 1rem;
+    color: color-mix(in srgb, var(--color-fontPrimary) 75%, transparent);
+}
+
+.command-palette-highlight {
+    padding: 0 0.1em;
+    border-radius: 0.2em;
+    background: color-mix(in srgb, #f6d365 72%, white 28%);
+    color: #173333;
+}
+
+.dark .command-palette-highlight {
+    background: color-mix(in srgb, #f6d365 40%, var(--color-borderprimary) 60%);
+    color: var(--color-fontPrimary);
+}
