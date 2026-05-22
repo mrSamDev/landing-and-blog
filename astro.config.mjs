@@ -5,6 +5,7 @@ import partytown from '@astrojs/partytown';
 import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 import mermaid from 'astro-mermaid';
+import searchIndex from './src/integrations/search-index.js';
 
 // https://astro.build/config
 export default defineConfig({
@@ -26,7 +27,8 @@ export default defineConfig({
                 forward: ['posthog']
             }
         }),
-        sitemap()
+        sitemap(),
+        searchIndex()
     ],
 
     output: 'static',

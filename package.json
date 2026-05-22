@@ -10,27 +10,30 @@
         "astro": "astro"
     },
     "dependencies": {
-        "@astrojs/mdx": "^5.0.3",
-        "@astrojs/partytown": "^2.1.6",
-        "@astrojs/react": "^5.0.3",
+        "@astrojs/mdx": "^5.0.6",
+        "@astrojs/partytown": "^2.1.7",
+        "@astrojs/react": "^5.0.5",
         "@astrojs/rss": "^4.0.18",
         "@astrojs/sitemap": "^3.7.2",
-        "@astrojs/vercel": "^10.0.4",
+        "@astrojs/vercel": "^10.0.7",
         "@tailwindcss/vite": "^4.1.10",
         "@types/react": "^18.2.0",
         "@types/react-dom": "^18.2.0",
         "@vercel/analytics": "^1.5.0",
         "@vercel/speed-insights": "^1.2.0",
-        "astro": "^6.1.4",
+        "astro": "^6.3.7",
         "astro-mermaid": "^1.1.0",
         "clsx": "^2.1.1",
+        "fuse.js": "^7.1.0",
         "marked": "^15.0.1",
         "mermaid": "^11.12.0",
         "tailwindcss": "^4.1.10"
     },
     "devDependencies": {
+        "@astrojs/check": "^0.9.9",
         "@tailwindcss/typography": "^0.5.15",
         "prettier": "^3.3.3",
-        "prettier-plugin-tailwindcss": "^0.6.8"
+        "prettier-plugin-tailwindcss": "^0.6.8",
+        "typescript": "^6.0.3"
     }
 }
