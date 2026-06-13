@@ -1,7 +1,7 @@
 ---
 title: agentic-kanban
 description: Coordination protocol for AI agents. SQLite-backed. Agent-agnostic. No server, no daemon, no queues.
-publishDate: 'June 01 2026'
+publishDate: 'Jun 01 2026'
 isFeatured: true
 seo:
   image:
