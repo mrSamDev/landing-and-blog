@@ -99,7 +99,6 @@ Every command prints stable JSON to stdout. Empty work returns `{}`. Errors go t
 ## Links
 
 - GitHub: https://github.com/mrSamDev/agentic-kanban
-- NPM (pi extension): https://www.npmjs.com/package/@mr-samdev/kanban
 
 ## License
 
