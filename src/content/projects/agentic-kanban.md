@@ -9,10 +9,6 @@ seo:
     alt: agentic-kanban project cover
 ---
 
-# agentic-kanban
-
-> **Alpha.** Things may break. You've been warned.
-
 Coordination protocol for AI agents. SQLite-backed. Agent-agnostic.
 
 No server, no daemon, no queues. Just a shared database file agents use to claim, track, review, and finish work. Single Go binary plus SQLite.
