@@ -1,7 +1,7 @@
 ---
 title: agentic-kanban
 description: Coordination protocol for AI agents. SQLite-backed. Agent-agnostic. No server, no daemon, no queues.
-publishDate: 'Feb 15 2026'
+publishDate: 'Jun 01 2026'
 isFeatured: true
 seo:
   image:
@@ -88,6 +88,7 @@ Worker-A claims TASK-1. Worker-A crashes.
 Worker-B calls claim-next and gets TASK-1.
 ```
 
+<<<<<<< HEAD
 Every command prints stable JSON to stdout. Empty work returns `{}`. Errors go to stderr as `{"error":"..."}` with exit code 2. Skill files embedded in the binary teach agents the protocol. No tool-calling framework needed.
 
 ## Built With
@@ -95,8 +96,18 @@ Every command prints stable JSON to stdout. Empty work returns `{}`. Errors go t
 - Go 1.25
 - SQLite via modernc.org/sqlite (pure Go, no CGo)
 - Cobra for CLI
-- UUIDs
+- # UUIDs
+  Every command prints stable JSON to stdout. Empty work returns `{}`. Errors go to stderr as `{"error":"..."}` with exit code 2. Skill files (embedded in the binary, written by `kanban init`) teach agents the protocol. No tool-calling framework needed.
+  > > > > > > > 77f721f83eb4f34cdc28f08789029e7418a01e1e
 
 ## Links
 
 - GitHub: https://github.com/mrSamDev/agentic-kanban
+  <<<<<<< HEAD
+  =======
+
+## License
+
+MIT
+
+> > > > > > > 77f721f83eb4f34cdc28f08789029e7418a01e1e
