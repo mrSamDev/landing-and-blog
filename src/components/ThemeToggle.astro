@@ -1,11 +1,13 @@
-<button id="theme-toggle" class="relative w-8 h-8 -mr-2 flex items-center justify-center group" aria-label="Change color scheme">
-    <!-- Halo effect on hover -->
-    <div class="absolute w-12 h-12 rounded-full opacity-0 group-hover:opacity-25 bg-gray-200 dark:bg-gray-700 transition-all duration-300 ease-in-out"></div>
+---
+---
 
-    <!-- Icon -->
-    <svg class="w-4 h-4 fill-current relative z-10" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="8"></circle>
-    </svg>
+<button
+    id="theme-toggle"
+    class="inline-flex items-center justify-center w-8 h-8 p-0 border border-ink rounded-pill bg-panel-2 text-ink text-base leading-none hover:bg-surface hover:-translate-y-px transition"
+    aria-label="Change color scheme"
+>
+    <span class="inline dark:hidden" aria-hidden="true">☾</span>
+    <span class="hidden dark:inline" aria-hidden="true">☀</span>
 </button>
 
 <script>

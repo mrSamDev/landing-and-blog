@@ -11,6 +11,10 @@ const postKey = post.data.key || `tip-${post.id}`;
 ---
 
 <style>
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
     .accordion-content {
         max-height: 0;
         overflow: hidden;
@@ -28,22 +32,22 @@ const postKey = post.data.key || `tip-${post.id}`;
     }
 </style>
 
-<details id={postKey} class="group mb-4 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow w-full">
-    <summary class="p-4 cursor-pointer flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <h2 class="text-md md:text-xl font-semibold mr-2">{post.data.title}</h2>
+<details id={postKey} class="group border border-ink rounded-lg bg-panel-2 shadow-[0_1px_3px_rgb(var(--shadow-rgb)/0.06)] hover:-translate-y-px hover:shadow-[0_2px_8px_rgb(var(--shadow-rgb)/0.12)] transition w-full">
+    <summary class="p-3 cursor-pointer flex justify-between items-center gap-2 list-none">
+        <h2 class="font-display font-bold text-base md:text-lg leading-tight truncate">{post.data.title}</h2>
+        <div class="flex items-center gap-2 shrink-0">
             <Button id={'copy-button-' + postKey}>Copy</Button>
+            <span class="text-ink/60 transition-transform duration-200 group-open:rotate-180">&#9660;</span>
         </div>
-        <span class="ml-2 transform transition-transform group-open:rotate-180">&#9660;</span>
     </summary>
 
-    <div class="accordion-content p-4 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
+    <div class="accordion-content p-3 pt-0 prose prose-sijo prose-sm sm:prose-base w-full">
         <Content />
         {
             post.data.reference && (
-                <div class="mt-4 text-sm text-gray-500">
+                <div class="mt-4 text-sm text-ink/60">
                     Original post:{' '}
-                    <a href={post.data.reference} target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">
+                    <a href={post.data.reference} target="_blank" rel="noopener noreferrer" class="text-link underline hover:no-underline">
                         Read here
                     </a>
                 </div>

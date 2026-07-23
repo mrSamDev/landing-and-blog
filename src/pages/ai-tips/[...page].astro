@@ -24,14 +24,14 @@ const blog = page.data.filter((i) => i.data.isPublished);
     image={{ src: '/sijo-preview.jpg', alt: 'The preview of the site' }}
     showHeader={false}
 >
-    <h1 class="mb-4 text-2xl leading-tight italic sm:mb-8 sm:text-4xl">AI Tips Archive</h1>
-    <p class="mb-12 sm:mb-16">
+    <h1 class="mb-4 font-display font-extrabold text-2xl sm:mb-6 sm:text-4xl">AI Tips Archive</h1>
+    <p class="mb-8 sm:mb-12 text-sm leading-relaxed text-ink/80 max-w-2xl">
         These are not all my original works. I’ll be adding links to the original articles I found. This is just my archive to organize interesting prompts I’ve
         discovered, sharing them with the world while giving full credit to the real writers.
     </p>
-    <div class="space-y-4">
+    <div class="flex flex-col gap-3">
         {blog.map((post) => <AItipAccordion post={post} />)}
     </div>
-    <Pagination page={page} class="my-16 sm:my-24" />
-    <Subscribe class="my-16 sm:my-24" />
+    <Pagination page={page} class="my-12 sm:my-16" />
+    <Subscribe class="my-12 sm:my-16" />
 </BaseLayout>

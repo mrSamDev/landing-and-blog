@@ -5,22 +5,76 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Light-mode design language from DESIGN.md (FeedPop).
+ * Tokens are exposed as Tailwind utilities (bg-panel, text-ink, border-ink,
+ * bg-pink-cta, font-display, rounded-pill, …) and overridden under .dark.
+ */
 @theme {
-    --color-fontPrimary: rgb(0, 71, 71);
-    --color-main: rgb(236 244 244);
-    --color-muted: rgb(220 235 235);
-    --color-borderprimary: rgb(0 128 128);
+    /* Structural / text — "ink" is the single structural color */
+    --color-ink: #004747;
+    --color-panel: #f0f5f5;
+    --color-panel-2: #ffffff;
+    --color-surface: #e8eeee;
+    --color-bg: #f5f8f8;
+
+    /* Backwards-compatible aliases so existing markup keeps working */
+    --color-fontPrimary: #004747; /* = ink */
+    --color-main: #f5f8f8; /* = bg */
+    --color-muted: #e8eeee; /* = surface */
+    --color-borderprimary: #004747; /* = ink */
+
+    /* Accents */
+    --color-yellow: #f9d84a;
+    --color-pink: #c92d68;
+    --color-pink-cta: #c92d68;
+    --color-pink-cta-deep: #a8205a;
+    --color-pink-cta-shadow: #8a1f4f;
+    --color-pink-error: #972959;
+    --color-mint: #92efc5;
+    --color-bluey: #3f5bff;
+    --color-link: #a8205a;
+
+    /* Typography */
+    --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Baloo 2', 'Nunito', ui-sans-serif, system-ui, sans-serif;
+
+    /* Radii (tempered for density) */
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-input: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 16px;
+    --radius-pill: 9999px;
 }
 
 @layer theme {
     * {
         @variant dark {
-            --color-fontPrimary: rgb(236, 244, 244); /* #ECF4F4 */
-            --color-main: rgb(0, 71, 71); /* #004747 */
-            --color-muted: rgb(0 89 89); /* #005959 */
-            --color-borderprimary: rgb(0 128 128); /* #008080 */
+            --color-ink: #ffffff;
+            --color-panel: #171717;
+            --color-panel-2: #000000;
+            --color-surface: #111111;
+            --color-bg: #0d0d0d;
+
+            --color-fontPrimary: #ffffff;
+            --color-main: #0d0d0d;
+            --color-muted: #111111;
+            --color-borderprimary: #ffffff;
+
+            --color-pink-error: #ff8caa;
+            --color-mint: #2d7d6a;
+            --color-link: #ff5d97;
         }
     }
+}
+
+:root {
+    --shadow-rgb: 0 71 71; /* teal-tinted shadow in light mode */
+}
+.dark {
+    --shadow-rgb: 0 0 0; /* pure black shadow in dark mode */
 }
 
 @layer base {
@@ -28,45 +82,37 @@
         color-scheme: light dark;
     }
 
+    body {
+        font-family: var(--font-sans);
+    }
+
+    /* Display font for headings & the app name only */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
     body.command-palette-open {
         overflow: hidden;
     }
 
     :focus-visible {
-        outline: 2px solid var(--color-borderprimary);
+        outline: 2px solid var(--color-pink-cta);
         outline-offset: 3px;
     }
-}
 
-@layer components {
-    .skip-link {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-        z-index: 5000;
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--color-borderprimary);
-        border-radius: 999px;
-        background: var(--color-main);
-        color: var(--color-fontPrimary);
-        transform: translateY(-160%);
-        transition: transform 0.2s ease;
-    }
-
-    .skip-link:focus {
-        transform: translateY(0);
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.001ms !important;
+            transition-duration: 0.001ms !important;
+        }
     }
 }
-
-/* @theme {
-    
-  
-} */
-
-/* @layer base {
-    :root {
-       
-    }
-    html.dark {
-    }
-} */

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
 import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
@@ -19,26 +18,30 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
     <Hero />
     {
         featuredProjects?.length > 0 && (
-            <div class="mb-16 sm:mb-24">
-                <h2 class="mb-12 text-xl   italic sm:mb-16 sm:text-2xl">Projects</h2>
-                {featuredProjects.map((project) => (
-                    <ProjectPreview project={project} class="mb-10 sm:mb-12" headingLevel="h3" />
-                ))}
-                <div class="mt-12 sm:mt-16">
-                    <Button href="/projects">View All Projects</Button>
+            <div class="mb-10 sm:mb-12">
+                <div class="flex items-center justify-between gap-4 mb-5 sm:mb-6">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl">Projects</h2>
+                    <a class="text-sm font-extrabold text-pink-cta hover:underline underline-offset-2 whitespace-nowrap" href="/projects">View all →</a>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {featuredProjects.map((project) => (
+                        <ProjectPreview project={project} headingLevel="h3" />
+                    ))}
                 </div>
             </div>
         )
     }
     {
         featuredPosts?.length > 0 && (
-            <div class="mb-16 sm:mb-24">
-                <h2 class="mb-12 text-xl   italic sm:mb-16 sm:text-2xl">Writing</h2>
-                {featuredPosts.map((post) => (
-                    <PostPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
-                ))}
-                <div class="mt-12 sm:mt-16">
-                    <Button href="/blog">View All Posts</Button>
+            <div class="mb-12 sm:mb-16">
+                <div class="flex items-center justify-between gap-4 mb-5 sm:mb-6">
+                    <h2 class="font-display font-bold text-xl sm:text-2xl">Writing</h2>
+                    <a class="text-sm font-extrabold text-pink-cta hover:underline underline-offset-2 whitespace-nowrap" href="/blog">View all →</a>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {featuredPosts.map((post) => (
+                        <PostPreview post={post} headingLevel="h3" />
+                    ))}
                 </div>
             </div>
         )

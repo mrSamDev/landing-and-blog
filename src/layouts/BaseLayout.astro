@@ -36,8 +36,11 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
 
         <link rel="sitemap" href="/sitemap-index.xml" />
     </head>
-    <body class="bg-main text-text text-fontPrimary">
-        <a class="skip-link" href="#main-content">Skip to content</a>
+    <body class="bg-bg text-ink font-sans antialiased">
+        <a
+            class="absolute top-4 left-4 z-[5000] py-3 px-4 border-2 border-ink rounded-pill bg-panel-2 text-ink font-extrabold -translate-y-[160%] focus:translate-y-0 transition-transform duration-200"
+            href="#main-content"
+        >Skip to content</a>
         <div class="flex flex-col min-h-screen px-4 md:px-8">
             {chrome && <Nav />}
 
