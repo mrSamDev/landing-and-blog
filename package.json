@@ -39,5 +39,14 @@
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.8",
         "typescript": "^6.0.3"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@tailwindcss/oxide",
+            "@vercel/speed-insights",
+            "esbuild",
+            "sharp",
+            "workerd"
+        ]
     }
 }
