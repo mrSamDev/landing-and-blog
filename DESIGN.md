@@ -1,6 +1,6 @@
 ---
-name: RSS-client
-description: Compact, scannable UI for an RSS feed reader. Friendly but efficient. Supports light and dark themes.
+name: SIJO-SAM
+description: Compact And why personal style.
 colors:
   ink: '#004747'
   panel: '#f0f5f5'

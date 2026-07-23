@@ -10,7 +10,7 @@ module.exports = {
                         '--tw-prose-headings': 'var(--color-fontPrimary)',
                         '--tw-prose-lead': '#ffffff',
                         '--tw-prose-links': '#a476ff',
-                        '--tw-prose-bold': '#a476ff',
+                        '--tw-prose-bold': 'var(--color-pink-cta-deep)',
                         '--tw-prose-counters': 'var(--color-fontPrimary)',
                         '--tw-prose-bullets': 'var(--color-fontPrimary)',
                         '--tw-prose-hr': '#a476ff',
