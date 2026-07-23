@@ -1,8 +1,7 @@
 ---
 /*
- * Trapezoid-style tag (slanted parallelogram) — keeps the 1px ink border
- * that defines this design system by using skewX on the shell and an
- * inverse skewX on the text so it stays upright and readable.
+ * Pill chip tag — follows DESIGN.md chip spec.
+ * Pill radius, 1px ink border, badge typography.
  *
  *   <Tag text="Astro" />                      → subtle neutral chip
  *   <Tag text="Astro" href="/tags/astro" />   → linkable
@@ -33,12 +32,12 @@ const colorClasses: Record<Color, string> = {
 <Tag
     href={href}
     class:list={[
-        'inline-flex skew-x-[-12deg] items-center border border-ink rounded-[2px]',
-        'px-2.5 py-[3px] text-[11px] font-bold uppercase tracking-wider leading-none',
+        'inline-flex items-center border border-ink rounded-pill',
+        'px-2 py-[3px] text-[0.68rem] font-extrabold tracking-[0.06em] leading-none',
         colorClasses[color],
         isAccent && 'shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.12)]',
         className
     ]}
 >
-    <span class="inline-block skew-x-[12deg]">{text}</span>
+    {text}
 </Tag>

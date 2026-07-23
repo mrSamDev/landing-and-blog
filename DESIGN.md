@@ -1,6 +1,6 @@
 ---
 name: SIJO-SAM
-description: Compact And why personal style.
+description: Compact, friendly personal portfolio and technical blog for Sijo Sam. Warm teal ink, pastel accent chips, rounded corners, Baloo 2 display + Nunito body. Built with Astro + Tailwind CSS v4.
 colors:
   ink: '#004747'
   panel: '#f0f5f5'
@@ -34,26 +34,36 @@ colors-dark:
   bluey: '#3f5bff'
   link: '#ff5d97'
 typography:
-  display-app:
+  display-hero:
+    fontFamily: Baloo 2
+    fontSize: 2.25rem
+    fontWeight: 800
+    lineHeight: '1.1'
+  display-page-title:
     fontFamily: Baloo 2
     fontSize: 1.5rem
     fontWeight: 800
-    lineHeight: '1.1'
-  display-card:
-    fontFamily: Baloo 2
-    fontSize: 1.05rem
-    fontWeight: 700
-    lineHeight: '1.2'
-  display-modal:
-    fontFamily: Baloo 2
-    fontSize: 1.5rem
-    fontWeight: 700
-    lineHeight: '1.2'
+    lineHeight: '1.15'
   display-section:
     fontFamily: Baloo 2
-    fontSize: 1.15rem
+    fontSize: 1.25rem
     fontWeight: 700
     lineHeight: '1.2'
+  display-card:
+    fontFamily: Baloo 2
+    fontSize: 1.125rem
+    fontWeight: 700
+    lineHeight: '1.2'
+  display-logo:
+    fontFamily: Baloo 2
+    fontSize: 1.125rem
+    fontWeight: 800
+    lineHeight: '1'
+  content-title:
+    fontFamily: Baloo 2
+    fontSize: 1.875rem
+    fontWeight: 500
+    lineHeight: '1.3'
   body-md:
     fontFamily: Nunito
     fontSize: 0.9rem
@@ -78,15 +88,11 @@ typography:
     fontFamily: Nunito
     fontSize: 0.82rem
     fontWeight: 800
-  stat-value:
-    fontFamily: Nunito
-    fontSize: 1rem
-    fontWeight: 800
   badge:
     fontFamily: Nunito
     fontSize: 0.68rem
     fontWeight: 800
-    letterSpacing: 0.06em
+    letterSpacing: 0.04em
 rounded:
   xs: 6px
   sm: 8px
@@ -102,67 +108,117 @@ spacing:
   lg: 16px
   xl: 24px
 components:
-  panel:
+  nav-bar:
     backgroundColor: '{colors.panel}'
-    rounded: '{rounded.xl}'
-    padding: 16px
-  header-bar:
-    backgroundColor: '{colors.panel}'
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
     rounded: '{rounded.xl}'
     padding: 12px 16px
+    shadow: '0 2px 8px rgb(var(--shadow-rgb) / 0.08)'
+  mobile-drawer:
+    backgroundColor: '{colors.panel}'
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
+    width: 'min(82vw, 18rem)'
+  announcement-banner:
+    backgroundColor: '{colors.bg}'
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
+  button:
+    backgroundColor: '{colors.panel-2}'
+    textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
+    rounded: '{rounded.pill}'
+    padding: 8px 14px
+  icon-button:
+    backgroundColor: '{colors.bg}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
+    rounded: '{rounded.pill}'
+    padding: 8px
+  theme-toggle:
+    backgroundColor: '{colors.panel-2}'
+    textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
+    rounded: '{rounded.pill}'
+    padding: 0
+  search-button:
+    backgroundColor: '{colors.panel-2}'
+    textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
+    rounded: '{rounded.pill}'
+    padding: 6px 12px
   card:
     backgroundColor: '{colors.panel-2}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.lg}'
     padding: 12px
-  chip-type-article:
+    shadow: '0 1px 3px rgb(var(--shadow-rgb) / 0.06)'
+  chip-article:
     backgroundColor: '{colors.pink}'
     textColor: '#ffffff'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.pill}'
     padding: 3px 8px
-  chip-type-video:
+  chip-project:
     backgroundColor: '{colors.bluey}'
     textColor: '#ffffff'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.pill}'
     padding: 3px 8px
   chip-neutral:
     backgroundColor: '{colors.surface}'
     textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.pill}'
     padding: 3px 8px
-  chip-category:
-    backgroundColor: '{colors.mint}'
+  chip-tag:
+    backgroundColor: '{colors.surface}'
     textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.pill}'
     padding: 3px 8px
-  button-refresh:
-    backgroundColor: 'linear-gradient(180deg, {colors.pink-cta} 0%, {colors.pink-cta-deep} 100%)'
-    textColor: '#ffffff'
-    rounded: '{rounded.pill}'
-    padding: 8px 14px
-  button-secondary:
+  ai-tip-accordion:
     backgroundColor: '{colors.panel-2}'
-    textColor: '{colors.ink}'
-    rounded: '{rounded.pill}'
-    padding: 8px 14px
-  button-open-article:
-    backgroundColor: '{colors.yellow}'
-    textColor: '{colors.ink}'
-    rounded: '{rounded.pill}'
-    padding: 8px 14px
-  button-theme-toggle:
-    backgroundColor: '{colors.panel-2}'
-    textColor: '{colors.ink}'
-    rounded: '{rounded.pill}'
-    padding: 8px 10px
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
+    rounded: '{rounded.lg}'
+    padding: 12px
+    shadow: '0 1px 3px rgb(var(--shadow-rgb) / 0.06)'
+  subscribe-panel:
+    backgroundColor: '{colors.panel}'
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
+    rounded: '{rounded.xl}'
+    padding: 48px
   text-input:
     backgroundColor: '{colors.panel-2}'
     textColor: '{colors.ink}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
     rounded: '{rounded.input}'
     padding: 8px 12px
-  sources-container:
-    backgroundColor: '{colors.surface}'
-    rounded: '{rounded.lg}'
-    padding: 8px 12px
+  footer:
+    borderColor: '{colors.ink}'
+    borderWidth: 2px
+  command-palette:
+    backgroundColor: 'color-mix(in srgb, {colors.bg} 88%, white 12%)'
+    borderColor: 'color-mix(in srgb, {colors.ink} 75%, white 25%)'
+    borderWidth: 1px
+    rounded: 24px
+  content-menu-dropdown:
+    backgroundColor: '{colors.bg}'
+    borderColor: '{colors.ink}'
+    borderWidth: 1px
+    rounded: 8px
 ---
 
 ## Overview

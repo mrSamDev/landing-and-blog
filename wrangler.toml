@@ -1,0 +1,3 @@
+# Cloudflare Pages config for staging/beta deployment
+name = "sijo-landing-blog-staging"
+pages_build_output_dir = "dist"

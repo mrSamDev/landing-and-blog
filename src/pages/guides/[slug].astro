@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import ContentHeader from '../../components/ContentHeader.astro';
 import PostPreview from '../../components/PostPreview.astro';
+import Tag from '../../components/Tag.astro';
 import Subscribe from '../../components/Subscribe.astro';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import { slugify } from '../../utils/common-utils';
@@ -42,11 +43,9 @@ const { Content } = await render(post);
         <div class="mt-8 flex flex-wrap items-center gap-6 text-sm justify-between sm:mt-12 sm:text-base">
             {
                 tags.length > 0 && (
-                    <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                    <div class="flex flex-wrap gap-2">
                         {tags.map((tag: string) => (
-                            <a class="text-fontPrimary hover:underline" href={`/tags/${slugify(tag)}`}>
-                                #{tag}
-                            </a>
+                            <Tag text={tag} href={`/tags/${slugify(tag)}`} />
                         ))}
                     </div>
                 )

@@ -87,7 +87,7 @@ const siteConfig: SiteConfig = {
             target: '_blank'
         },
         {
-            text: 'RSS',
+            text: 'Rss feed',
             href: '/rss.xml'
         }
     ],
