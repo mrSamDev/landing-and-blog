@@ -3,6 +3,8 @@ title: pi-deploy-artifacts
 description: Deploy HTML pages to live URLs on Vercel, Cloudflare Pages, Netlify, or GitHub Pages. Like Claude Code artifacts for pi.
 publishDate: 'Jul 19 2026'
 isFeatured: true
+tags:
+  - DevTool
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

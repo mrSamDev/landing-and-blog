@@ -9,6 +9,7 @@ import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
 import clsx from 'clsx';
 import CarbonBadge from '../components/CarbonBadge.astro';
+import siteConfig from '../data/site-config';
 
 export type Props = HeadProps & { showHeader?: boolean; fullWidth?: boolean; chrome?: boolean };
 
@@ -34,6 +35,7 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
 
         <PostHog />
 
+        <link rel="alternate" type="application/rss+xml" title={head.title ?? siteConfig.title} href="/rss.xml" />
         <link rel="sitemap" href="/sitemap-index.xml" />
     </head>
     <body class="bg-main text-text text-fontPrimary">

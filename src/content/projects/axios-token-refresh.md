@@ -3,10 +3,7 @@ title: Axios Token Refresh
 description: A robust Axios plugin that handles token refresh logic automatically when API calls fail due to authentication issues.
 publishDate: 'April 03 2025'
 tags:
-  - Guide
-  - Authentication
-  - JavaScript
-  - Programming
+  - Library
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

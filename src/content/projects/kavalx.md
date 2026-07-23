@@ -3,6 +3,9 @@ title: Kavalx
 description: AI PR Review Agent for Bitbucket & Self-Hosted Teams. Controllable, self-hostable code review with retrieval, memory, and architecture-aware agent orchestration.
 publishDate: 'May 22 2026'
 isFeatured: true
+tags:
+  - AI
+  - DevTool
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

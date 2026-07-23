@@ -2,11 +2,9 @@
 title: Paddle Game Adventures - Implementing a Canvas Game in React
 description: Build a classic paddle game using React and the Canvas API. We'll cover game loops, collision detection, particle effects, and power-ups while exploring fundamental game development concepts.
 publishDate: 'Dec 10 2024'
+isPublished: false
 tags:
-  - Guide
-  - Paddle-Game
-  - JavaScript
-  - Programming
+  - Game
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

@@ -3,6 +3,9 @@ title: llm-moat
 description: An open-source TypeScript toolkit for defending LLM applications against prompt injection, tool misuse, and unsafe input flows.
 publishDate: 'Apr 01 2026'
 isFeatured: true
+tags:
+  - AI
+  - Library
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

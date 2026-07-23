@@ -2,6 +2,8 @@
 title: 'JiraCraft: Git Branch Management CLI'
 description: JiraCraft is a command-line tool that automates Git branch creation from JIRA tickets, improving developer workflow and maintaining consistent branch naming conventions.
 publishDate: 'Jan 02 2024'
+tags:
+  - DevTool
 seo:
   image:
     src: '/project-1.jpg'
