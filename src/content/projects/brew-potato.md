@@ -3,10 +3,7 @@ title: Brew Potato
 description: A simple terminal UI for Homebrew that shows only user-installed packages and lets you uninstall them interactively.
 publishDate: 'Mar 01 2026'
 tags:
-  - Go
-  - Homebrew
-  - TUI
-  - Bubble Tea
+  - DevTool
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/UI_ofnace.png

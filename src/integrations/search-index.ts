@@ -89,6 +89,7 @@ export default function searchIndex(): AstroIntegration {
 
                 // Projects
                 for (const project of readCollection(contentDir, 'projects')) {
+                    if (project.data.isPublished === false) continue;
                     items.push({
                         id: `project:${project.id}`,
                         type: 'project',
