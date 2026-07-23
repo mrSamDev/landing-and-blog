@@ -87,9 +87,8 @@ const siteConfig: SiteConfig = {
             target: '_blank'
         },
         {
-            text: 'Paddle game',
-            href: 'https://mrsamdev-paddle-game.netlify.app/',
-            target: '_blank'
+            text: 'RSS',
+            href: '/rss.xml'
         }
     ],
     socialLinks: [
@@ -100,7 +99,7 @@ const siteConfig: SiteConfig = {
     ],
     hero: {
         title: 'Sijo Sam',
-        text: 'നദിക്ക് വള്ളവും മനുഷ്യൻക്ക് സ്വപ്നവും ഒരുപോലെയാണ്.',
+        text: 'നദിക്ക് വള്ളവും മനുഷ്യർക്ക് സ്വപ്നവും ഒരുപോലെയാണ്.',
         image: {
             src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
             alt: 'Sijo Sam - Technical Lead'

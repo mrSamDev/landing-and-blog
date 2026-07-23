@@ -3,6 +3,8 @@ title: domsure
 description: DOM query utilities that replace non-null assertions with real runtime checks. Eight helpers under 1 KB gzipped.
 publishDate: 'Jul 04 2026'
 isFeatured: true
+tags:
+  - Library
 seo:
   image:
     src: https://res.cloudinary.com/dnmuyrcd7/image/upload/v1733839719/Blog/canvas.png

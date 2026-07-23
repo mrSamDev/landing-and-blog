@@ -95,7 +95,7 @@ export async function getSearchIndex() {
         );
     }
 
-    for (const project of projects) {
+    for (const project of projects.filter((entry) => entry.data.isPublished)) {
         items.push(
             makeItem({
                 id: `project:${project.id}`,
