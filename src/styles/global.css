@@ -54,7 +54,7 @@
         @variant dark {
             --color-ink: #ffffff;
             --color-panel: #26262c;
-            --color-panel-2: #101013;
+            --color-panel-2: #1d1d20;
             --color-surface: #1e1e23;
             --color-bg: #1a1a1f;
 
@@ -116,3 +116,12 @@
         }
     }
 }
+
+/* ── View Transitions ──
+   Astro's built-in `transition:animate` directives handle all page
+   transitions. No custom `::view-transition-*` CSS is needed:
+     • `<html transition:animate="none">` disables the default root fade
+       so persisted elements (nav, footer) don't flicker.
+     • `<main transition:animate="fade">` provides a clean content fade.
+   The prefers-reduced-motion guard in @layer base above already covers
+   view-transition pseudo-elements (animation-duration: 0.001ms !important). */

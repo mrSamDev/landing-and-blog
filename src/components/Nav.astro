@@ -314,6 +314,22 @@ const navLinks = siteConfig.headerNavLinks || [];
         // Reset state after Astro view transitions.
         document.addEventListener('astro:after-swap', () => {
             setMenuState(false);
+            updateActiveNavLink();
         });
+
+        // Keep the active nav-link underline in sync after client-side navigation.
+        function updateActiveNavLink() {
+            const currentPath = window.location.pathname.replace(/\/$/, '');
+            document.querySelectorAll('[data-nav-href]').forEach((el) => {
+                const href = el.getAttribute('data-nav-href') || '';
+                const isActive = href === currentPath || href === currentPath.replace(/\/$/, '');
+                el.classList.toggle('underline', isActive);
+                el.classList.toggle('underline-offset-2', isActive);
+                el.classList.toggle('decoration-1', isActive);
+            });
+        }
+
+        // Run on initial load too, in case the server-side check was wrong.
+        updateActiveNavLink();
     })();
 </script>

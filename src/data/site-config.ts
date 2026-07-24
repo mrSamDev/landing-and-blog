@@ -88,7 +88,12 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Rss feed',
-            href: '/rss.xml'
+            href: '/rss.xml',
+            target: '_blank'
+        },
+        {
+            text: 'Carbon',
+            href: '/carbon'
         }
     ],
     socialLinks: [

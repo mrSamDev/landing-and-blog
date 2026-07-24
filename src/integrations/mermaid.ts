@@ -19,46 +19,35 @@ type MermaidOptions = {
 
 const MERMAID_CSS = `
 pre.mermaid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color: transparent;
-    border: none;
-    overflow: auto;
-    min-height: 200px;
-    position: relative;
-}
-pre.mermaid:not([data-processed]) {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: mermaid-shimmer 1.5s infinite;
-}
-html.dark pre.mermaid:not([data-processed]) {
-    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
-    background-size: 200% 100%;
-}
-@keyframes mermaid-shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 2rem 0 !important;
+    padding: 1rem !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    overflow: auto !important;
+    visibility: hidden !important;
 }
 pre.mermaid[data-processed] {
-    animation: none;
-    background: transparent;
-    min-height: auto;
+    background: transparent !important;
+    background-color: transparent !important;
+    visibility: visible !important;
 }
 pre.mermaid svg {
-    max-width: 100%;
-    height: auto;
+    max-width: 100% !important;
+    height: auto !important;
 }
 html.dark pre.mermaid[data-processed] {
-    background-color: rgba(255, 255, 255, 0.02);
-    border-radius: 0.5rem;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-radius: 0.5rem !important;
 }
 html:not(.dark) pre.mermaid[data-processed] {
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: 0.5rem;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-radius: 0.5rem !important;
 }
 `;
 
@@ -78,14 +67,27 @@ function buildClientScript(opts: {
     });
 
     // The theme observer block is only included when autoTheme is true.
+    // A debounce prevents race conditions when the 'dark' class toggles
+    // rapidly (e.g. during View Transitions the class is removed by the DOM
+    // swap, then re-added by the ThemeToggle — both within the same tick).
     const themeObserverBlock = opts.autoTheme
         ? `
-  var themeObserver = new MutationObserver(function () {
-    document.querySelectorAll('pre.mermaid[data-processed]').forEach(function (d) {
-      d.removeAttribute('data-processed');
-    });
-    initMermaid();
-  });
+  var renderTimer = null;
+  var lastTheme = getCurrentTheme();
+  function scheduleRender() {
+    if (renderTimer) clearTimeout(renderTimer);
+    renderTimer = setTimeout(function () {
+      renderTimer = null;
+      var nowTheme = getCurrentTheme();
+      if (nowTheme === lastTheme) return;
+      lastTheme = nowTheme;
+      document.querySelectorAll('pre.mermaid[data-processed]').forEach(function (d) {
+        d.removeAttribute('data-processed');
+      });
+      initMermaid();
+    }, 50);
+  }
+  var themeObserver = new MutationObserver(scheduleRender);
   themeObserver.observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['class'],
@@ -104,7 +106,7 @@ function buildClientScript(opts: {
   }
 
   function getCurrentTheme() {
-    ${opts.autoTheme ? "return document.documentElement.classList.contains('dark') ? 'dark' : 'default';" : "return defaultConfig.theme;"}
+    ${opts.autoTheme ? "var saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {} if (saved === 'dark') return 'dark'; if (saved === 'light') return 'default'; return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';" : "return defaultConfig.theme;"}
   }
 
   function initMermaid() {
@@ -115,6 +117,7 @@ function buildClientScript(opts: {
       var currentTheme = getCurrentTheme();
       mermaid.initialize(Object.assign({}, defaultConfig, {
         theme: currentTheme,
+        themeVariables: { background: 'transparent' },
         gitGraph: {
           mainBranchName: 'main',
           showCommitLabel: true,
@@ -133,6 +136,8 @@ function buildClientScript(opts: {
 
         mermaid.render(id, definition).then(function (result) {
           diagram.innerHTML = result.svg;
+          var svg = diagram.querySelector('svg');
+          if (svg) svg.style.setProperty('background', 'transparent', 'important');
           diagram.setAttribute('data-processed', 'true');
         }).catch(function (error) {
           console.error('[mermaid] Render error for', id, error);
@@ -159,7 +164,21 @@ function buildClientScript(opts: {
   }
 ${themeObserverBlock}
 
-  document.addEventListener('astro:after-swap', function () {
+  // Use 'astro:page-load' (not 'astro:after-swap') so the theme is already
+  // synced by ThemeToggle before we read it.  'astro:page-load' fires after
+  // all post-swap work is done, including theme restoration.
+  // Also re-inject CSS on each page load because View Transitions replace
+  // the <head>, removing our injected <style> element.
+  function injectMermaidCSS() {
+    if (document.getElementById('mermaid-css')) return;
+    var s = document.createElement('style');
+    s.id = 'mermaid-css';
+    s.textContent = ${JSON.stringify(MERMAID_CSS)};
+    document.head.appendChild(s);
+  }
+  injectMermaidCSS();
+  document.addEventListener('astro:page-load', function () {
+    injectMermaidCSS();
     if (document.querySelectorAll('pre.mermaid').length > 0) {
       initMermaid();
     }
@@ -434,14 +453,17 @@ export default function mermaid(options: MermaidOptions = {}): AstroIntegration 
                     });
                 }
 
-                /* --- Client-side script --- */
-                injectScript('page', buildClientScript({ theme, autoTheme, mermaidConfig }));
+                /* --- Preload mermaid to reduce dynamic import delay --- */
+                updateConfig({
+                    vite: {
+                        optimizeDeps: {
+                            include: ['mermaid'],
+                        },
+                    },
+                });
 
-                /* --- CSS --- */
-                injectScript(
-                    'page',
-                    `(function(){var s=document.createElement('style');s.textContent=${JSON.stringify(MERMAID_CSS)};document.head.appendChild(s);})();`,
-                );
+                /* --- Client-side script (includes CSS injection) --- */
+                injectScript('page', buildClientScript({ theme, autoTheme, mermaidConfig }));
             },
         },
     };

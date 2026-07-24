@@ -19,10 +19,10 @@ colors:
   link: '#a8205a'
 colors-dark:
   ink: '#ffffff'
-  panel: '#171717'
-  panel-2: '#000000'
-  surface: '#111111'
-  bg: '#0d0d0d'
+  panel: '#26262c'
+  panel-2: '#1d1d20'
+  surface: '#1e1e23'
+  bg: '#1a1a1f'
   yellow: '#f9d84a'
   pink: '#c92d68'
   pink-cta: '#c92d68'
@@ -250,13 +250,13 @@ The palette keeps the original warm ink and pastel accents but uses them more sp
 
 ### Dark theme
 
-Simple black and white — no tinted surfaces, just neutral grays.
+Neutral charcoal grays — no teal tints, just a soft layered dark palette so surfaces separate without harsh pure-black contrast.
 
 - **Ink (#ffffff):** Pure white for all text and borders.
-- **Panel (#171717):** Near-black panel for header and modal.
-- **Panel-2 (#000000):** Pure black card surface — the white 1px border provides high-contrast separation from the panel and background.
-- **Surface (#111111):** Near-black for chips and sources bar (recessed look).
-- **BG (#0d0d0d):** Near-black page background.
+- **Panel (#26262c):** Lifted charcoal panel for header and modal — light enough to read as a distinct surface, dark enough to stay calm.
+- **Panel-2 (#1d1d20):** Card surface. Toned down ~5% from the near-black it used to be — still clearly recessed beneath the panel and the 1px white border, but no longer a harsh pure-black block. Sits just above the page bg for a soft layering effect.
+- **Surface (#1e1e23):** Recessed charcoal for chips and sources bar.
+- **BG (#1a1a1f):** Page background — the deepest layer, with panel and cards stepping up from it.
 - **Yellow (#f9d84a):** Unchanged. The "Read original" button uses fixed black text (#000000) in dark mode for contrast.
 - **Pink (#c92d68):** Unchanged from light — dark enough for white text on black.
 - **Pink-CTA (#c92d68 → #a8205a):** Unchanged gradient. White text passes AA.
@@ -264,7 +264,7 @@ Simple black and white — no tinted surfaces, just neutral grays.
 - **Mint (#2d7d6a):** Muted green for selected/category chips. White text on this green has good contrast.
 - **Bluey (#3f5bff):** Unchanged from light — white text passes AA on black.
 
-In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme is simple black and white — no teal tints, just neutral grays.
+In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme uses soft layered charcoal grays — no teal tints — with surfaces stepping up gently from the page bg rather than harsh pure-black blocks.
 
 ## Typography
 

@@ -2,7 +2,6 @@
 import { type CollectionEntry } from 'astro:content';
 import ArrowRight from '../icons/ArrowRight.astro';
 import FormattedDate from './FormattedDate.astro';
-import { slugify } from '../utils/common-utils';
 
 type Props = { post: CollectionEntry<'blog' | 'guides'>; class?: string; headingLevel?: 'h2' | 'h3'; isGuide?: boolean };
 
@@ -43,7 +42,6 @@ const { title, publishDate, updatedDate, excerpt } = post.data;
         </div>
 
         <h2
-            transition:name={slugify(title) + '-title'}
             class="font-display font-bold text-lg leading-tight sm:text-xl group-hover:text-pink-cta transition-colors"
         >
             {title}
