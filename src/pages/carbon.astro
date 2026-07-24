@@ -9,7 +9,6 @@ const title = 'Carbon';
 const description = `Carbon footprint of ${siteConfig.title}, measured by Website Carbon. Cleaner pages mean a greener web.`;
 
 let carbonData = null;
-let loadTime = null;
 
 if (Astro.site) {
     // Read the built page size to pass to the API
@@ -21,16 +20,6 @@ if (Astro.site) {
         bytes = stats.size;
     } catch {
         // First build — file not written yet, use fallback
-    }
-
-    // Measure page load time by fetching the homepage
-    try {
-        const start = performance.now();
-        const res = await fetch(Astro.site.href);
-        await res.text();
-        loadTime = ((performance.now() - start) / 1000).toFixed(2);
-    } catch {
-        // Load time unavailable
     }
 
     try {
@@ -77,13 +66,6 @@ if (Astro.site) {
                         Rating: <span class="font-bold text-green-600">{carbonData.rating}</span>
                         &middot; Cleaner than {carbonData.p}% of pages tested.
                     </p>
-                    {
-                        loadTime && (
-                            <p class="mt-1 text-sm text-ink/60">
-                                This page loaded in {loadTime}s
-                            </p>
-                        )
-                    }
                 </div>
             ) : (
                 <p class="text-ink/70">
