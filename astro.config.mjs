@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
-import mermaid from 'astro-mermaid';
+import mermaid from './src/integrations/mermaid';
 import searchIndex from './src/integrations/search-index.js';
 
 // https://astro.build/config
