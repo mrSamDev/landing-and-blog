@@ -1,0 +1,9 @@
+packages:
+  - '.'
+
+allowBuilds:
+  '@tailwindcss/oxide': true
+  '@vercel/speed-insights': true
+  esbuild: true
+  sharp: true
+  workerd: true

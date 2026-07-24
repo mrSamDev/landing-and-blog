@@ -1,125 +1,166 @@
 ---
 import NavLink from './NavLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import AnnouncementBanner from './AnnouncementBanner.astro';
 import siteConfig from '../data/site-config';
 
 const navLinks = siteConfig.headerNavLinks || [];
 ---
 
-<nav transition:persist class="min-h-10 pt-4 pb-12 relative sm:min-h-14 sm:pb-24 md:pt-8">
-    {
-        navLinks.length > 0 && (
-            <div class="w-full max-w-4xl mx-auto relative">
-                <button
-                    class="menu-toggle w-8 h-8 -ml-1 flex items-center justify-center relative z-30 md:hidden"
-                    aria-label="Open Menu"
-                    aria-expanded="false"
-                    aria-controls="menu-items"
-                >
-                    <span class="menu-toggle-icon w-6 h-px relative bg-current" />
-                </button>
-                <ul id="menu-items" class="menu flex gap-6" data-menu-items>
-                    {navLinks.map((link) => (
-                        <li class="py-1">
-                            <NavLink class="text-xl text-fontPrimary hover:underline hover:underline-offset-2 hover:decoration-1 md:text-base" href={link.href}>
-                                {link.text}
-                            </NavLink>
+<nav transition:persist class="sticky top-0 z-50 pt-3 pb-3 mb-8 md:mb-12 bg-bg">
+    <div
+        class="w-full bg-panel border-2 border-ink rounded-xl shadow-[0_2px_8px_rgb(var(--shadow-rgb)/0.08)] overflow-hidden"
+    >
+      <div class="flex items-center gap-3 px-3 py-2 md:px-4 md:py-3">
+        <a href="/" class="shrink-0 font-display font-extrabold text-lg leading-none text-ink hover:text-pink-cta transition-colors">
+            Sijo
+        </a>
+
+        {
+            navLinks.length > 0 && (
+                <div class="relative flex-1 min-w-0">
+                    <button
+                        class="menu-toggle w-8 h-8 -ml-1 flex items-center justify-center relative z-[60] md:hidden"
+                        aria-label="Open Menu"
+                        aria-expanded="false"
+                        aria-controls="menu-items"
+                    >
+                        <span class="menu-toggle-icon w-6 h-px relative bg-current" />
+                    </button>
+
+                    {/* Dimming layer behind the drawer */}
+                    <div class="menu-backdrop" data-menu-backdrop aria-hidden="true"></div>
+
+                    <ul
+                        id="menu-items"
+                        class="menu flex gap-1 md:gap-2 md:items-center md:justify-center"
+                        data-menu-items
+                    >
+                        <li class="menu-heading md:hidden" aria-hidden="true">
+                            <span class="font-display font-extrabold text-lg text-ink">Menu</span>
                         </li>
-                    ))}
-                </ul>
-            </div>
-        )
-    }
-    <div class="absolute right-0 top-4 z-10 flex items-center gap-2 md:top-8">
-        <button
-            type="button"
-            class="search-trigger hidden md:inline-flex"
-            aria-label="Open search"
-            data-open-command-palette
-        >
-            <span>Search</span>
-            <span class="search-trigger-shortcut">Cmd/Ctrl K</span>
-        </button>
-        <button type="button" class="search-trigger search-trigger-icon md:hidden" aria-label="Open search" data-open-command-palette>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                    d="M10.5 4a6.5 6.5 0 1 0 4.06 11.58l4.43 4.43 1.41-1.41-4.43-4.43A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
-                    fill="currentColor"
-                />
-            </svg>
-        </button>
-        <ThemeToggle />
+                        {navLinks.map((link) => (
+                            <li>
+                                <NavLink class="menu-link text-sm font-extrabold text-ink/80 hover:text-ink hover:bg-surface rounded-pill px-3 py-1.5 transition-colors" href={link.href}>
+                                    {link.text}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+
+        <div class="ml-auto flex items-center gap-2 shrink-0">
+            <button
+                type="button"
+                class="hidden md:inline-flex items-center gap-1.5 min-h-8 px-3 py-1.5 border border-ink rounded-pill bg-panel-2 text-ink text-[0.8rem] font-extrabold leading-none hover:bg-surface hover:-translate-y-px transition"
+                aria-label="Open search"
+                data-open-command-palette
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
+                    <path
+                        d="M10.5 4a6.5 6.5 0 1 0 4.06 11.58l4.43 4.43 1.41-1.41-4.43-4.43A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
+                        fill="currentColor"
+                    />
+                </svg>
+                <span>Search</span>
+                <span class="opacity-55 text-[0.7rem] font-bold tracking-[0.04em]">⌘K</span>
+            </button>
+            <button
+                type="button"
+                class="md:hidden inline-flex items-center justify-center w-8 h-8 p-0 border border-ink rounded-pill bg-panel-2 text-ink hover:bg-surface hover:-translate-y-px transition"
+                aria-label="Open search"
+                data-open-command-palette
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4">
+                    <path
+                        d="M10.5 4a6.5 6.5 0 1 0 4.06 11.58l4.43 4.43 1.41-1.41-4.43-4.43A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"
+                        fill="currentColor"
+                    />
+                </svg>
+            </button>
+            <ThemeToggle />
+        </div>
+      </div>
+      <AnnouncementBanner />
     </div>
 </nav>
 
 <style>
-    .search-trigger {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-height: 2rem;
-        padding: 0.35rem 0.75rem;
-        border: 1px dashed var(--color-borderprimary);
-        border-radius: 999px;
-        background-color: color-mix(in srgb, var(--color-main) 82%, transparent);
-        color: var(--color-fontPrimary);
-        font-size: 0.85rem;
-        line-height: 1;
-        transition:
-            transform 0.2s ease,
-            background-color 0.2s ease,
-            border-color 0.2s ease;
-    }
-
-    .search-trigger:hover,
-    .search-trigger:focus-visible {
-        background-color: var(--color-muted);
-        transform: translateY(-1px);
-    }
-
-    .search-trigger-shortcut {
-        opacity: 0.7;
-        font-size: 0.75rem;
-    }
-
-    .search-trigger-icon {
-        width: 2rem;
-        height: 2rem;
-        justify-content: center;
-        padding: 0;
-    }
-
-    .search-trigger-icon svg {
-        width: 1rem;
-        height: 1rem;
+    /* Mobile slide-in sidebar drawer.
+       Desktop keeps the inline horizontal menu; only <768px gets the drawer.
+       z-index stack (all within the nav's stacking context):
+         backdrop 40  <  drawer 50  <  hamburger toggle 60  */
+    .menu-backdrop {
+        display: none;
     }
 
     @media (max-width: 767px) {
+        .menu-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background-color: rgb(0 0 0 / 0.45);
+            opacity: 0;
+            visibility: hidden;
+            transition:
+                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .menu-backdrop.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .menu {
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
-            position: absolute;
-            top: -0.625rem;
-            left: -0.625rem;
-            max-width: 16rem;
-            padding: 1rem 0.75rem 2.5rem;
-            z-index: 20;
-            background-color: var(--color-main);
-            border: 1px dashed var(--color-borderprimary);
-            visibility: hidden;
-            opacity: 0;
-            width: calc(100% + 1.25rem);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100dvh;
+            width: min(82vw, 18rem);
+            max-width: none;
+            padding: 4.75rem 1rem 1.5rem;
+            z-index: 50;
+            background-color: var(--color-panel);
+            border: 2px solid var(--color-ink);
+            border-radius: 0;
+            border-right-width: 2px;
+            box-shadow: 12px 0 40px rgb(0 0 0 / 0.18);
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            transform: translateX(-105%);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .menu.is-visible {
-            visibility: visible;
-            opacity: 1;
-            transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+            transform: translateX(0);
+        }
+
+        /* Drawer-only heading row (hidden on desktop) */
+        .menu-heading {
+            padding: 0 0.75rem 0.5rem;
+            margin-bottom: 0.25rem;
+            border-bottom: 2px solid var(--color-ink);
+        }
+
+        /* Larger, comfortable touch targets inside the drawer */
+        .menu-link {
+            display: block;
+            padding: 0.7rem 0.75rem !important;
+            font-size: 1rem !important;
+            border-radius: var(--radius-sm) !important;
+            line-height: 1.2;
         }
         .menu a:focus-visible {
-            outline: 2px solid currentColor;
+            outline: 2px solid var(--color-pink-cta);
             outline-offset: 3px;
         }
+
+        /* Hamburger -> X morph */
         .menu-toggle-icon {
             transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
         }
@@ -178,18 +219,23 @@ const navLinks = siteConfig.headerNavLinks || [];
         function getNodes() {
             const toggle = document.querySelector('.menu-toggle');
             const menu = document.querySelector('[data-menu-items]');
+            const backdrop = document.querySelector('[data-menu-backdrop]');
 
-            return { toggle, menu };
+            return { toggle, menu, backdrop };
         }
 
         function setMenuState(expanded: boolean) {
-            const { toggle, menu } = getNodes();
+            const { toggle, menu, backdrop } = getNodes();
             if (!toggle || !menu) return;
 
             toggle.classList.toggle('is-active', expanded);
             toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
             toggle.setAttribute('aria-label', expanded ? 'Close Menu' : 'Open Menu');
             menu.classList.toggle('is-visible', expanded);
+            backdrop?.classList.toggle('is-visible', expanded);
+
+            // Lock body scroll while the drawer is open.
+            document.body.style.overflow = expanded ? 'hidden' : '';
 
             if (expanded) {
                 const firstLink = menu.querySelector('a');
@@ -208,14 +254,29 @@ const navLinks = siteConfig.headerNavLinks || [];
             const target = event.target instanceof Element ? event.target : null;
             const toggle = target?.closest('.menu-toggle');
             const menu = target?.closest('[data-menu-items]');
+            const backdrop = target?.closest('[data-menu-backdrop]');
 
+            // Hamburger / X toggle.
             if (toggle) {
                 event.preventDefault();
                 setMenuState(!isMenuOpen());
                 return;
             }
 
-            if (!menu && isMenuOpen()) {
+            // Clicking the dimming backdrop closes the drawer.
+            if (backdrop && isMenuOpen()) {
+                setMenuState(false);
+                return;
+            }
+
+            // Clicking a link inside the drawer closes it for a snappy feel.
+            if (menu && target?.closest('a') && isMenuOpen()) {
+                setMenuState(false);
+                return;
+            }
+
+            // Outside click closes.
+            if (!menu && !backdrop && isMenuOpen()) {
                 setMenuState(false);
             }
         });
@@ -250,8 +311,25 @@ const navLinks = siteConfig.headerNavLinks || [];
             }
         });
 
+        // Reset state after Astro view transitions.
         document.addEventListener('astro:after-swap', () => {
             setMenuState(false);
+            updateActiveNavLink();
         });
+
+        // Keep the active nav-link underline in sync after client-side navigation.
+        function updateActiveNavLink() {
+            const currentPath = window.location.pathname.replace(/\/$/, '');
+            document.querySelectorAll('[data-nav-href]').forEach((el) => {
+                const href = el.getAttribute('data-nav-href') || '';
+                const isActive = href === currentPath || href === currentPath.replace(/\/$/, '');
+                el.classList.toggle('underline', isActive);
+                el.classList.toggle('underline-offset-2', isActive);
+                el.classList.toggle('decoration-1', isActive);
+            });
+        }
+
+        // Run on initial load too, in case the server-side check was wrong.
+        updateActiveNavLink();
     })();
 </script>

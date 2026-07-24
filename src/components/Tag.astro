@@ -1,0 +1,43 @@
+---
+/*
+ * Pill chip tag — follows DESIGN.md chip spec.
+ * Pill radius, 1px ink border, badge typography.
+ *
+ *   <Tag text="Astro" />                      → subtle neutral chip
+ *   <Tag text="Astro" href="/tags/astro" />   → linkable
+ *   <Tag text="Astro" color="pink" />         → solid accent
+ */
+type Color = 'surface' | 'pink' | 'bluey' | 'mint' | 'yellow';
+
+type Props = {
+    text: string;
+    href?: string;
+    color?: Color;
+    class?: string;
+};
+
+const { text, href, color = 'surface', class: className } = Astro.props;
+const Tag = href ? 'a' : 'span';
+
+const isAccent = color !== 'surface';
+const colorClasses: Record<Color, string> = {
+    surface: 'bg-surface text-ink',
+    pink: 'bg-pink text-white',
+    bluey: 'bg-bluey text-white',
+    mint: 'bg-mint text-ink',
+    yellow: 'bg-yellow text-ink'
+};
+---
+
+<Tag
+    href={href}
+    class:list={[
+        'inline-flex items-center border border-ink rounded-pill',
+        'px-2 py-[3px] text-[0.68rem] font-extrabold tracking-[0.06em] leading-none',
+        colorClasses[color],
+        isAccent && 'shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.12)]',
+        className
+    ]}
+>
+    {text}
+</Tag>

@@ -15,6 +15,7 @@ export type Hero = {
     text?: string;
     image?: Image;
     actions?: Link[];
+    subtitle?: string;
 };
 
 export type Subscribe = {
@@ -87,8 +88,13 @@ const siteConfig: SiteConfig = {
             target: '_blank'
         },
         {
-            text: 'RSS',
-            href: '/rss.xml'
+            text: 'Rss feed',
+            href: '/rss.xml',
+            target: '_blank'
+        },
+        {
+            text: 'Carbon',
+            href: '/carbon'
         }
     ],
     socialLinks: [
@@ -100,6 +106,7 @@ const siteConfig: SiteConfig = {
     hero: {
         title: 'Sijo Sam',
         text: 'നദിക്ക് വള്ളവും മനുഷ്യർക്ക് സ്വപ്നവും ഒരുപോലെയാണ്.',
+        subtitle: 'A boat carries us across a river; a dream carries us through life.',
         image: {
             src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
             alt: 'Sijo Sam - Technical Lead'
