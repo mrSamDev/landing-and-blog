@@ -1,5 +1,4 @@
 ---
-import { marked } from 'marked';
 import Button from './Button.astro';
 import siteConfig from '../data/site-config';
 
@@ -8,14 +7,34 @@ const hero = siteConfig.hero;
 
 {
     (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
-        <section class="w-full flex flex-col gap-6 mb-16 sm:mb-24">
-            {hero.title && <h1 class="font-display font-extrabold text-4xl leading-tight sm:text-5xl sm:leading-tight">{hero.title}</h1>}
+        <section class="flex flex-col gap-6 mt-4 sm:mt-8 mb-16 sm:mb-24">
+            {hero.title && (
+                <h1 class="font-display font-extrabold text-4xl leading-tight sm:text-5xl sm:leading-tight">
+                    {hero.title}
+                </h1>
+            )}
 
-            {hero.text && <div class="max-w-none prose prose-sijo sm:prose-lg" set:html={marked.parse(hero.text)} />}
+            {
+                hero.text && (
+                    <blockquote class="border-l-2 border-ink/20 pl-4 py-1">
+                        <p class="italic text-lg sm:text-xl text-ink/70 leading-relaxed font-display">
+                            {hero.text}
+                        </p>
+                        {hero.subtitle && (
+                            <p class="mt-2 text-sm text-ink/90 leading-relaxed">
+                                {hero.subtitle}
+                            </p>
+                        )}
+                    </blockquote>
+                )
+            }
+
             {hero.actions && hero.actions.length > 0 && (
                 <div class="flex flex-wrap gap-4">
                     {hero.actions.map((action) => (
-                        <Button href={action.href}>{action.text}</Button>
+                        <Button href={action.href} variant={action.primary ? 'primary' : 'secondary'}>
+                            {action.text}
+                        </Button>
                     ))}
                 </div>
             )}
