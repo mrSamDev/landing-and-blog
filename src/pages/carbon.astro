@@ -2,24 +2,54 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import siteConfig from '../data/site-config';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const title = 'Carbon';
 const description = `Carbon footprint of ${siteConfig.title}, measured by Website Carbon. Cleaner pages mean a greener web.`;
 
 let carbonData = null;
+let loadTime = null;
 
 if (Astro.site) {
-    const encodedURL = encodeURIComponent(Astro.site.href);
+    // Read the built page size to pass to the API
+    const builtPath = path.join(process.cwd(), 'dist', 'carbon', 'index.html');
+    let bytes = 30000; // fallback if file doesn't exist yet
+
     try {
-        const response = await fetch(`https://api.websitecarbon.com/b?url=${encodedURL}`, {
-            headers: {
-                'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400'
+        const stats = fs.statSync(builtPath);
+        bytes = stats.size;
+    } catch {
+        // First build — file not written yet, use fallback
+    }
+
+    // Measure page load time by fetching the homepage
+    try {
+        const start = performance.now();
+        const res = await fetch(Astro.site.href);
+        await res.text();
+        loadTime = ((performance.now() - start) / 1000).toFixed(2);
+    } catch {
+        // Load time unavailable
+    }
+
+    try {
+        const response = await fetch(
+            `https://api.websitecarbon.com/data?bytes=${bytes}&green=0`,
+            {
+                headers: {
+                    'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400'
+                }
             }
-        });
+        );
         const data = await response.json();
 
         if (!data.error) {
-            carbonData = data;
+            carbonData = {
+                c: data.gco2e,
+                p: Math.round(data.cleanerThan * 100),
+                rating: data.rating
+            };
         }
     } catch (error) {
         // Carbon data unavailable — page still renders without stats.
@@ -38,12 +68,22 @@ if (Astro.site) {
             carbonData ? (
                 <div class="w-full p-6 border-2 border-ink rounded-2xl bg-panel-2 shadow-card">
                     <div class="flex items-baseline gap-2">
-                        <span class="text-4xl font-extrabold tabular-nums">{carbonData.c}</span>
+                        <span class="text-4xl font-extrabold tabular-nums">{carbonData.c.toFixed(4)}</span>
                         <span class="text-lg font-semibold">
                             g of CO<sub class="relative top-1 text-[0.7em]">2</sub>/view
                         </span>
                     </div>
-                    <p class="mt-2 text-ink/80">Cleaner than {carbonData.p}% of pages tested.</p>
+                    <p class="mt-2 text-ink/80">
+                        Rating: <span class="font-bold text-green-600">{carbonData.rating}</span>
+                        &middot; Cleaner than {carbonData.p}% of pages tested.
+                    </p>
+                    {
+                        loadTime && (
+                            <p class="mt-1 text-sm text-ink/60">
+                                This page loaded in {loadTime}s
+                            </p>
+                        )
+                    }
                 </div>
             ) : (
                 <p class="text-ink/70">
@@ -57,6 +97,22 @@ if (Astro.site) {
                 </p>
             )
         }
+
+        <p class="mt-2 text-xs text-ink/50">
+            Data via{' '}
+            <a
+                class="text-pink-cta font-semibold hover:underline underline-offset-2"
+                href="https://api.websitecarbon.com/"
+                target="_blank"
+                rel="noopener">Website Carbon API</a
+            >.{' '}
+            <a
+                class="text-pink-cta font-semibold hover:underline underline-offset-2"
+                href="https://www.websitecarbon.com/website/sijosam-in/"
+                target="_blank"
+                rel="noopener">View test result</a
+            >.
+        </p>
 
         <section class="mt-10">
             <h2 class="font-display font-bold text-xl sm:text-2xl">Why does this matter?</h2>
