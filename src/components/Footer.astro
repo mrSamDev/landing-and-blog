@@ -53,9 +53,11 @@ const navLinks = siteConfig.footerNavLinks || [];
     document.querySelectorAll('a[data-link]').forEach((link) => {
         link.addEventListener('click', () => {
             const linkText = link.getAttribute('data-link');
-            posthog?.capture('social_link_click', {
-                link: linkText
-            });
+            if (typeof posthog.capture === 'function') {
+                posthog.capture('social_link_click', {
+                    link: linkText
+                });
+            }
         });
     });
 </script>
