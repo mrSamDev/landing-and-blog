@@ -223,88 +223,117 @@ components:
 
 ## Overview
 
-Compact Friendly. FeedPop is a clean, scannable RSS reader built for people who want to skim many articles fast. The aesthetic keeps a touch of warmth — rounded corners, a friendly display font, pastel accent chips — but prioritizes information density over decoration. Think of it as a well-organized reading list, not a candy box.
+Sijo Sam is a personal portfolio and technical blog — clean, scannable, and warm. The aesthetic balances professionalism with personality: rounded corners, friendly display fonts, pastel accent chips, and a Malayalam quote that grounds the design in identity.
 
-The design respects the user's screen real estate. Borders are thin (1–2px), shadows are subtle, cards are compact, and the grid packs three columns on desktop. Every pixel earns its place. The goal is to make "checking your feeds" feel like glancing at a well-curated index — you see what's new at a glance, click what interests you, and move on.
+The site has three core purposes:
 
-The app supports both light and dark themes. A toggle in the header switches instantly. The preference is persisted to localStorage and defaults to the system's `prefers-color-scheme`.
+1. **Introduce** — Hero section with name, role, and a philosophical anchor (നദിക്ക് വള്ളവും മനുഷ്യർക്ക് സ്വപ്നവും ഒരുപോലെയാണ് — "A boat carries us across a river; a dream carries us through life")
+2. **Showcase** — Featured projects and writing in compact preview cards
+3. **Navigate** — Clear paths to projects, blog posts, guides, AI tips, and resume
+
+Every pixel earns its place. Borders are thin (1–2px), shadows are subtle, cards are compact, and the grid packs two columns on desktop for featured content. The goal is to make visitors feel welcomed, not overwhelmed.
+
+The site supports both light and dark themes. A toggle in the header switches instantly. The preference is persisted to localStorage and defaults to the system's `prefers-color-scheme`.
 
 ## Colors
 
-The palette keeps the original warm ink and pastel accents but uses them more sparingly. Accents appear on chips and the refresh button only — large surfaces stay neutral.
+The palette uses warm teal ink as the structural color, with pastel accents applied sparingly on chips and CTAs.
 
 ### Light theme (default)
 
-- **Ink (#004747):** Dark teal — `main` — for all text and borders. The single structural color. Replaces the original navy.
-- **Panel (#f0f5f5):** Teal-tinted off-white for header and primary surfaces. Subtle, cool, friendly.
-- **Panel-2 (#ffffff):** Pure white for article cards — crisp separation from the teal-tinted panel.
-- **Surface (#e8eeee):** Light teal-gray for secondary containers (sources bar, neutral chips).
+- **Ink (#004747):** Dark teal — `main` — for all text and borders. The single structural color.
+- **Panel (#f0f5f5):** Teal-tinted off-white for header and primary surfaces.
+- **Panel-2 (#ffffff):** Pure white for cards and content surfaces — crisp separation from the teal-tinted panel.
+- **Surface (#e8eeee):** Light teal-gray for secondary containers (chips, tags).
 - **BG (#f5f8f8):** Page background. Solid very-light teal-white — no gradients.
-- **Yellow (#f9d84a):** "Read original" CTA in the modal and the fresh-post dot.
-- **Pink (#c92d68):** Chip color for "article" type tags. Darkened from the original bright pink so white chip text meets WCAG AA 4.5:1 contrast (5.17:1).
-- **Pink-CTA (#c92d68 → #a8205a):** The refresh/sync button gradient. Primary action color. Darkened so white text passes AA (5.17:1 top, 6.96:1 bottom). Shadow: `#8a1f4f`.
-- **Link (#a8205a):** Hyperlink color inside article content. 6.96:1 on white in light mode. In dark mode, a brighter `#ff5d97` (6.2:1 on panel) is used instead.
+- **Yellow (#f9d84a):** Accent color for highlights and special CTAs.
+- **Pink (#c92d68):** Chip color for article tags. Darkened so white text meets WCAG AA 4.5:1 contrast (5.17:1).
+- **Pink-CTA (#c92d68 → #a8205a):** Primary action gradient. Darkened so white text passes AA (5.17:1 top, 6.96:1 bottom). Shadow: `#8a1f4f`.
+- **Link (#a8205a):** Hyperlink color inside content. 6.96:1 on white in light mode. In dark mode, a brighter `#ff5d97` (6.2:1 on panel) is used instead.
 - **Pink-error (#972959):** Dark rose for error text and error borders.
-- **Mint (#92efc5):** Category chips and the active/selected source highlight.
-- **Bluey (#3f5bff):** "Video" type chip only. Darkened so white text passes AA (5.06:1).
+- **Mint (#92efc5):** Active states, selected items, and category chips.
+- **Bluey (#3f5bff):** Video/project type chips only. Darkened so white text passes AA (5.06:1).
 
 ### Dark theme
 
-Neutral charcoal grays — no teal tints, just a soft layered dark palette so surfaces separate without harsh pure-black contrast.
+Neutral charcoal grays — soft layered dark palette so surfaces separate without harsh pure-black contrast.
 
 - **Ink (#ffffff):** Pure white for all text and borders.
-- **Panel (#26262c):** Lifted charcoal panel for header and modal — light enough to read as a distinct surface, dark enough to stay calm.
-- **Panel-2 (#1d1d20):** Card surface. Toned down ~5% from the near-black it used to be — still clearly recessed beneath the panel and the 1px white border, but no longer a harsh pure-black block. Sits just above the page bg for a soft layering effect.
-- **Surface (#1e1e23):** Recessed charcoal for chips and sources bar.
+- **Panel (#26262c):** Lifted charcoal panel for header and modal.
+- **Panel-2 (#1d1d20):** Card surface. Toned down ~5% from near-black — sits just above the page bg for soft layering.
+- **Surface (#1e1e23):** Recessed charcoal for chips and secondary containers.
 - **BG (#1a1a1f):** Page background — the deepest layer, with panel and cards stepping up from it.
-- **Yellow (#f9d84a):** Unchanged. The "Read original" button uses fixed black text (#000000) in dark mode for contrast.
+- **Yellow (#f9d84a):** Unchanged. Uses fixed black text (#000000) in dark mode for contrast.
 - **Pink (#c92d68):** Unchanged from light — dark enough for white text on black.
 - **Pink-CTA (#c92d68 → #a8205a):** Unchanged gradient. White text passes AA.
 - **Pink-error (#ff8caa):** Brighter rose for error text — the light-theme value is too dark on black.
-- **Mint (#2d7d6a):** Muted green for selected/category chips. White text on this green has good contrast.
+- **Mint (#2d7d6a):** Muted green for selected/category chips.
 - **Bluey (#3f5bff):** Unchanged from light — white text passes AA on black.
 
-In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme uses soft layered charcoal grays — no teal tints — with surfaces stepping up gently from the page bg rather than harsh pure-black blocks.
+In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme uses soft layered charcoal grays — no teal tints — with surfaces stepping up gently from the page bg.
 
 ## Typography
 
 Two fonts: Baloo 2 for display, Nunito for body and UI. Both are rounded and friendly but used at practical sizes.
 
-**Baloo 2** (display) is used for the app name (`display-app`, 1.5rem), article card titles (`display-card`, 1.05rem), and modal title (`display-modal`, 1.5rem). Always 700 weight. Line height 1.2 — readable, not cramped.
+**Baloo 2** (display) is used for:
+- Hero title (`display-hero`, 2.25rem, 800 weight)
+- Page titles (`display-page-title`, 1.5rem, 800 weight)
+- Section headings (`display-section`, 1.25rem, 700 weight)
+- Card titles (`display-card`, 1.125rem, 700 weight)
+- Logo (`display-logo`, 1.125rem, 800 weight)
+- Content titles (`content-title`, 1.875rem, 500 weight)
 
-**Nunito** (body) handles everything else. Article excerpts use `body-md` (0.9rem). Metadata and chip text use `body-sm` (0.78rem). Filter labels use `label-ui` (0.82rem, 800 weight). Small uppercase labels use `label-caps` (0.7rem, 700 weight, 0.06em tracking).
+Line height 1.1–1.3 — readable, not cramped.
 
-Font sizes are deliberately small for an RSS reader — the priority is fitting more articles per screen, not making each one shout.
+**Nunito** (body) handles everything else:
+- Body text: `body-md` (0.9rem), `body-base` (0.85rem), `body-sm` (0.78rem)
+- Labels: `label-ui` (0.82rem, 800 weight), `label-caps` (0.7rem, 700 weight, 0.06em tracking)
+- Badges: `badge` (0.68rem, 800 weight, 0.04em tracking)
+
+Font sizes are deliberately compact for information density — the priority is fitting more content per screen without feeling cramped.
 
 ## Layout
 
-The layout is a sidebar + main content area, with a compact header bar on top.
+The layout is a centered max-width container with a compact header bar on top.
 
 ```
 ┌───────────────────────────────────────────┐
-│  FeedPop        [stats]    [☾] [↻]        │  compact header
-├──────────┬────────────────────────────────┤
-│ Sources  │  [ ─── Add RSS feed box ─── ]  │
-│ ├ All    │  ┌──────┐ ┌──────┐ ┌──────┐    │
-│ ├ Feed1  │  │ card │ │ card │ │ card │    │
-│ ├ Feed2  │  └──────┘ └──────┘ └──────┘    │
-│ └ Feed3  │  ┌──────┐ ┌──────┐ ┌──────┐    │
-│          │  │ card │ │ card │ │ card │    │
-└──────────┴────────────────────────────────┘
+│  Sijo Sam    [nav links]    [☾] [🔍]      │  compact header
+├───────────────────────────────────────────┤
+│                                           │
+│  ┌─────────────────────────────────────┐  │
+│  │  Sijo Sam                           │  │  hero section
+│  │  നദിക്ക് വള്ളവും മനുഷ്യർക്ക്...       │  │
+│  │  [About] [Projects] [Say Hi]        │  │
+│  └─────────────────────────────────────┘  │
+│                                           │
+│  Projects                        [View all]│
+│  ┌──────────┐ ┌──────────┐                │
+│  │  card    │ │  card    │                │  featured grid
+│  └──────────┘ └──────────┘                │
+│                                           │
+│  Writing                         [View all]│
+│  ┌──────────┐ ┌──────────┐                │
+│  │  card    │ │  card    │                │  featured grid
+│  └──────────┘ └──────────┘                │
+│                                           │
+└───────────────────────────────────────────┘
 ```
 
-**Header bar:** A single horizontal panel containing the app name (left), inline stat pills (hidden on mobile), and the theme toggle + refresh button (right). ~50px tall on desktop.
+**Header bar:** A single horizontal panel containing the site name/logo (left), navigation links (center), and theme toggle + search button (right). ~50px tall on desktop.
 
-**Sidebar (left):** A vertical panel listing all subscribed feeds. "All feeds" at the top, each feed below as a full-width clickable item. Selected feed is highlighted with mint background. Remove buttons appear on hover. 224px wide on desktop (`lg:`), full width and stacked above main content on mobile.
+**Hero section:** Centered content block with:
+- Name (Baloo 2, 2.25rem, 800 weight)
+- Malayalam quote in blockquote with left border accent
+- English translation subtitle
+- Action buttons (About, Projects, Say Hi)
 
-**Main content (right):**
+**Featured grids:** Two columns on desktop for featured projects and writing. Each card is compact with 1px ink border, 14px radius, and subtle shadow.
 
-- **Add feed box:** A panel at the top of the main area with the RSS URL input and "Add feed" button. Always visible.
-- **Article grid:** Below the add feed box. Three columns on `xl:`, two on `sm:`, one on mobile. Gap is 12px. Cards are compact and the entire card is clickable (opens the modal).
+**Main content pages:** Blog, projects, guides, AI tips, and resume pages follow a consistent single-column or grid layout with max-width 5xl (640px) centered container.
 
-**Modal:** Centered overlay, max-width 640px. Title, metadata, sanitized HTML content, and a "Read original" link. Borders are 2px ink, 16px radius.
-
-Spacing follows a 4px base unit. Common values: 4, 8, 12, 16, 24px. Gaps between chips use 6px.
+Spacing follows a 4px base unit. Common values: 4, 8, 12, 16, 24px. Gaps between cards use 12px.
 
 ## Elevation & Depth
 
@@ -312,32 +341,32 @@ Depth is subtle — just enough to separate layers without adding visual noise.
 
 **Panels (header, modal):** `0 2px 8px rgb(var(--shadow-rgb) / 0.08)` — a soft, small shadow. `--shadow-rgb` is `0 71 71` in light mode, `0 0 0` in dark mode.
 
-**Article cards:** `0 1px 3px rgb(var(--shadow-rgb) / 0.06)` — barely there, just enough to lift the white card off the warm background. On hover: `0 2px 8px rgb(var(--shadow-rgb) / 0.12)` with a subtle `translateY(-1px)` lift.
+**Cards:** `0 1px 3px rgb(var(--shadow-rgb) / 0.06)` — barely there, just enough to lift the white card off the warm background. On hover: `0 2px 8px rgb(var(--shadow-rgb) / 0.12)` with a subtle `translateY(-1px)` lift.
 
-**Refresh button:** `0 4px 0 #8a1f4f` — keeps the signature hard shadow on the primary CTA only. On hover: `translateY(-1px)`. On active: `translateY(2px)` with `0 2px 0` shadow.
+**Buttons:** `0 4px 0 #8a1f4f` — keeps the signature hard shadow on primary CTA only. On hover: `translateY(-1px)`. On active: `translateY(2px)` with `0 2px 0` shadow.
 
-No thumbnail offset blocks. No decorative rotated shapes. The content is the design.
+No decorative rotated shapes. No excessive shadows. The content is the design.
 
 ## Shapes
 
-Roundness is still part of the identity, but tempered for density:
+Roundness is part of the identity — friendly but not exaggerated:
 
-- **pill (9999px):** all chips, all buttons, stat pills in the header
-- **xl (16px):** header bar, modal container
-- **lg (14px):** article cards, sources container
+- **pill (9999px):** all chips, all buttons, stat pills
+- **xl (16px):** header bar, modal container, subscribe panel
+- **lg (14px):** cards, content containers
 - **input (10px):** text input, select dropdowns
 - **sm (8px):** minor UI elements, thumbnails
 - **xs (6px):** small inline elements
 
-Corners are rounded but not exaggerated. Cards at 14px look friendly without wasting corner space.
+Corners are rounded but not wasteful. Cards at 14px look friendly without losing corner space.
 
 ## Dark Mode
 
-The app implements a manual light/dark theme toggle with system preference fallback.
+The site implements a manual light/dark theme toggle with system preference fallback.
 
-**Implementation:** A `data-theme="light"` or `data-theme="dark"` attribute is set on `<html>`. All color tokens are CSS custom properties, so dark mode is a pure variable override — no component code changes needed. The `useTheme` hook in `src/theme.ts` manages state, persists to `localStorage` (key: `feedpop-theme`), and defaults to `window.matchMedia("(prefers-color-scheme: dark)")` on first visit.
+**Implementation:** A `data-theme="light"` or `data-theme="dark"` attribute is set on `<html>`. All color tokens are CSS custom properties, so dark mode is a pure variable override — no component code changes needed. The theme hook manages state, persists to `localStorage` (key: `theme`), and defaults to `window.matchMedia("(prefers-color-scheme: dark)")` on first visit.
 
-**FOUC prevention:** An inline script in `index.html` reads the stored preference and sets `data-theme` before React hydrates, preventing a flash of the wrong theme.
+**FOUC prevention:** An inline script in `BaseLayout.astro` reads the stored preference and sets `data-theme` before Astro hydrates, preventing a flash of the wrong theme.
 
 **Toggle button:** A compact secondary-style button in the header bar showing "☾" in light mode (click → dark) and "☀" in dark mode (click → light). Same 2px border, pill radius, and compact padding as other buttons.
 
@@ -353,87 +382,87 @@ The app implements a manual light/dark theme toggle with system preference fallb
 
 - Pink and blue accent colors are darkened so all white-on-color text meets 4.5:1 contrast.
 - Secondary text uses `text-ink-muted` (75% ink) instead of 60%, ensuring 4.5:1 on panel/card surfaces in light mode.
-- `:focus-visible` rings (2px pink-cta outline) on all buttons and article cards.
+- `:focus-visible` rings (2px pink-cta outline) on all buttons and cards.
 - `@media (prefers-reduced-motion: reduce)` disables all decorative animation (spin, fade-in) and transform-based transitions.
-- The article modal uses `role="dialog" aria-modal="true"`, traps Tab focus, and restores focus to the triggering card on close.
+- Modals use `role="dialog" aria-modal="true"`, trap Tab focus, and restore focus to the triggering element on close.
 - Error banners use `role="alert"`; loading states use an `aria-live="polite"` region.
-- Article read/fresh status is exposed via `aria-description`, not colour/opacity alone.
-- The article grid uses `role="list"`/`role="listitem"` for screen-reader list navigation.
 - A skip-to-content link is the first focusable element.
 - Form inputs have associated `<label>` elements; invalid input triggers `role="alert"` and `aria-invalid`.
 
 ## Components
 
-**Header bar:** The primary navigation surface. Panel background, 2px ink border, 16px radius, subtle shadow. Contains:
+**Header bar (Nav):** The primary navigation surface. Panel background, 2px ink border, 16px radius, subtle shadow. Contains:
 
-- App name ("FeedPop") in Baloo 2 1.5rem
-- Inline stat pills (hidden on mobile): unread count, source count, last sync
+- Site name/logo ("Sijo Sam") in Baloo 2 1.125rem, 800 weight
+- Navigation links: Home, Projects, Blog, Guides, AI Tips, Resume
 - Theme toggle button (☾ / ☀)
-- Refresh button (pink gradient CTA)
+- Search button (triggers command palette)
 
-**Add feed box:** A panel at the top of the main content area. Contains the RSS URL text input (flex-1) and an "Add feed" button. Always visible so users can add feeds at any time.
+**Hero:** Centered content block at the top of the home page. Contains:
 
-**Sources sidebar:** A vertical panel on the left side. Contains a "Sources" label, an "All feeds" button, and a list of subscribed feed buttons. Each feed button is full-width, left-aligned, with a truncated title. Selected feed gets mint background + ink border. Remove (✕) buttons appear on hover. 224px wide on desktop, full width stacked above main on mobile.
+- Name (Baloo 2, 2.25rem, 800 weight)
+- Malayalam quote in blockquote with 2px ink left border, italic, 1.5rem
+- English translation subtitle (0.82rem, ink/90)
+- Action buttons (About, Projects, Say Hi) in primary/secondary variants
 
-**Article cards:** Compact, clickable, white background (panel-2). 1px ink border, 14px radius, subtle shadow. 12px padding. Layout:
+**Cards (PostPreview, ProjectPreview):** Compact, clickable, white background (panel-2). 1px ink border, 14px radius, subtle shadow. 12px padding. Layout:
 
-- Thumbnail (optional): full-width, 80px tall, 8px radius, 1px border, object-cover. Only shown if the article has an image.
+- Thumbnail (optional): full-width, 80px tall, 8px radius, 1px border, object-cover
 - Type chip + date chip: inline row above the title, small (0.68rem)
-- Title: Baloo 2, 1.05rem, 700 weight, 1.2 line-height, `line-clamp-2`
-- Excerpt: Nunito, 0.85rem, `line-clamp-2`, ink at 80% opacity
-- Read time + word count: small neutral chips at the bottom
-- No separate "Open article" button — the entire card is clickable and opens the modal. A subtle hover state (shadow + 1px lift) signals interactivity.
-- Fresh flag: tiny yellow dot in the metadata row for items newer than 24h.
-
-**Stat pills (header):** Small inline pills with a bold number and a tiny uppercase label. Surface background, 1px ink border, pill radius, 4px 10px padding.
+- Title: Baloo 2, 1.125rem, 700 weight, 1.2 line-height, `line-clamp-2`
+- Excerpt/description: Nunito, 0.85rem, `line-clamp-2`, ink at 80% opacity
+- Metadata chips at the bottom (read time, tags, etc.)
+- Entire card is clickable. A subtle hover state (shadow + 1px lift) signals interactivity.
 
 **Chips:** All pill radius + 1px ink border. Compact: 3px 8px padding, 0.68rem text.
 
 - Article type: pink background, white text
-- Video type: bluey background, white text
-- Neutral (date, read-time, word-count): surface background, ink text
-- Category: mint background, ink text
-- Selected source: mint background (toggled on the neutral chip)
+- Project type: bluey background, white text
+- Neutral (date, read-time): surface background, ink text
+- Tag chips: surface background, ink text
 
-**Refresh button (primary CTA):** Vertical gradient `#c92d68 → #a8205a`, white text, pill, 2px ink border, hard shadow `0 4px 0 #8a1f4f`. Compact: 8px 14px padding, 0.82rem text. Contains a sync icon or "…" for loading. Hover lifts `translateY(-1px)`.
+**Primary buttons:** Vertical gradient `#c92d68 → #a8205a`, white text, pill, 2px ink border, hard shadow `0 4px 0 #8a1f4f`. Compact: 8px 14px padding, 0.82rem text. Hover lifts `translateY(-1px)`.
 
-**Secondary buttons:** White/panel-2 background, ink text, 2px ink border, pill. Used for "Add", theme toggle, modal close. Compact: 8px 14px padding. Hover lifts `translateY(-1px)`.
-
-**Read original button (modal):** Yellow background, ink text, 2px ink border, pill. Same compact sizing. Includes an arrow icon and a visually-hidden "(opens in a new tab)" indicator for screen readers. In dark mode, text is fixed to `#000000` for contrast.
+**Secondary buttons:** White/panel-2 background, ink text, 2px ink border, pill. Used for navigation, theme toggle, modal close. Compact: 8px 14px padding. Hover lifts `translateY(-1px)`.
 
 **Text input:** White/panel-2 background, 1px ink border, 10px radius, 8px 12px padding. Placeholder uses ink at 40% opacity. Flat, no inset shadow.
 
-**Sources container:** Surface background, 1px solid ink border, 14px radius. The sidebar panel uses the standard `.panel` class; individual feed items use transparent borders that get ink border + mint background when selected.
+**Command palette:** Centered overlay, max-width 640px. Panel background, 1px ink border, 24px radius. Contains search input and keyboard shortcut hints (⌘K).
 
-**Modal:** Panel background, 2px ink border, 16px radius, subtle shadow. Header with title + close button (2px ink border separator), scrollable sanitized content area, footer with "Read original" link. Max-width 640px, max-height 80vh. Backdrop is `bg-black/40` in both themes.
+**Footer:** Simple panel with 2px ink border. Contains:
+
+- About, Contact links
+- Code (GitHub) link
+- RSS feed link
+- Carbon page link
 
 ## Do's and Don'ts
 
 **Do:**
 
-- Use 1–2px ink borders on cards and inputs, 2px on panels and the modal
-- Keep article cards compact — 12px padding, small thumbnails, 2-line clamps
-- Make the entire article card clickable to open the modal
-- Use three columns on desktop for the article grid
-- Keep the header to a single compact bar — no giant hero
-- Use Baloo 2 for titles and the app name only
-- Apply the hard CTA shadow (`0 4px 0 #8a1f4f`) to the refresh button only
+- Use 1–2px ink borders on cards and inputs, 2px on panels
+- Keep cards compact — 12px padding, 2-line clamps
+- Make entire cards clickable
+- Use two columns on desktop for featured content grids
+- Keep the header to a single compact bar
+- Use Baloo 2 for titles and the site name only
+- Apply the hard CTA shadow (`0 4px 0 #8a1f4f`) to primary buttons only
 - Use `translateY(-1px)` on hover for cards and buttons
-- Show read time and word count as small chips at the bottom of each card
 - Support dark mode via CSS variable overrides on `[data-theme="dark"]`
 - Persist theme preference to localStorage with system preference fallback
+- Include the Malayalam quote in the hero — it's central to identity
 
 **Don't:**
 
 - Use borders thicker than 2px anywhere
-- Use 4px borders, 32px radii, or heavy double shadows — that's the old design
-- Give article cards their own "Open article" button — the card itself is the button
-- Use a giant hero section or display text larger than 1.5rem (modal/app name)
-- Use the thumbnail offset block or decorative rotated shapes
+- Use 4px borders, 32px radii, or heavy double shadows
+- Give cards their own "Open" button — the card itself is the button
+- Use a giant hero section or display text larger than 2.25rem
+- Use decorative rotated shapes or excessive shadows
 - Use dashed borders — solid only
 - Use gray text — use `ink` at reduced opacity (`ink/60`, `ink/80`) instead
-- Apply the CTA pink gradient to anything other than the refresh button
+- Apply the CTA pink gradient to anything other than primary buttons
 - Use fonts outside Baloo 2 / Nunito
-- Waste vertical space — an RSS reader should show many articles per screen
 - Hardcode colors in components — use CSS variables so dark mode works automatically
-- Use `bg-ink/40` for the modal backdrop — use `bg-black/40` so it stays dark in both themes
+- Use `bg-ink/40` for modal backdrop — use `bg-black/40` so it stays dark in both themes
+- Remove the Malayalam quote or English translation — they define the site's voice
