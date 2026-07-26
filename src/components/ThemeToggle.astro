@@ -3,7 +3,7 @@
 
 <button
     id="theme-toggle"
-    class="inline-flex items-center justify-center w-8 h-8 p-0 border border-ink rounded-pill bg-panel-2 text-ink text-base leading-none hover:bg-surface hover:-translate-y-px transition"
+    class="inline-flex items-center justify-center w-8 h-8 p-0 border border-ink/25 rounded-pill bg-panel-2 text-ink text-base leading-none hover:bg-surface hover:-translate-y-px transition"
     aria-label="Change color scheme"
 >
     <span class="inline dark:hidden" aria-hidden="true">☾</span>
@@ -31,7 +31,12 @@
         }
 
         function applyTheme(theme) {
-            document.documentElement.classList.toggle('dark', theme === 'dark');
+            const isDark = theme === 'dark';
+            document.documentElement.classList.toggle('dark', isDark);
+            // Mirror the theme to data-theme so theme-aware integrations
+            // (e.g. mermaid) detect light vs dark reliably instead of
+            // falling back to prefers-color-scheme.
+            document.documentElement.dataset.theme = theme;
             window.localStorage.setItem('theme', theme);
         }
 

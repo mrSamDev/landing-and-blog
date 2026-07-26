@@ -8,7 +8,7 @@ type Props = ButtonProps | AnchorProps;
 
 const { href, class: className, ...rest } = Astro.props;
 const buttonClasses =
-    'inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-sm font-extrabold leading-tight text-ink bg-panel-2 border-2 border-ink rounded-pill transition-all hover:-translate-y-px active:translate-y-0 shadow-card hover:shadow-card-hover';
+    'inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-sm font-extrabold leading-tight text-ink bg-panel-2 border border-ink/40 rounded-pill transition-all hover:-translate-y-px active:translate-y-0 shadow-card hover:shadow-card-hover';
 ---
 
 {

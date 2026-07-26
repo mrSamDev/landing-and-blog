@@ -50,6 +50,9 @@ importers:
       astro:
         specifier: ^7.1.3
         version: 7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.12.2)(@vercel/functions@3.4.3)(jiti@2.4.2)(rollup@4.60.1)(yaml@2.9.0)
+      astro-mermaid-satteri:
+        specifier: ^0.3.0
+        version: 0.3.0(@astrojs/markdown-satteri@0.3.4)(astro@7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.12.2)(@vercel/functions@3.4.3)(jiti@2.4.2)(rollup@4.60.1)(yaml@2.9.0))(mermaid@11.12.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1638,6 +1641,16 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
+
+  astro-mermaid-satteri@0.3.0:
+    resolution: {integrity: sha512-6l5r/s3jyHwNLRSa80Qy7VACUnLtdH+EsmUGdhJzY/2mOUw9fzRbjRw6l9TDsd/LW5MdU/UGj960nEVX3vMO2w==}
+    peerDependencies:
+      '@astrojs/markdown-satteri': ^0.3.0
+      astro: ^7.0.0
+      mermaid: ^11.0.0
+    peerDependenciesMeta:
+      '@astrojs/markdown-satteri':
+        optional: true
 
   astro@7.1.3:
     resolution: {integrity: sha512-4dhPyAAXthf3xLEYnG8SeL7yr/nTPPABfY7e9YF0yuO+vK9Xp+8Q5j4xzsmL3GueukQv4oNwGNTBepLOiDGeJA==}
@@ -5200,6 +5213,13 @@ snapshots:
   array-iterate@2.0.1: {}
 
   astring@1.9.0: {}
+
+  astro-mermaid-satteri@0.3.0(@astrojs/markdown-satteri@0.3.4)(astro@7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.12.2)(@vercel/functions@3.4.3)(jiti@2.4.2)(rollup@4.60.1)(yaml@2.9.0))(mermaid@11.12.0):
+    dependencies:
+      astro: 7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.12.2)(@vercel/functions@3.4.3)(jiti@2.4.2)(rollup@4.60.1)(yaml@2.9.0)
+      mermaid: 11.12.0
+    optionalDependencies:
+      '@astrojs/markdown-satteri': 0.3.4
 
   astro@7.1.3(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@24.12.2)(@vercel/functions@3.4.3)(jiti@2.4.2)(rollup@4.60.1)(yaml@2.9.0):
     dependencies:
