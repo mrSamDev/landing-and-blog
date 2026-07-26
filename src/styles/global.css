@@ -16,11 +16,11 @@
     --color-panel: #f0f5f5;
     --color-panel-2: #ffffff;
     --color-surface: #e8eeee;
-    --color-bg: #f5f8f8;
+    --color-bg: #e9f0f0;
 
     /* Backwards-compatible aliases so existing markup keeps working */
     --color-fontPrimary: #004747; /* = ink */
-    --color-main: #f5f8f8; /* = bg */
+    --color-main: #e9f0f0; /* = bg */
     --color-muted: #e8eeee; /* = surface */
     --color-borderprimary: #004747; /* = ink */
 
@@ -56,10 +56,10 @@
             --color-panel: #26262c;
             --color-panel-2: #1d1d20;
             --color-surface: #1e1e23;
-            --color-bg: #1a1a1f;
+            --color-bg: #141419;
 
             --color-fontPrimary: #ffffff;
-            --color-main: #1a1a1f;
+            --color-main: #141419;
             --color-muted: #1e1e23;
             --color-borderprimary: #ffffff;
 

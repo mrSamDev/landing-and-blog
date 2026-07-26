@@ -21,17 +21,23 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
         <BaseHead {...head} />
         <ClientRouter />
         <script is:inline>
+            function applyInitialTheme(theme) {
+                const isDark = theme === 'dark';
+                document.documentElement.classList.toggle('dark', isDark);
+                document.documentElement.style.colorScheme = theme;
+                // Set data-theme so theme-aware integrations (e.g. mermaid)
+                // detect light vs dark reliably instead of falling back to
+                // prefers-color-scheme, which would render dark diagrams on a
+                // light page when the OS is in dark mode.
+                document.documentElement.dataset.theme = theme;
+            }
             try {
                 const savedTheme = localStorage.getItem('theme');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-                document.documentElement.classList.toggle('dark', theme === 'dark');
-                document.documentElement.style.colorScheme = theme;
+                applyInitialTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
             } catch {
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                document.documentElement.classList.toggle('dark', prefersDark);
-                document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light';
+                applyInitialTheme(prefersDark ? 'dark' : 'light');
             }
         </script>
 
