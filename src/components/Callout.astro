@@ -1,0 +1,94 @@
+---
+/**
+ * Reusable callout / admonition component for MDX blog posts.
+ *
+ * Usage in .mdx:
+ *   import Callout from '../../components/Callout.astro';
+ *
+ *   <Callout variant="note">Some inline note.</Callout>
+ *   <Callout variant="tip" title="Pro tip">
+ *     Multi-line content works too.
+ *   </Callout>
+ *   <Callout variant="feedback" title="Enjoyed this post?" />
+ *
+ * Variants: note | tip | warning | feedback
+ * All props optional; `variant` defaults to "note".
+ * When no slot content is provided, the feedback variant renders a
+ * default "thanks for reading / share feedback" message.
+ */
+
+type Variant = 'note' | 'tip' | 'warning' | 'feedback';
+
+interface Props {
+    variant?: Variant;
+    title?: string;
+    class?: string;
+}
+
+const { variant = 'note', title, class: className } = Astro.props;
+
+const variants: Record<Variant, { icon: string; label: string; accent: string; bar: string; bg: string }> = {
+    note: {
+        icon: 'ℹ️',
+        label: 'Note',
+        accent: 'text-ink',
+        bar: 'bg-ink/60',
+        bg: 'bg-panel',
+    },
+    tip: {
+        icon: '💡',
+        label: 'Tip',
+        accent: 'text-ink',
+        bar: 'bg-mint',
+        bg: 'bg-mint/10',
+    },
+    warning: {
+        icon: '⚠️',
+        label: 'Warning',
+        accent: 'text-ink',
+        bar: 'bg-yellow',
+        bg: 'bg-yellow/10',
+    },
+    feedback: {
+        icon: '💬',
+        label: 'Feedback',
+        accent: 'text-pink-cta-deep dark:text-pink-cta',
+        bar: 'bg-pink-cta',
+        bg: 'bg-pink-cta/5',
+    },
+};
+
+const cfg = variants[variant];
+const heading = title ?? cfg.label;
+const hasSlot = await Astro.slots.has('default');
+---
+
+<aside class:list={[
+    'not-prose my-8 flex gap-4 rounded-xl border border-ink/15 p-5 shadow-[0_2px_8px_rgb(var(--shadow-rgb)/0.06)]',
+    cfg.bg,
+    className,
+]}>
+    <div class:list={['mt-0.5 w-1 shrink-0 rounded-full', cfg.bar]}></div>
+    <div class="flex-1 min-w-0">
+        <p class:list={['flex items-center gap-2 m-0 mb-2 font-display font-extrabold text-base', cfg.accent]}>
+            <span aria-hidden="true">{cfg.icon}</span>
+            {heading}
+        </p>
+        {
+            hasSlot ? (
+                <div class="text-sm leading-relaxed text-ink/80 [&_a]:font-bold [&_a]:text-pink-cta-deep dark:[&_a]:text-pink-cta [&_a]:underline [&_a]:underline-offset-2 [&_p]:m-0 [&_p:last-child]:mb-0">
+                    <slot />
+                </div>
+            ) : variant === 'feedback' ? (
+                <div class="text-sm leading-relaxed text-ink/80 [&_a]:font-bold [&_a]:text-pink-cta-deep dark:[&_a]:text-pink-cta [&_a]:underline [&_a]:underline-offset-2">
+                    <p class="m-0 mb-2">
+                        Thanks for reading! I recently revamped this site, and I'd love to hear what you think — good, bad, or buggy.
+                    </p>
+                    <p class="m-0">
+                        Drop a comment below, or reach out on <a href="https://bsky.app/profile/sijosam.in" target="_blank" rel="noopener">Bluesky</a> / <a href="mailto:dev.sijo.sam@gmail.com">email</a>.
+                    </p>
+                </div>
+            ) : null
+        }
+    </div>
+</aside>
