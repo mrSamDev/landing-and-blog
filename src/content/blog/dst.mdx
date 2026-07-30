@@ -1,6 +1,6 @@
 ---
 title: I Let a Random Number Generator Find My Bugs
-excerpt: A seeded PRNG, a reference model, and six thousand requests later — how Deterministic Simulation Testing found a cache bug my unit tests never would have.
+excerpt: 'A seeded PRNG, a reference model, and six thousand requests later: how Deterministic Simulation Testing found a cache bug my unit tests never would have.'
 publishDate: 'Aug 01 2026'
 isFeatured: true
 tags:
@@ -19,23 +19,25 @@ seo:
 
 A random number generator found a bug I didn't know I had. I wasn't fuzzing. It wasn't quite property testing either.
 
-I'd been reading about [Deterministic Simulation Testing](https://turso.tech/blog/introducing-limbo-a-complete-rewrite-of-sqlite-in-rust), the approach [Turso](https://turso.tech) and [TigerBeetle](https://www.tigerbeetle.com/) use on their databases. I wanted to see if it made sense on something smaller, so I tried it on a frontend rendering engine.
+I'd been reading about <Link href="https://turso.tech/blog/introducing-limbo-a-complete-rewrite-of-sqlite-in-rust">Deterministic Simulation Testing</Link>, the approach <Link href="https://turso.tech">Turso</Link> and <Link href="https://www.tigerbeetle.com/">TigerBeetle</Link> use on their databases. I wanted to see if it made sense on something smaller, so I tried it on a frontend rendering engine.
 
 ## How I Stumbled Into This
 
-I use Turso for most small projects. SQLite you can spin up in a few seconds is hard to argue with. A while back they announced they were rewriting SQLite from scratch, first as a fork, [libSQL](https://docs.turso.tech/libsql), then a full Rust rewrite.
+I use Turso for most small projects. SQLite you can spin up in a few seconds is hard to argue with. A while back they announced they were rewriting SQLite from scratch, first as a fork, <Link href="https://docs.turso.tech/libsql">libSQL</Link>, then a full Rust rewrite.
 
 The thing that caught my eye was their testing strategy. They kept mentioning DST, and I'd never heard of it. Could be I just wasn't paying attention.
 
 I read more, and it started to click why you'd trust a rewrite of the most reliable database on earth to it.
 
-The one-line version: model-based testing driven by deterministic randomness. You write a model of how your system should behave, then generate random sequences of operations and run them through the real thing. Every response gets compared to what the model predicted. A mismatch is a bug.
+The one-line version: model-based testing driven by deterministic randomness. You write a model of how your system should behave, then generate random sequences of operations and run them through the real thing.
 
-Because the randomness comes from a seed, the failure reproduces every time.
+Every response gets compared to what the model predicted. A mismatch is a bug. Because the randomness comes from a seed, the failure reproduces every time.
 
-FoundationDB and TigerBeetle both rely on it. Turso partnered with [Antithesis](https://antithesis.com/) to run it at the OS level, injecting hardware faults into a deterministic hypervisor.
+FoundationDB and TigerBeetle both rely on it. Turso partnered with <Link href="https://antithesis.com/">Antithesis</Link> to run it at the OS level, injecting hardware faults into a deterministic hypervisor.
 
-If you've used [QuickCheck](https://en.wikipedia.org/wiki/QuickCheck) or [fast-check](https://fast-check.dev/), the shape is familiar. The difference is scale. Property testing generates random inputs for a function. DST generates random sequences of operations for a whole system and checks each one against a reference model.
+If you've used <Link href="https://en.wikipedia.org/wiki/QuickCheck">QuickCheck</Link> or <Link href="https://fast-check.dev/">fast-check</Link>, the shape is familiar. The difference is scale.
+
+Property testing generates random inputs for a function. DST generates random sequences of operations for a whole system and checks each one against a reference model.
 
 I'm not building a database. But I had a rendering engine with enough moving parts that I kept worrying about cases I hadn't tested.
 
@@ -57,7 +59,7 @@ flowchart TD
 
 Hand-written tests cover the paths you thought about. The ones you didn't think about are where production breaks. The weird interleavings. A config reset that lands between two requests. A fetch still in flight when the next one arrives.
 
-You don't write tests for those because you don't know they exist. The shift with DST is that you stop guessing which cases matter.
+You don't write tests for those because you don't know they exist. With DST, you stop guessing which cases matter.
 
 You write down the rules of how the system behaves. Then a random number generator picks the cases, thousands of them, and you check that reality never breaks the rules.
 
@@ -87,7 +89,11 @@ Writing a test for every combination would take forever. I'd still miss the inte
 
 Instead of asserting that a specific input gives a specific output, you write down the rules. Then you throw random stuff at the real thing and check that each response matches what the rules predict.
 
-The rules live in a reference model. A plain object that mirrors the engine's config cache state machine:
+The rules live in a reference model. A plain object that mirrors the engine's config cache state machine.
+
+Say config isn't loaded yet. The model predicts that the next request triggers a fetch, and sets `fetchCount` to 1. If `failNext` is true, it predicts the fetch throws instead, and clears the flag.
+
+That's the level it operates at. It doesn't know about HTTP or routes or HTML. It just tracks enough state to say what should happen next.
 
 ```ts
 // Mirrors the engine's config cache state machine so we can predict,
@@ -122,14 +128,29 @@ function mulberry32(seed: number): () => number {
 }
 ```
 
-From the seed, a generator produces a random list of operations. Hit a page with TV user-agent signals. Call the data API. Fetch config. Simulate an isolate restart on the edge. Inject a failure into the next fetch. Each one is something that could happen in production.
+From the seed, a generator produces a random list of operations. Hit a page with TV user-agent signals. Call the data API, fetch config, simulate an isolate restart on the edge, inject a failure into the next fetch. Each one is something that could happen in production.
+
+A snippet from one run might look like:
+
+```
+SSR  /movie/123   TV
+FETCH_CONFIG
+RESET
+SSR  /            browser
+FAIL_NEXT_FETCH
+SSR  /tv          TV
+```
+
+The generator doesn't know what order makes sense. It just picks ops. Most sequences are boring. Some aren't.
 
 Then I walk the list. For each op, two things happen in lockstep:
 
 1. The **model** predicts what the response should be, and advances its own state.
 2. The **real app** handles the request and produces an actual response.
 
-Then I compare them. Status code, body, the `__DATA__` payload embedded in the HTML, the config version. Everything. A mismatch fails the test.
+Then I compare them. Status code, body, the `__DATA__` payload embedded in the HTML, the config version. Everything.
+
+A mismatch fails the test.
 
 I'm not asserting that one endpoint returns 200. I'm asserting that across every combination of mode, route, and failure, the app behaves exactly like the model says it should. That's a stronger claim than any single test.
 
@@ -141,11 +162,13 @@ There's a comment in the test that captures what happened:
 
 > A partial reset (clearing only `loaded`/`cachedVersion`) is what caused the model/engine divergence: the model predicted a refetch while the real engine served L1.
 
-The model was right. It expected a refetch after reset. The engine served stale memory instead. The reset wasn't actually clearing the in-memory cache.
+The model was right. It expected a refetch after reset, but the engine served stale memory instead. The reset wasn't actually clearing the in-memory cache.
 
 When an isolate restarted on the edge, the engine kept handing out config from the old one. A request would arrive, get a version number from an isolate that no longer existed, and carry on like nothing happened.
 
-This is the kind of bug a hand-written test doesn't catch. It only shows up when a reset interleaves with config-touching requests in a particular order. Nobody writes a unit test for "what if the isolate restarts between the second and third request of a mixed batch." The simulation did, because it doesn't know or care what I think is interesting.
+This is the kind of bug a hand-written test doesn't catch. It only shows up when a reset interleaves with config-touching requests in a particular order.
+
+Nobody writes a unit test for "what if the isolate restarts between the second and third request of a mixed batch." The simulation did, because it doesn't know or care what I think is interesting.
 
 Because it's seeded, the failure reproduces exactly. Copy the seed, replay the op list, watch it break again. No flaky test, no "works on my machine."
 
@@ -155,11 +178,13 @@ I ended up with a few principles. They're documented at the top of the test file
 
 If you're trusting a machine to find bugs, the machine has to behave predictably. Every source of entropy in my setup comes from a fixed integer seed. Request order, paths, mode signals, error injection, resets.
 
-No `Math.random()`, no `Date.now()`. Same seed in, identical trace out. Without that, a failing test is just a story someone tells you.
+No `Math.random()`, no `Date.now()`. Same seed in, identical trace out. Without that, you can't reproduce the failure, so you can't fix it.
 
 The reference model never imports the code under test. It's a separate, simpler reimplementation of the rules. If it imported the app, it'd be testing the app against itself, which proves nothing.
 
-Failures don't get swallowed. Every response gets checked against the model, every invariant gets an assertion. When something breaks, the test points at the seed and the op that triggered it. You copy the seed, replay the ops, and watch it fail. No digging through a stack trace wondering which combination of inputs caused it.
+Failures don't get swallowed. Every response gets checked against the model, every invariant gets an assertion. When something breaks, the test points at the seed and the op that triggered it.
+
+You copy the seed, replay the ops, and watch it fail. No digging through a stack trace wondering which combination of inputs caused it.
 
 Randomized op sequences sweep the full mode, route, endpoint, and error space across many seeds. You don't pick the cases. The generator finds the corners you'd never look in.
 
@@ -179,7 +204,9 @@ When something does break, you get the seed and the op list. You can reduce it t
 
 I'm not arguing against unit tests. Targeted tests are still the right tool for "does this function parse this input." DST answers a different question: does the whole system hold up under sequences of events I didn't think to anticipate?
 
-What I like is the tests I didn't have to write. I didn't write one for "reset, then two concurrent config requests, then an SSR page." I didn't write one for "fail the config, hit the data API, reset, hit config again." The simulation generated all of those. Thousands of them. Checked every response.
+What I like is the tests I didn't have to write. I didn't write one for "reset, then two concurrent config requests, then an SSR page." I didn't write one for "fail the config, hit the data API, reset, hit config again."
+
+The simulation generated all of those. Thousands of them. Checked every response.
 
 When it did fail, it failed on something real. A stale-cache bug that would've hit in production exactly once, at a time nobody was watching.
 
@@ -187,9 +214,9 @@ When it did fail, it failed on something real. A stale-cache bug that would've h
 
 Every test you write by hand covers a path you already understood. The simulation finds the rest.
 
-Comparing the real app against an independent model catches things a single assertion never would, because the model checks everything. You're checking behavior you didn't think to assert.
+An independent model catches things a single assertion never would. You're checking behavior you didn't think to assert, because the model checks everything.
 
-If your PRNG isn't seeded, a failing test is just a story someone tells you. You can't reproduce it, can't debug it, can't fix it with confidence. That's what makes determinism non-optional.
+If your PRNG isn't seeded, a failing test is just a story someone tells you. You can't reproduce it, can't debug it, can't fix it with confidence. So determinism isn't really optional.
 
 I spent an afternoon on the model and the harness. It's since run thousands of scenarios I'd never have typed out by hand. That felt like a good trade.
 
@@ -199,12 +226,11 @@ The reset bug wasn't in any ticket or any mental model I had of what might break
 
 I wouldn't have tried this if Turso hadn't been so public about using it on their SQLite rewrite. It doesn't replace your other tests, and your model can be wrong too. But for a system with enough moving parts to surprise you, an afternoon of setup is worth it.
 
-If you're doing something similar, I'm on [Bluesky](https://bsky.app/profile/sijosam.in). Curious what other people are trying beyond writing more tests and hoping.
+If you're doing something similar, I'm on <Link href="https://bsky.app/profile/sijosam.in">Bluesky</Link>. Curious what other people are trying beyond writing more tests and hoping.
 
+import Link from '../../components/Link.astro';
 import Callout from '../../components/Callout.astro';
 
 <Callout variant="feedback" />
 
 ---
-
-*Tags: [Testing](/tags/testing), [TypeScript](/tags/typescript), [Simulation](/tags/simulation), [Lessons Learned](/tags/lessons-learned)*

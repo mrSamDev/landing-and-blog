@@ -1,22 +1,4 @@
 ---
-/**
- * Reusable callout / admonition component for MDX blog posts.
- *
- * Usage in .mdx:
- *   import Callout from '../../components/Callout.astro';
- *
- *   <Callout variant="note">Some inline note.</Callout>
- *   <Callout variant="tip" title="Pro tip">
- *     Multi-line content works too.
- *   </Callout>
- *   <Callout variant="feedback" title="Enjoyed this post?" />
- *
- * Variants: note | tip | warning | feedback
- * All props optional; `variant` defaults to "note".
- * When no slot content is provided, the feedback variant renders a
- * default "thanks for reading / share feedback" message.
- */
-
 type Variant = 'note' | 'tip' | 'warning' | 'feedback';
 
 interface Props {
