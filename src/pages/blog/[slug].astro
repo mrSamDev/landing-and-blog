@@ -12,19 +12,23 @@ import { slugify } from '../../utils/common-utils';
 import Comment from '../../components/Utterances.astro';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-    const postCount = posts.length;
-    return posts.map((post, index) => ({
-        params: { slug: post.id },
-        props: {
-            post,
-            prevPost: index + 1 !== postCount ? posts[index + 1] : null,
-            nextPost: index !== 0 ? posts[index - 1] : null
-        }
-    }));
+    const allPosts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+    const publishedPosts = allPosts.filter((post) => post.data.isPublished);
+    const pubCount = publishedPosts.length;
+    return allPosts.map((post) => {
+        const index = publishedPosts.indexOf(post);
+        return {
+            params: { slug: post.id },
+            props: {
+                post,
+                prevPost: index >= 0 && index + 1 !== pubCount ? publishedPosts[index + 1] : null,
+                nextPost: index >= 0 && index !== 0 ? publishedPosts[index - 1] : null
+            }
+        };
+    });
 }
 
-type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'>; nextPost: CollectionEntry<'blog'> };
+type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'> | null; nextPost: CollectionEntry<'blog'> | null };
 
 const { href } = Astro.url;
 const { post, prevPost, nextPost } = Astro.props;
