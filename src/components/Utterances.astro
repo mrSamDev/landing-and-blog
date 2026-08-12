@@ -8,64 +8,66 @@ interface Props {
 const { theme = 'github-dark', label = 'comments', issueTerm = 'pathname' } = Astro.props;
 ---
 
-<div id="utterances-container" data-theme={theme}></div>
+<div id="utterances-container" data-theme={theme} data-label={label} data-issue-term={issueTerm}></div>
 
-<script define:vars={{ theme, label, issueTerm }}>
-    function loadUtterances() {
-        try {
-            const existingScript = document.querySelector('#utterances-script');
-            existingScript?.remove();
+<script>
+    import { $ } from 'domsure';
 
-            const script = document.createElement('script');
-            const container = document.querySelector('#utterances-container');
+    function initUtterances() {
+        const container = $('#utterances-container');
+        if (!container) return;
 
-            if (!container) {
-                console.warn('Utterances container not found');
-                return;
+        const theme = container.getAttribute('data-theme') || 'github-dark';
+        const label = container.getAttribute('data-label') || 'comments';
+        const issueTerm = container.getAttribute('data-issue-term') || 'pathname';
+
+        function loadUtterances(target: HTMLElement) {
+            try {
+                const existingScript = $('#utterances-script');
+                existingScript?.remove();
+
+                const script = document.createElement('script');
+                target.innerHTML = '';
+
+                const config = {
+                    src: 'https://utteranc.es/client.js',
+                    repo: 'mrSamDev/landing-and-blog',
+                    'issue-term': issueTerm,
+                    label: label,
+                    theme: theme,
+                    crossorigin: 'anonymous'
+                };
+
+                Object.entries(config).forEach(([key, value]) => {
+                    script.setAttribute(key, String(value));
+                });
+
+                script.id = 'utterances-script';
+
+                script.onerror = () => {
+                    target.innerHTML = 'Error loading comments. Please check your configuration.';
+                };
+
+                target.appendChild(script);
+            } catch (error) {
+                console.error('Error initializing Utterances:', error);
             }
-
-            container.innerHTML = '';
-
-            const config = {
-                src: 'https://utteranc.es/client.js',
-                repo: 'mrSamDev/landing-and-blog',
-                'issue-term': issueTerm,
-                label: label,
-                theme: theme,
-                crossorigin: 'anonymous'
-            };
-
-            Object.entries(config).forEach(([key, value]) => {
-                script.setAttribute(key, value);
-            });
-
-            script.id = 'utterances-script';
-
-            script.onerror = () => {
-                container.innerHTML = 'Error loading comments. Please check your configuration.';
-            };
-
-            // Append script
-            container.appendChild(script);
-        } catch (error) {
-            console.error('Error initializing Utterances:', error);
         }
-    }
 
-    loadUtterances();
+        loadUtterances(container);
 
-    const container = document.querySelector('#utterances-container');
-    if (container) {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-                    loadUtterances();
+                    loadUtterances(container);
                 }
             });
         });
 
         observer.observe(container, { attributes: true });
     }
+
+    document.addEventListener('astro:page-load', initUtterances);
 </script>
 
 <style>

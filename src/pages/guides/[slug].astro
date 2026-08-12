@@ -76,8 +76,9 @@ const { Content } = await render(post);
 </BaseLayout>
 
 <script>
+    import { $ } from 'domsure';
     document.addEventListener('astro:page-load', () => {
-        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement;
+        const copyUrlButton = $.optional('.copy-url-button') as HTMLButtonElement | null;
         copyUrlButton?.addEventListener('click', async () => {
             await copyUrl(copyUrlButton);
         });

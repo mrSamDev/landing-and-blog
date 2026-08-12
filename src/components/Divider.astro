@@ -83,6 +83,7 @@
 </style>
 
 <script>
+    import { $ } from 'domsure';
     const affirmations = [
         'You are amazing!',
         'You make the world better',
@@ -103,9 +104,9 @@
     ];
 
     let isAnimating = false;
-    const divider = document.getElementById('blog-divider');
-    const scaleEffect = document.getElementById('scale-effect');
-    const wordElement = document.getElementById('random-word');
+    const divider = $.optional('#blog-divider');
+    const scaleEffect = $.optional('#scale-effect');
+    const wordElement = $.optional('#random-word');
 
     function showRandomWord() {
         if (!wordElement) return;
@@ -157,7 +158,7 @@
     }
 
     document.addEventListener('astro:page-load', () => {
-        const divider = document.getElementById('blog-divider');
+        const divider = $.optional('#blog-divider');
         if (divider) {
             divider.style.width = '44px';
         }

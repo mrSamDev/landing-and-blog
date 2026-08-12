@@ -49,15 +49,26 @@ const navLinks = siteConfig.footerNavLinks || [];
     </div>
 </footer>
 
-<script is:inline>
-    document.querySelectorAll('a[data-link]').forEach((link) => {
-        link.addEventListener('click', () => {
-            const linkText = link.getAttribute('data-link');
-            if (typeof posthog.capture === 'function') {
-                posthog.capture('social_link_click', {
-                    link: linkText
-                });
-            }
-        });
-    });
+<script>
+    import { $$ } from 'domsure';
+
+    const tracked = new WeakSet<HTMLElement>();
+
+    function bindSocialLinkTracking() {
+        for (const link of $$('a[data-link]')) {
+            if (tracked.has(link)) continue;
+            tracked.add(link);
+            link.addEventListener('click', () => {
+                const linkText = link.getAttribute('data-link');
+                const ph = (window as typeof window & {
+                    posthog?: { capture?: (event: string, props: Record<string, unknown>) => void };
+                }).posthog;
+                if (ph && typeof ph.capture === 'function') {
+                    ph.capture('social_link_click', { link: linkText });
+                }
+            });
+        }
+    }
+
+    document.addEventListener('astro:page-load', bindSocialLinkTracking);
 </script>

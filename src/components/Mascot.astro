@@ -215,6 +215,7 @@
 </style>
 
 <script>
+    import { $ } from 'domsure';
     // Define interfaces for better type safety
     interface Position {
         x: number;
@@ -242,10 +243,10 @@
 
         constructor(elementId: string, containerId: string, speed: number = 2) {
             // Initialize properties
-            this.element = document.getElementById(elementId);
-            this.container = document.getElementById(containerId);
-            this.effectsContainer = document.getElementById('effectsContainer');
-            this.moodIndicator = document.getElementById('moodIndicator');
+            this.element = $.optional('#' + elementId);
+            this.container = $.optional('#' + containerId);
+            this.effectsContainer = $('#effectsContainer');
+            this.moodIndicator = $('#moodIndicator');
             this.position = 0;
             this.direction = 1;
             this.speed = speed;
