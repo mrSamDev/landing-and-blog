@@ -13,11 +13,18 @@ const { theme = 'github-dark', label = 'comments', issueTerm = 'pathname' } = As
 <script>
     import { $ } from 'domsure';
 
+    function getSiteTheme() {
+        return document.documentElement.classList.contains('dark') ? 'github-dark' : 'github-light';
+    }
+
     function initUtterances() {
         const container = $('#utterances-container');
         if (!container) return;
 
-        const theme = container.getAttribute('data-theme') || 'github-dark';
+        // Mirror the site theme so the comment box stays readable in both modes
+        container.setAttribute('data-theme', getSiteTheme());
+
+        const theme = container.getAttribute('data-theme') || 'github-light';
         const label = container.getAttribute('data-label') || 'comments';
         const issueTerm = container.getAttribute('data-issue-term') || 'pathname';
 
@@ -65,6 +72,20 @@ const { theme = 'github-dark', label = 'comments', issueTerm = 'pathname' } = As
         });
 
         observer.observe(container, { attributes: true });
+
+        // Reload comments when the site theme flips so the box never stays
+        // dark on a light page (or vice versa)
+        const themeObserver = new MutationObserver(() => {
+            const nextTheme = getSiteTheme();
+            if (container.getAttribute('data-theme') !== nextTheme) {
+                container.setAttribute('data-theme', nextTheme);
+            }
+        });
+
+        themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class', 'data-theme']
+        });
     }
 
     document.addEventListener('astro:page-load', initUtterances);

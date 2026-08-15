@@ -1,27 +1,5 @@
 ---
-/**
- * SijoChatWidget — a floating chat bubble (bottom-right) that opens a panel
- * containing the self-contained Sijo AI widget bundle.
- *
- * The widget itself has no built-in floating button (per the integration
- * guide), so this component owns the bubble + panel chrome and mounts the
- * compiled IIFE bundle (`/widget.js`) into a container via the DOM API
- * (`window.SijoAIWidget.mount). The bundle is lazy-loaded on first open so
- * the ~640 KB cost isn't paid on every page load.
- *
- * `transition:persist` keeps the widget (and its open/closed + chat state)
- * alive across Astro view-transition navigations.
- *
- * Styling uses the site's Tailwind theme tokens (bg-panel-2, border-ink,
- * from-pink-cta, font-display, rounded-pill, …). Open/closed state is driven
- * by the `data-open` attribute on the root, targeted via Tailwind's
- * `group` + `group-data-[open=true]:` variants.
- *
- * Backend: the RAG API server (Bun + Hono) on http://localhost:3001, whose
- * CORS allows any localhost origin, so the widget can call ${API_BASE}/chat
- * cross-origin from this site.
- */
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = 'https://whomai-api.mrsamdev.xyz/api';
 ---
 
 <div
@@ -61,90 +39,117 @@ const API_BASE = 'http://localhost:3001/api';
     </button>
 </div>
 
-<script>
-    import { $ } from 'domsure';
+<script is:inline>
+    (function () {
+        const $ = (sel) => document.querySelector(sel);
+        $.required = (sel) => {
+            const el = $(sel);
+            if (!el) throw new Error('Missing element: ' + sel);
+            return el;
+        };
 
-    // These elements are guaranteed by the markup above; fail loud if any is missing.
-    const root = $.required('#sijo-ai-float');
-    // Guard against double-init when Astro view transitions re-run hoisted scripts.
-    if (root.dataset.ready === '1') {
-        // Already wired (persisted element kept its listeners). Nothing to do.
-    } else {
-        root.dataset.ready = '1';
-
-        const fab = $.required('#sijo-ai-fab');
-        const panel = $.required('#sijo-ai-panel');
-        const mount = $.required('#sijo-ai-mount');
-        const API_BASE = root.dataset.apiBase || '/api';
-        const SCRIPT_SRC = '/widget.js';
-        const SCRIPT_ID = 'sijo-ai-widget-bundle';
-        let mounted = false;
-
-        /** Load the widget bundle once; resolve when the global is ready. */
-        function loadBundle(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
-                const W = window;
-                if (W.SijoAIWidget && typeof W.SijoAIWidget.mount === 'function') {
-                    resolve();
-                    return;
-                }
-                // Silent query — the bundle script may not exist yet on first open.
-                let s = $('#' + SCRIPT_ID) as HTMLScriptElement | null;
-                if (!s) {
-                    s = document.createElement('script');
-                    s.id = SCRIPT_ID;
-                    s.src = SCRIPT_SRC;
-                    s.async = true;
-                    document.head.appendChild(s);
-                }
-                s.addEventListener('load', () => resolve(), { once: true });
-                s.addEventListener(
-                    'error',
-                    () => reject(new Error('Failed to load ' + SCRIPT_SRC)),
-                    { once: true }
-                );
-            });
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn, { once: true });
+            } else {
+                fn();
+            }
         }
 
-        function setOpen(open: boolean) {
-            root.dataset.open = open ? 'true' : 'false';
-            fab.setAttribute('aria-expanded', open ? 'true' : 'false');
-            fab.setAttribute('aria-label', open ? 'Close Sijo AI assistant' : 'Open Sijo AI assistant');
-        }
+        whenReady(function () {
+            const root = $.required('#sijo-ai-float');
+            if (root.dataset.ready === '1') return; // view transitions re-run this script
+            root.dataset.ready = '1';
 
-        function open() {
-            panel.hidden = false; // ensure visible before first animate
-            setOpen(true);
-            if (mounted) return;
-            loadBundle()
-                .then(() => {
+            const fab = $.required('#sijo-ai-fab');
+            const panel = $.required('#sijo-ai-panel');
+            const mount = $.required('#sijo-ai-mount');
+            const API_BASE = root.dataset.apiBase || '/api';
+            const SCRIPT_SRC = 'https://whomai-api.mrsamdev.xyz/widget.js';
+            const SCRIPT_ID = 'sijo-ai-widget-bundle';
+            let mounted = false;
+
+            function loadBundle() {
+                return new Promise(function (resolve, reject) {
                     const W = window;
-                    if (!W.SijoAIWidget || typeof W.SijoAIWidget.mount !== 'function') {
-                        console.error('[sijo-ai] bundle loaded but SijoAIWidget.mount missing');
+                    if (W.SijoAIWidget && typeof W.SijoAIWidget.mount === 'function') {
+                        resolve();
                         return;
                     }
-                    W.SijoAIWidget.mount(mount, {
-                        apiBase: API_BASE,
-                        showHeader: true,
-                        showThemeToggle: true
-                    });
-                    mounted = true;
-                })
-                .catch((err) => console.error('[sijo-ai]', err));
-        }
+                    let s = document.getElementById(SCRIPT_ID);
+                    if (!s) {
+                        s = document.createElement('script');
+                        s.id = SCRIPT_ID;
+                        s.src = SCRIPT_SRC;
+                        s.async = true;
+                        document.head.appendChild(s);
+                    }
+                    s.addEventListener('load', function () { resolve(); }, { once: true });
+                    s.addEventListener(
+                        'error',
+                        function () { reject(new Error('Failed to load ' + SCRIPT_SRC)); },
+                        { once: true }
+                    );
+                });
+            }
 
-        function close() {
-            setOpen(false);
-        }
+            function setOpen(open) {
+                root.dataset.open = open ? 'true' : 'false';
+                fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+                fab.setAttribute('aria-label', open ? 'Close Sijo AI assistant' : 'Open Sijo AI assistant');
+            }
 
-        fab.addEventListener('click', () => {
-            if (root.dataset.open === 'true') close();
-            else open();
+            // The bundle keeps its own theme on its shadow host, so mirror the site's.
+            function getSiteTheme() {
+                return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+            }
+            function syncWidgetTheme() {
+                const host = mount.querySelector('[data-sijo-ai-widget]');
+                if (host) host.dataset.theme = getSiteTheme();
+            }
+            // Watching <html>, not the host, so the widget's own toggle doesn't loop back.
+            const themeObserver = new MutationObserver(function () { syncWidgetTheme(); });
+            themeObserver.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme', 'class']
+            });
+
+            function open() {
+                panel.hidden = false;
+                setOpen(true);
+                if (mounted) return;
+                loadBundle()
+                    .then(function () {
+                        const W = window;
+                        if (!W.SijoAIWidget || typeof W.SijoAIWidget.mount !== 'function') {
+                            console.error('[sijo-ai] bundle loaded but SijoAIWidget.mount missing');
+                            return;
+                        }
+                        W.SijoAIWidget.mount(mount, {
+                            apiBase: API_BASE,
+                            showHeader: true,
+                            showThemeToggle: true
+                        });
+                        mounted = true;
+                        // The bundle's initial theme effect lands after render; sync past it.
+                        syncWidgetTheme();
+                        requestAnimationFrame(function () { requestAnimationFrame(syncWidgetTheme); });
+                    })
+                    .catch(function (err) { console.error('[sijo-ai]', err); });
+            }
+
+            function close() {
+                setOpen(false);
+            }
+
+            fab.addEventListener('click', function () {
+                if (root.dataset.open === 'true') close();
+                else open();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && root.dataset.open === 'true') close();
+            });
         });
-
-        // Close on Escape.
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && root.dataset.open === 'true') close();
-        });
-    }
+    })();
 </script>
