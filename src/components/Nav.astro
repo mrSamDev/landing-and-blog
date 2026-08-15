@@ -206,6 +206,7 @@ const navLinks = siteConfig.headerNavLinks || [];
 </style>
 
 <script>
+    import { $, $$ } from 'domsure';
     (() => {
         const w = window as typeof window & { __siteNavInitialized?: boolean };
         if (w.__siteNavInitialized) {
@@ -217,9 +218,9 @@ const navLinks = siteConfig.headerNavLinks || [];
         const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
         function getNodes() {
-            const toggle = document.querySelector('.menu-toggle');
-            const menu = document.querySelector('[data-menu-items]');
-            const backdrop = document.querySelector('[data-menu-backdrop]');
+            const toggle = $.optional('.menu-toggle');
+            const menu = $.optional('[data-menu-items]');
+            const backdrop = $.optional('[data-menu-backdrop]');
 
             return { toggle, menu, backdrop };
         }
@@ -256,26 +257,22 @@ const navLinks = siteConfig.headerNavLinks || [];
             const menu = target?.closest('[data-menu-items]');
             const backdrop = target?.closest('[data-menu-backdrop]');
 
-            // Hamburger / X toggle.
             if (toggle) {
                 event.preventDefault();
                 setMenuState(!isMenuOpen());
                 return;
             }
 
-            // Clicking the dimming backdrop closes the drawer.
             if (backdrop && isMenuOpen()) {
                 setMenuState(false);
                 return;
             }
 
-            // Clicking a link inside the drawer closes it for a snappy feel.
             if (menu && target?.closest('a') && isMenuOpen()) {
                 setMenuState(false);
                 return;
             }
 
-            // Outside click closes.
             if (!menu && !backdrop && isMenuOpen()) {
                 setMenuState(false);
             }
@@ -320,7 +317,7 @@ const navLinks = siteConfig.headerNavLinks || [];
         // Keep the active nav-link underline in sync after client-side navigation.
         function updateActiveNavLink() {
             const currentPath = window.location.pathname.replace(/\/$/, '');
-            document.querySelectorAll('[data-nav-href]').forEach((el) => {
+            $$('[data-nav-href]').forEach((el) => {
                 const href = el.getAttribute('data-nav-href') || '';
                 const isActive = href === currentPath || href === currentPath.replace(/\/$/, '');
                 el.classList.toggle('underline', isActive);

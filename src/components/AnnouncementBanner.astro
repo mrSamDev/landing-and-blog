@@ -7,10 +7,22 @@
             New
         </span>
         <p class="m-0 text-sm leading-tight text-ink">
-            Fresh new look — check out the
-            <a target="_blank" href="https://github.com/mrSamDev/landing-and-blog/blob/main/DESIGN.md" class="font-extrabold text-pink-cta-deep dark:text-pink-cta underline underline-offset-2 hover:text-pink-cta transition-colors whitespace-nowrap">
-              {" "}  design.md →
-            </a>
+            New — check out the{" "}
+            <button type="button" id="announcement-open-chat" class="font-extrabold text-pink-cta-deep dark:text-pink-cta underline underline-offset-2 hover:text-pink-cta transition-colors whitespace-nowrap cursor-pointer bg-transparent border-none p-0">
+              AI chat bot about my life →
+            </button>
         </p>
     </div>
 </div>
+
+<script>
+    import { $ } from 'domsure';
+
+    (() => {
+        const openChat = $.required('#announcement-open-chat');
+        const [fabErr, fab] = $.tryRequired('#sijo-ai-fab');
+        if (fabErr) return;
+
+        openChat.addEventListener('click', () => fab?.click());
+    })();
+</script>

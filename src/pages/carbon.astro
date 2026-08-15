@@ -8,8 +8,7 @@ import path from 'node:path';
 const title = 'Carbon';
 const description = `Carbon footprint of ${siteConfig.title}, measured by Website Carbon. Cleaner pages mean a greener web.`;
 
-// Default values from last successful Website Carbon test
-// Overridden by live API data when available
+// Fallbacks from last successful test; overridden by the live API
 let carbonData = {
     c: 0.0031,
     p: 99,
@@ -17,16 +16,14 @@ let carbonData = {
 };
 
 if (Astro.site) {
-    // Read the built page size to pass to the API
     const builtPath = path.join(process.cwd(), 'dist', 'carbon', 'index.html');
-    let bytes = 30000; // fallback if file doesn't exist yet
+    let bytes = 30000;
 
     try {
         const stats = fs.statSync(builtPath);
         bytes = stats.size;
-    } catch {
-        // First build — file not written yet, use fallback
-    }
+    } catch {}
+
 
     try {
         const response = await fetch(
@@ -47,7 +44,7 @@ if (Astro.site) {
             };
         }
     } catch (error) {
-        // API unavailable — using default values
+        // keep fallback carbonData when the API is down
     }
 }
 ---

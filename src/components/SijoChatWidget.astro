@@ -1,0 +1,155 @@
+---
+const API_BASE = 'https://whomai-api.mrsamdev.xyz/api';
+---
+
+<div
+    id="sijo-ai-float"
+    class="group fixed bottom-5 right-5 z-[9999] font-display max-[30rem]:bottom-4 max-[30rem]:right-4"
+    transition:persist
+    data-open="false"
+    data-api-base={API_BASE}
+>
+    <div
+        id="sijo-ai-panel"
+        class="absolute bottom-[calc(3.5rem+0.75rem)] right-0 flex w-[min(24rem,calc(100vw-2.5rem))] h-[min(40rem,calc(100dvh-6rem))] flex-col overflow-hidden rounded-2xl border-2 border-ink bg-panel-2 shadow-[0_18px_50px_-12px_rgb(var(--shadow-rgb)_/_0.5)] opacity-0 translate-y-3 scale-[0.98] pointer-events-none transition-[opacity,transform] duration-[160ms] ease-out group-data-[open=true]:opacity-100 group-data-[open=true]:translate-y-0 group-data-[open=true]:scale-100 group-data-[open=true]:pointer-events-auto max-[30rem]:w-[calc(100vw-2rem)] max-[30rem]:h-[calc(100dvh-5.5rem)] motion-reduce:transition-none"
+        role="dialog"
+        aria-label="Sijo AI chat"
+        aria-modal="false"
+        hidden
+    >
+        <div id="sijo-ai-mount" class="flex min-h-0 flex-1 flex-col"></div>
+    </div>
+
+    <button
+        id="sijo-ai-fab"
+        class="relative inline-flex h-14 w-14 items-center justify-center rounded-pill border-none bg-linear-to-b from-pink-cta to-pink-cta-deep text-white cursor-pointer shadow-[0_6px_18px_-4px_rgb(var(--shadow-rgb)_/_0.45)] transition-[transform,box-shadow] duration-[160ms] ease-out hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-6px_rgb(var(--shadow-rgb)_/_0.55)] active:translate-y-0 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-pink-cta focus-visible:outline-offset-[3px] motion-reduce:transition-none"
+        type="button"
+        aria-label="Open Sijo AI assistant"
+        aria-expanded="false"
+        aria-controls="sijo-ai-panel"
+    >
+        <svg class="sijo-ai-fab__icon sijo-ai-fab__icon--chat inline-flex group-data-[open=true]:hidden" width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2.5l1.9 5.1 5.1 1.9-5.1 1.9L12 16.5l-1.9-5.1L5 9.5l5.1-1.9L12 2.5Z" fill="currentColor" />
+            <path d="M19 13.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" fill="currentColor" opacity="0.75" />
+            <path d="M5 14.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6Z" fill="currentColor" opacity="0.5" />
+        </svg>
+        <svg class="sijo-ai-fab__icon sijo-ai-fab__icon--close hidden group-data-[open=true]:inline-flex" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </button>
+</div>
+
+<script is:inline>
+    (function () {
+        const $ = (sel) => document.querySelector(sel);
+        $.required = (sel) => {
+            const el = $(sel);
+            if (!el) throw new Error('Missing element: ' + sel);
+            return el;
+        };
+
+        function whenReady(fn) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', fn, { once: true });
+            } else {
+                fn();
+            }
+        }
+
+        whenReady(function () {
+            const root = $.required('#sijo-ai-float');
+            if (root.dataset.ready === '1') return; // view transitions re-run this script
+            root.dataset.ready = '1';
+
+            const fab = $.required('#sijo-ai-fab');
+            const panel = $.required('#sijo-ai-panel');
+            const mount = $.required('#sijo-ai-mount');
+            const API_BASE = root.dataset.apiBase || '/api';
+            const SCRIPT_SRC = 'https://whomai-api.mrsamdev.xyz/widget.js';
+            const SCRIPT_ID = 'sijo-ai-widget-bundle';
+            let mounted = false;
+
+            function loadBundle() {
+                return new Promise(function (resolve, reject) {
+                    const W = window;
+                    if (W.SijoAIWidget && typeof W.SijoAIWidget.mount === 'function') {
+                        resolve();
+                        return;
+                    }
+                    let s = document.getElementById(SCRIPT_ID);
+                    if (!s) {
+                        s = document.createElement('script');
+                        s.id = SCRIPT_ID;
+                        s.src = SCRIPT_SRC;
+                        s.async = true;
+                        document.head.appendChild(s);
+                    }
+                    s.addEventListener('load', function () { resolve(); }, { once: true });
+                    s.addEventListener(
+                        'error',
+                        function () { reject(new Error('Failed to load ' + SCRIPT_SRC)); },
+                        { once: true }
+                    );
+                });
+            }
+
+            function setOpen(open) {
+                root.dataset.open = open ? 'true' : 'false';
+                fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+                fab.setAttribute('aria-label', open ? 'Close Sijo AI assistant' : 'Open Sijo AI assistant');
+            }
+
+            // The bundle keeps its own theme on its shadow host, so mirror the site's.
+            function getSiteTheme() {
+                return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+            }
+            function syncWidgetTheme() {
+                const host = mount.querySelector('[data-sijo-ai-widget]');
+                if (host) host.dataset.theme = getSiteTheme();
+            }
+            // Watching <html>, not the host, so the widget's own toggle doesn't loop back.
+            const themeObserver = new MutationObserver(function () { syncWidgetTheme(); });
+            themeObserver.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-theme', 'class']
+            });
+
+            function open() {
+                panel.hidden = false;
+                setOpen(true);
+                if (mounted) return;
+                loadBundle()
+                    .then(function () {
+                        const W = window;
+                        if (!W.SijoAIWidget || typeof W.SijoAIWidget.mount !== 'function') {
+                            console.error('[sijo-ai] bundle loaded but SijoAIWidget.mount missing');
+                            return;
+                        }
+                        W.SijoAIWidget.mount(mount, {
+                            apiBase: API_BASE,
+                            showHeader: true,
+                            showThemeToggle: true
+                        });
+                        mounted = true;
+                        // The bundle's initial theme effect lands after render; sync past it.
+                        syncWidgetTheme();
+                        requestAnimationFrame(function () { requestAnimationFrame(syncWidgetTheme); });
+                    })
+                    .catch(function (err) { console.error('[sijo-ai]', err); });
+            }
+
+            function close() {
+                setOpen(false);
+            }
+
+            fab.addEventListener('click', function () {
+                if (root.dataset.open === 'true') close();
+                else open();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && root.dataset.open === 'true') close();
+            });
+        });
+    })();
+</script>

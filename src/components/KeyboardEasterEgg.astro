@@ -59,6 +59,7 @@
 </style>
 
 <script>
+    import { $ } from 'domsure';
     (() => {
         const w = window as typeof window & { __keyboardEasterEggInitialized?: boolean };
         if (w.__keyboardEasterEggInitialized) {
@@ -85,7 +86,7 @@
         }
 
         function getEgg() {
-            return document.querySelector('[data-keyboard-easter-egg]');
+            return $('[data-keyboard-easter-egg]');
         }
 
         function showEgg() {

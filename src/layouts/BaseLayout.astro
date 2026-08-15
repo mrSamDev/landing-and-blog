@@ -7,6 +7,7 @@ import Footer from '../components/Footer.astro';
 import KeyboardEasterEgg from '../components/KeyboardEasterEgg.astro';
 import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
+import SijoChatWidget from '../components/SijoChatWidget.astro';
 import clsx from 'clsx';
 import siteConfig from '../data/site-config';
 
@@ -61,5 +62,6 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
         </div>
         <CommandPalette />
         <KeyboardEasterEgg />
+        <SijoChatWidget />
     </body>
 </html>
