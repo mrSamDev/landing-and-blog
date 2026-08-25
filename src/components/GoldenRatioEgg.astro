@@ -12,34 +12,40 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
 ---
 
 <div class="golden-egg" data-golden-egg hidden aria-live="polite" data-step={STEP}>
-    <div class="golden-egg__stage" style={`aspect-ratio:${stageAspect}`}>
-        <svg class="golden-egg__svg" viewBox={viewBox} aria-hidden="true">
-            {
-                spiral.squares.map((s, i) => (
-                    <g class="golden-egg__square" data-golden-square style={`--d:${(i * STEP).toFixed(2)}s;--len:${s.arc.length.toFixed(2)}px`}>
-                        <rect x={s.x} y={s.y} width={s.size} height={s.size} class="golden-egg__rect" />
-                        <path d={s.arc.d} class="golden-egg__arc" />
-                    </g>
-                ))
-            }
-        </svg>
-        <div class="golden-egg__caption">
-            <p class="golden-egg__eyebrow">You found the balance</p>
-            <p class="golden-egg__value" data-phi-value>φ = {phi}</p>
+    <div class="golden-egg__wrap flex w-full flex-col items-center gap-3">
+        <div class="golden-egg__stage relative w-[min(94vw,36rem)] rounded-lg p-3 pointer-events-auto" style={`aspect-ratio:${stageAspect}`}>
+            <svg class="golden-egg__svg block h-auto w-full" viewBox={viewBox} aria-hidden="true">
+                {
+                    spiral.squares.map((s, i) => (
+                        <g class="golden-egg__square" data-golden-square style={`--d:${(i * STEP).toFixed(2)}s;--len:${s.arc.length.toFixed(2)}px`}>
+                            <rect x={s.x} y={s.y} width={s.size} height={s.size} class="golden-egg__rect" />
+                            <path d={s.arc.d} class="golden-egg__arc" />
+                        </g>
+                    ))
+                }
+            </svg>
+            <button
+                type="button"
+                class="golden-egg__close absolute right-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full border border-ink/25 bg-transparent text-base leading-none text-ink pointer-events-auto hover:bg-ink hover:text-main"
+                data-golden-close
+                aria-label="Close"
+            >×</button>
         </div>
-        <button type="button" class="golden-egg__close" data-golden-close aria-label="Close">×</button>
+        <div class="golden-egg__caption w-full max-w-[min(94vw,36rem)] px-4 py-2 text-center">
+            <p class="golden-egg__eyebrow m-0 font-display text-xs uppercase tracking-widest">You found the balance</p>
+            <p class="golden-egg__value m-0 pt-0.5 font-display text-base font-bold" data-phi-value>φ = {phi}</p>
+            <nav class="golden-egg__links mt-1.5 flex flex-wrap justify-center gap-2" aria-label="Golden ratio resources">
+                <a href="https://en.wikipedia.org/wiki/Golden_ratio" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+                <a href="https://en.wikipedia.org/wiki/Fibonacci_sequence" target="_blank" rel="noopener noreferrer">Fibonacci</a>
+                <a href="https://mathworld.wolfram.com/GoldenRatio.html" target="_blank" rel="noopener noreferrer">MathWorld</a>
+            </nav>
+        </div>
     </div>
 </div>
 
 <style>
+    /* JS-toggled container visibility; layout is Tailwind. */
     .golden-egg {
-        position: fixed;
-        inset: 0;
-        z-index: 4800;
-        display: grid;
-        place-items: end center;
-        padding: 0 1.5rem 1.25rem;
-        pointer-events: none;
         opacity: 0;
         transition: opacity 0.4s ease;
     }
@@ -60,22 +66,14 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         );
     }
 
+    /* color-mix backgrounds read better here than as arbitrary Tailwind values */
     .golden-egg__stage {
-        position: relative;
-        width: min(94vw, 36rem);
         border: 1px solid color-mix(in srgb, var(--color-ink) 26%, transparent);
-        border-radius: var(--radius-lg);
         background: color-mix(in srgb, var(--color-main) 78%, white 22%);
         box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 18%, transparent);
-        padding: 0.75rem;
     }
 
-    .golden-egg__svg {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-
+    /* SVG construction internals: stroke-dash driven by inline --len/--d vars */
     .golden-egg__rect {
         fill: color-mix(in srgb, var(--color-ink) 10%, transparent);
         stroke: color-mix(in srgb, var(--color-ink) 55%, transparent);
@@ -108,71 +106,31 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         transition: none !important;
     }
 
+    /* Caption reveal is state-driven; it now sits below the card, not over it */
     .golden-egg__caption {
-        position: absolute;
-        left: 50%;
-        bottom: 0.6rem;
-        transform: translateX(-50%) translateY(0.25rem);
-        text-align: center;
-        padding: 0.45rem 0.9rem;
-        border-radius: var(--radius-md);
         background: color-mix(in srgb, var(--color-main) 74%, white 26%);
+        border-radius: var(--radius-md);
         box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 10%, transparent);
-        white-space: nowrap;
         opacity: 0;
-        transition:
-            opacity 0.7s ease 0.2s,
-            transform 0.7s ease 0.2s;
-        pointer-events: none;
+        transition: opacity 0.7s ease 0.2s;
     }
 
     .golden-egg.is-done .golden-egg__caption {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-
-    .golden-egg__eyebrow,
-    .golden-egg__value {
-        margin: 0;
-        font-family: var(--font-display);
     }
 
     .golden-egg__eyebrow {
-        font-size: 0.8rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
         opacity: 0.85;
     }
 
-    .golden-egg__value {
-        padding-top: 0.2rem;
-        font-size: 1.05rem;
-        font-weight: 700;
+    .golden-egg__links a {
+        opacity: 0.85;
+        transition: opacity 0.2s ease;
+    }
+
+    .golden-egg__links a:hover,
+    .golden-egg__links a:focus-visible {
         opacity: 1;
-    }
-
-    .golden-egg__close {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        width: 1.75rem;
-        height: 1.75rem;
-        display: grid;
-        place-items: center;
-        border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
-        border-radius: 999px;
-        background: transparent;
-        color: var(--color-ink);
-        font-size: 1rem;
-        line-height: 1;
-        cursor: pointer;
-        pointer-events: auto;
-        transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .golden-egg__close:hover {
-        background: var(--color-ink);
-        color: var(--color-main);
     }
 </style>
 
@@ -195,12 +153,20 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         const DONE_CLASS = 'is-done';
         const REVEALED_CLASS = 'is-revealed';
         const NO_ANIM_CLASS = 'no-anim';
-        const HIDE_DELAY_MS = 6500;
+        const HIDE_DELAY_MS = 10000;
 
         let hideTimer = 0;
 
         function egg(): HTMLElement | null {
             return document.querySelector('[data-golden-egg]');
+        }
+
+        function armHideTimer(el: HTMLElement) {
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => {
+                reset(el);
+                hide();
+            }, HIDE_DELAY_MS);
         }
 
         function reset(el: HTMLElement) {
@@ -238,11 +204,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             });
 
             el.classList.add(VISIBLE_CLASS);
-            window.clearTimeout(hideTimer);
-            hideTimer = window.setTimeout(() => {
-                reset(el);
-                hide();
-            }, HIDE_DELAY_MS);
+            armHideTimer(el);
         }
 
         function hide() {
@@ -270,6 +232,34 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
 
         window.addEventListener(GOLDEN_REVEAL_EVENT, onRevealRequest);
         document.addEventListener('keydown', onKeydown);
+
+        // Pause the auto-dismiss while the pointer/keyboard is on the reveal
+        // (card + caption) so the resource links can be clicked. Delegated so
+        // it survives re-renders.
+        const wrapSelector = '.golden-egg__wrap';
+        function isInWrap(target: EventTarget | null) {
+            return target instanceof Element && target.closest(wrapSelector) !== null;
+        }
+        function pauseHide() {
+            window.clearTimeout(hideTimer);
+        }
+        function resumeHide() {
+            const el = egg();
+            if (!el || el.hidden) return;
+            armHideTimer(el);
+        }
+        document.addEventListener('mouseover', (e) => {
+            if (isInWrap(e.target)) pauseHide();
+        });
+        document.addEventListener('mouseout', (e) => {
+            if (isInWrap(e.target) && !isInWrap(e.relatedTarget)) resumeHide();
+        });
+        document.addEventListener('focusin', (e) => {
+            if (isInWrap(e.target)) pauseHide();
+        });
+        document.addEventListener('focusout', (e) => {
+            if (!isInWrap(e.relatedTarget)) resumeHide();
+        });
 
         // Close button. Bound here because the overlay is re-rendered per page.
         document.addEventListener(
