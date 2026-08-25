@@ -9,7 +9,7 @@ const hero = siteConfig.hero;
     (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
         <section class="flex flex-col gap-6 mt-4 sm:mt-8 mb-16 sm:mb-24">
             {hero.title && (
-                <h1 class="font-display font-extrabold text-4xl leading-tight sm:text-5xl sm:leading-tight">
+                <h1 class="font-display font-extrabold text-4xl leading-tight sm:text-5xl sm:leading-tight" data-mascot-trigger>
                     {hero.title}
                 </h1>
             )}
