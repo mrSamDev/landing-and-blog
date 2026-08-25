@@ -172,6 +172,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
 
 <script>
     import { goldenRatio } from '../utils/golden-ratio';
+    import { GOLDEN_REVEAL_EVENT } from '../utils/golden-events';
 
     (() => {
         const w = window as typeof window & {
@@ -258,7 +259,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             }
         }
 
-        window.addEventListener('golden-ratio:reveal', onRevealRequest);
+        window.addEventListener(GOLDEN_REVEAL_EVENT, onRevealRequest);
         document.addEventListener('keydown', onKeydown);
 
         // Close button. Bound here because the overlay is re-rendered per page.
@@ -279,7 +280,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         // Developer-console path.
         w.__goldenRatio = () => {
             window.console.log(`%cφ = ${PHI}`, 'font-family:monospace;font-weight:bold');
-            window.dispatchEvent(new CustomEvent('golden-ratio:reveal'));
+            window.dispatchEvent(new CustomEvent(GOLDEN_REVEAL_EVENT));
         };
 
         if (import.meta.env.DEV) {

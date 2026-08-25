@@ -54,6 +54,8 @@ const navLinks = siteConfig.footerNavLinks || [];
 <script>
     import { $$ } from 'domsure';
 
+    import { GOLDEN_REVEAL_EVENT } from '../utils/golden-events';
+
     const tracked = new WeakSet<HTMLElement>();
 
     // Five clicks (a Fibonacci number) on the hidden φ mark reveal the egg.
@@ -87,7 +89,7 @@ const navLinks = siteConfig.footerNavLinks || [];
             if (clickTimes.length >= REVEAL_CLICKS) {
                 setHint(0);
                 clickTimes = [];
-                window.dispatchEvent(new CustomEvent('golden-ratio:reveal'));
+                window.dispatchEvent(new CustomEvent(GOLDEN_REVEAL_EVENT));
             } else if (clickTimes.length >= 2) {
                 setHint(REVEAL_CLICKS - clickTimes.length);
             } else {
