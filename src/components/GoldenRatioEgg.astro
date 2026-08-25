@@ -1,0 +1,286 @@
+---
+import { goldenRatio, goldenSpiralSquares } from '../utils/golden-ratio';
+
+const spiral = goldenSpiralSquares(10);
+const MARGIN = 3;
+const viewBox = `${spiral.minX - MARGIN} ${spiral.minY - MARGIN} ${spiral.width + 2 * MARGIN} ${spiral.height + 2 * MARGIN}`;
+const phi = goldenRatio();
+const STEP = 0.28; // seconds between squares during the build-up
+---
+
+<div class="golden-egg" data-golden-egg hidden aria-live="polite">
+    <div class="golden-egg__stage">
+        <svg class="golden-egg__svg" viewBox={viewBox} aria-hidden="true">
+            {
+                spiral.squares.map((s, i) => (
+                    <g class="golden-egg__square" data-golden-square style={`--d:${(i * STEP).toFixed(2)}s;--len:${s.arc.length.toFixed(2)}px`}>
+                        <rect x={s.x} y={s.y} width={s.size} height={s.size} class="golden-egg__rect" />
+                        <path d={s.arc.d} class="golden-egg__arc" />
+                    </g>
+                ))
+            }
+        </svg>
+        <div class="golden-egg__caption">
+            <p class="golden-egg__eyebrow">You found the balance</p>
+            <p class="golden-egg__value" data-phi-value>φ = {phi}</p>
+        </div>
+        <button type="button" class="golden-egg__close" data-golden-close aria-label="Close">×</button>
+    </div>
+</div>
+
+<style>
+    .golden-egg {
+        position: fixed;
+        inset: 0;
+        z-index: 4800;
+        display: grid;
+        place-items: end center;
+        padding: 0 1.5rem 1.25rem;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .golden-egg.is-visible {
+        opacity: 1;
+    }
+
+    /* Soft vignette to focus the eye on the reveal without blocking the page */
+    .golden-egg::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            circle at center,
+            transparent 45%,
+            color-mix(in srgb, var(--color-ink) 13%, transparent) 100%
+        );
+    }
+
+    .golden-egg__stage {
+        position: relative;
+        width: min(94vw, 36rem);
+        aspect-ratio: 89 / 55;
+        border: 1px solid color-mix(in srgb, var(--color-ink) 26%, transparent);
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--color-main) 78%, white 22%);
+        box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 18%, transparent);
+        padding: 0.75rem;
+    }
+
+    .golden-egg__svg {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .golden-egg__rect {
+        fill: color-mix(in srgb, var(--color-ink) 10%, transparent);
+        stroke: color-mix(in srgb, var(--color-ink) 55%, transparent);
+        stroke-width: 0.7;
+        opacity: 0;
+        transition: opacity 0.5s ease var(--d, 0s);
+    }
+
+    .golden-egg__arc {
+        fill: none;
+        stroke: var(--color-ink);
+        stroke-width: 1;
+        stroke-linecap: round;
+        stroke-dasharray: var(--len, 0);
+        stroke-dashoffset: var(--len, 0);
+        transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1) var(--d, 0s);
+    }
+
+    .golden-egg__square.is-revealed .golden-egg__rect {
+        opacity: 1;
+    }
+
+    .golden-egg__square.is-revealed .golden-egg__arc {
+        stroke-dashoffset: 0;
+    }
+
+    .golden-egg__caption {
+        position: absolute;
+        left: 50%;
+        bottom: 0.6rem;
+        transform: translateX(-50%) translateY(0.25rem);
+        text-align: center;
+        padding: 0.45rem 0.9rem;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--color-main) 74%, white 26%);
+        box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+        white-space: nowrap;
+        opacity: 0;
+        transition:
+            opacity 0.7s ease 0.2s,
+            transform 0.7s ease 0.2s;
+        pointer-events: none;
+    }
+
+    .golden-egg.is-done .golden-egg__caption {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .golden-egg__eyebrow,
+    .golden-egg__value {
+        margin: 0;
+        font-family: var(--font-display);
+    }
+
+    .golden-egg__eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.85;
+    }
+
+    .golden-egg__value {
+        padding-top: 0.2rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        opacity: 1;
+    }
+
+    .golden-egg__close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 1.75rem;
+        height: 1.75rem;
+        display: grid;
+        place-items: center;
+        border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--color-ink);
+        font-size: 1rem;
+        line-height: 1;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .golden-egg__close:hover {
+        background: var(--color-ink);
+        color: var(--color-main);
+    }
+</style>
+
+<script>
+    import { goldenRatio } from '../utils/golden-ratio';
+
+    (() => {
+        const w = window as typeof window & {
+            __goldenEggInitialized?: boolean;
+            __goldenRatio?: () => void;
+        };
+        if (w.__goldenEggInitialized) {
+            return;
+        }
+        w.__goldenEggInitialized = true;
+
+        const PHI = goldenRatio();
+        const VISIBLE_CLASS = 'is-visible';
+        const DONE_CLASS = 'is-done';
+        const REVEALED_CLASS = 'is-revealed';
+        const HIDE_DELAY_MS = 6500;
+
+        let hideTimer = 0;
+
+        function egg(): HTMLElement | null {
+            return document.querySelector('[data-golden-egg]');
+        }
+
+        function reset(groups: NodeListOf<Element>) {
+            groups.forEach((g) => g.classList.remove(REVEALED_CLASS));
+        }
+
+        function reveal() {
+            const el = egg();
+            if (!el) return;
+            if (!el.hidden) {
+                // already showing — restart cleanly
+                window.clearTimeout(hideTimer);
+                const gs = el.querySelectorAll('[data-golden-square]');
+                reset(gs);
+            }
+
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const groups = el.querySelectorAll('[data-golden-square]');
+
+            el.hidden = false;
+            requestAnimationFrame(() => {
+                groups.forEach((g) => {
+                    const group = g as HTMLElement;
+                    if (reduce) group.style.setProperty('--d', '0s');
+                    group.classList.add(REVEALED_CLASS);
+                });
+                const lastDelay = reduce ? 0 : (groups.length - 1) * 0.28 + 0.35;
+                const doneDelay = reduce ? 80 : lastDelay * 1000;
+                window.setTimeout(() => el.classList.add(DONE_CLASS), doneDelay);
+            });
+
+            el.classList.add(VISIBLE_CLASS);
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => {
+                hide();
+                const gs = el.querySelectorAll('[data-golden-square]');
+                reset(gs);
+            }, HIDE_DELAY_MS);
+        }
+
+        function hide() {
+            const el = egg();
+            if (!el) return;
+            el.classList.remove(VISIBLE_CLASS, DONE_CLASS);
+            window.setTimeout(() => {
+                el.hidden = true;
+            }, 420);
+        }
+
+        function onRevealRequest() {
+            reveal();
+        }
+
+        function onKeydown(event: KeyboardEvent) {
+            if (event.key === 'Escape') {
+                const el = egg();
+                if (el && !el.hidden) {
+                    const gs = el.querySelectorAll('[data-golden-square]');
+                    reset(gs);
+                    hide();
+                }
+            }
+        }
+
+        window.addEventListener('golden-ratio:reveal', onRevealRequest);
+        document.addEventListener('keydown', onKeydown);
+
+        // Close button. Bound here because the overlay is re-rendered per page.
+        document.addEventListener(
+            'click',
+            (event) => {
+                if (!(event.target instanceof Element)) return;
+                if (!event.target.closest('[data-golden-close]')) return;
+                const el = egg();
+                if (!el) return;
+                const gs = el.querySelectorAll('[data-golden-square]');
+                reset(gs);
+                hide();
+            },
+            true
+        );
+
+        // Developer-console path.
+        w.__goldenRatio = () => {
+            window.console.log(`%cφ = ${PHI}`, 'font-family:monospace;font-weight:bold');
+            window.dispatchEvent(new CustomEvent('golden-ratio:reveal'));
+        };
+
+        if (import.meta.env.DEV) {
+            window.console.log('%cφ', 'font-family:monospace;color:currentColor');
+        }
+    })();
+</script>

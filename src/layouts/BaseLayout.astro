@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import Footer from '../components/Footer.astro';
+import GoldenRatioEgg from '../components/GoldenRatioEgg.astro';
 import KeyboardEasterEgg from '../components/KeyboardEasterEgg.astro';
 import Nav from '../components/Nav.astro';
 import PostHog from '../components/PostHog.astro';
@@ -62,6 +63,7 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
         </div>
         <CommandPalette />
         <KeyboardEasterEgg />
+        <GoldenRatioEgg />
         <SijoChatWidget />
     </body>
 </html>
