@@ -3,13 +3,16 @@ import { goldenRatio, goldenSpiralSquares } from '../utils/golden-ratio';
 
 const spiral = goldenSpiralSquares(10);
 const MARGIN = 3;
-const viewBox = `${spiral.minX - MARGIN} ${spiral.minY - MARGIN} ${spiral.width + 2 * MARGIN} ${spiral.height + 2 * MARGIN}`;
+const viewWidth = spiral.width + 2 * MARGIN;
+const viewHeight = spiral.height + 2 * MARGIN;
+const viewBox = `${spiral.minX - MARGIN} ${spiral.minY - MARGIN} ${viewWidth} ${viewHeight}`;
 const phi = goldenRatio();
 const STEP = 0.28; // seconds between squares during the build-up
+const stageAspect = `${viewWidth} / ${viewHeight}`;
 ---
 
-<div class="golden-egg" data-golden-egg hidden aria-live="polite">
-    <div class="golden-egg__stage">
+<div class="golden-egg" data-golden-egg hidden aria-live="polite" data-step={STEP}>
+    <div class="golden-egg__stage" style={`aspect-ratio:${stageAspect}`}>
         <svg class="golden-egg__svg" viewBox={viewBox} aria-hidden="true">
             {
                 spiral.squares.map((s, i) => (
@@ -60,7 +63,6 @@ const STEP = 0.28; // seconds between squares during the build-up
     .golden-egg__stage {
         position: relative;
         width: min(94vw, 36rem);
-        aspect-ratio: 89 / 55;
         border: 1px solid color-mix(in srgb, var(--color-ink) 26%, transparent);
         border-radius: var(--radius-lg);
         background: color-mix(in srgb, var(--color-main) 78%, white 22%);
@@ -209,6 +211,7 @@ const STEP = 0.28; // seconds between squares during the build-up
 
             const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const groups = el.querySelectorAll('[data-golden-square]');
+            const step = Number.parseFloat(el.dataset.step ?? '0.28') || 0.28;
 
             el.hidden = false;
             requestAnimationFrame(() => {
@@ -217,7 +220,7 @@ const STEP = 0.28; // seconds between squares during the build-up
                     if (reduce) group.style.setProperty('--d', '0s');
                     group.classList.add(REVEALED_CLASS);
                 });
-                const lastDelay = reduce ? 0 : (groups.length - 1) * 0.28 + 0.35;
+                const lastDelay = reduce ? 0 : (groups.length - 1) * step + 0.35;
                 const doneDelay = reduce ? 80 : lastDelay * 1000;
                 window.setTimeout(() => el.classList.add(DONE_CLASS), doneDelay);
             });
