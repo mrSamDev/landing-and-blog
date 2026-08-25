@@ -45,6 +45,8 @@ const navLinks = siteConfig.footerNavLinks || [];
         }
         <p class="text-sm">
             &copy; {new Date().getFullYear()}&nbsp;<a class="hover:underline hover:underline-offset-2" href="/">{siteConfig.title}</a>. All rights reserved.
+            <button type="button" class="golden-trigger" data-golden-trigger aria-label="Golden ratio" data-phi="1.618033988749895">φ</button>
+            <span class="golden-hint" data-golden-hint hidden aria-live="polite"></span>
         </p>
     </div>
 </footer>
@@ -52,7 +54,49 @@ const navLinks = siteConfig.footerNavLinks || [];
 <script>
     import { $$ } from 'domsure';
 
+    import { GOLDEN_REVEAL_EVENT } from '../utils/golden-events';
+
     const tracked = new WeakSet<HTMLElement>();
+
+    // Five clicks (a Fibonacci number) on the hidden φ mark reveal the egg.
+    const CLICK_WINDOW_MS = 3000;
+    const REVEAL_CLICKS = 5;
+    const triggerTracked = new WeakSet<HTMLElement>();
+    let clickTimes: number[] = [];
+
+    function bindGoldenTrigger() {
+        const trigger = document.querySelector('[data-golden-trigger]');
+        if (!(trigger instanceof HTMLElement) || triggerTracked.has(trigger)) return;
+        triggerTracked.add(trigger);
+        const hint = document.querySelector('[data-golden-hint]');
+
+        function setHint(remaining: number) {
+            if (!(hint instanceof HTMLElement)) return;
+            if (remaining >= 1) {
+                hint.textContent = String(remaining);
+                hint.hidden = false;
+            } else {
+                hint.hidden = true;
+            }
+        }
+
+        trigger.addEventListener('click', () => {
+            const now = Date.now();
+            clickTimes = clickTimes.filter((t) => now - t < CLICK_WINDOW_MS);
+            clickTimes.push(now);
+
+            // After the 2nd click, hint at how many more are needed (Fibonacci).
+            if (clickTimes.length >= REVEAL_CLICKS) {
+                setHint(0);
+                clickTimes = [];
+                window.dispatchEvent(new CustomEvent(GOLDEN_REVEAL_EVENT));
+            } else if (clickTimes.length >= 2) {
+                setHint(REVEAL_CLICKS - clickTimes.length);
+            } else {
+                setHint(0);
+            }
+        });
+    }
 
     function bindSocialLinkTracking() {
         for (const link of $$('a[data-link]')) {
@@ -71,4 +115,39 @@ const navLinks = siteConfig.footerNavLinks || [];
     }
 
     document.addEventListener('astro:page-load', bindSocialLinkTracking);
+    document.addEventListener('astro:page-load', bindGoldenTrigger);
 </script>
+
+<style>
+    .golden-trigger {
+        margin-left: 0.35rem;
+        padding: 0;
+        border: 0;
+        background: none;
+        font-family: var(--font-display);
+        font-size: 0.85em;
+        line-height: 1;
+        color: var(--color-ink);
+        opacity: 0.618;
+        cursor: default;
+        transition: opacity 0.3s ease;
+    }
+
+    .golden-trigger:hover,
+    .golden-trigger:focus-visible {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .golden-hint {
+        margin-left: 0.3rem;
+        font-family: var(--font-display);
+        font-size: 0.68rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--color-ink);
+        opacity: 0.7;
+        vertical-align: 0.15em;
+        transition: opacity 0.25s ease;
+    }
+</style>
