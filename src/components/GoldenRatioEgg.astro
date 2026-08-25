@@ -1,0 +1,292 @@
+---
+import { goldenRatio, goldenSpiralSquares } from '../utils/golden-ratio';
+
+const spiral = goldenSpiralSquares(10);
+const MARGIN = 3;
+const viewWidth = spiral.width + 2 * MARGIN;
+const viewHeight = spiral.height + 2 * MARGIN;
+const viewBox = `${spiral.minX - MARGIN} ${spiral.minY - MARGIN} ${viewWidth} ${viewHeight}`;
+const phi = goldenRatio();
+const STEP = 0.28; // seconds between squares during the build-up
+const stageAspect = `${viewWidth} / ${viewHeight}`;
+---
+
+<div class="golden-egg fixed inset-0 z-[4800] grid place-items-center p-6 pointer-events-none" data-golden-egg hidden aria-live="polite" data-step={STEP}>
+    <div class="golden-egg__wrap flex w-full flex-col items-center gap-3">
+        <div class="golden-egg__stage relative w-[min(94vw,36rem)] rounded-lg p-3 pointer-events-auto" style={`aspect-ratio:${stageAspect}`}>
+            <svg class="golden-egg__svg block h-auto w-full" viewBox={viewBox} aria-hidden="true">
+                {
+                    spiral.squares.map((s, i) => (
+                        <g class="golden-egg__square" data-golden-square style={`--d:${(i * STEP).toFixed(2)}s;--len:${s.arc.length.toFixed(2)}px`}>
+                            <rect x={s.x} y={s.y} width={s.size} height={s.size} class="golden-egg__rect" />
+                            <path d={s.arc.d} class="golden-egg__arc" />
+                        </g>
+                    ))
+                }
+            </svg>
+            <button
+                type="button"
+                class="golden-egg__close absolute right-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full border border-ink/25 bg-transparent text-base leading-none text-ink pointer-events-auto hover:bg-ink hover:text-main"
+                data-golden-close
+                aria-label="Close"
+            >×</button>
+        </div>
+        <div class="golden-egg__caption w-full max-w-[min(94vw,36rem)] px-4 py-2 text-center">
+            <p class="golden-egg__eyebrow m-0 font-display text-xs uppercase tracking-widest">You found the balance</p>
+            <p class="golden-egg__value m-0 pt-0.5 font-display text-base font-bold" data-phi-value>φ = {phi}</p>
+            <nav class="golden-egg__links mt-1.5 flex flex-wrap justify-center gap-2" aria-label="Golden ratio resources">
+                <a href="https://en.wikipedia.org/wiki/Golden_ratio" target="_blank" rel="noopener noreferrer">Wikipedia</a>
+                <a href="https://en.wikipedia.org/wiki/Fibonacci_sequence" target="_blank" rel="noopener noreferrer">Fibonacci</a>
+                <a href="https://mathworld.wolfram.com/GoldenRatio.html" target="_blank" rel="noopener noreferrer">MathWorld</a>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* JS-toggled container visibility; layout is Tailwind. */
+    .golden-egg {
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .golden-egg.is-visible {
+        opacity: 1;
+    }
+
+    /* Soft vignette to focus the eye on the reveal without blocking the page */
+    .golden-egg::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            circle at center,
+            transparent 45%,
+            color-mix(in srgb, var(--color-ink) 13%, transparent) 100%
+        );
+    }
+
+    /* color-mix backgrounds read better here than as arbitrary Tailwind values */
+    .golden-egg__stage {
+        border: 1px solid color-mix(in srgb, var(--color-ink) 26%, transparent);
+        background: color-mix(in srgb, var(--color-main) 78%, white 22%);
+        box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 18%, transparent);
+    }
+
+    /* SVG construction internals: stroke-dash driven by inline --len/--d vars */
+    .golden-egg__rect {
+        fill: color-mix(in srgb, var(--color-ink) 10%, transparent);
+        stroke: color-mix(in srgb, var(--color-ink) 55%, transparent);
+        stroke-width: 0.7;
+        opacity: 0;
+        transition: opacity 0.5s ease var(--d, 0s);
+    }
+
+    .golden-egg__arc {
+        fill: none;
+        stroke: var(--color-ink);
+        stroke-width: 1;
+        stroke-linecap: round;
+        stroke-dasharray: var(--len, 0);
+        stroke-dashoffset: var(--len, 0);
+        transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1) var(--d, 0s);
+    }
+
+    .golden-egg__square.is-revealed .golden-egg__rect {
+        opacity: 1;
+    }
+
+    .golden-egg__square.is-revealed .golden-egg__arc {
+        stroke-dashoffset: 0;
+    }
+
+    .golden-egg.no-anim .golden-egg__square,
+    .golden-egg.no-anim .golden-egg__rect,
+    .golden-egg.no-anim .golden-egg__arc {
+        transition: none !important;
+    }
+
+    /* Caption reveal is state-driven; it now sits below the card, not over it */
+    .golden-egg__caption {
+        background: color-mix(in srgb, var(--color-main) 74%, white 26%);
+        border-radius: var(--radius-md);
+        box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+        opacity: 0;
+        transition: opacity 0.7s ease 0.2s;
+    }
+
+    .golden-egg.is-done .golden-egg__caption {
+        opacity: 1;
+    }
+
+    .golden-egg__eyebrow {
+        opacity: 0.85;
+    }
+
+    .golden-egg__links a {
+        opacity: 0.85;
+        transition: opacity 0.2s ease;
+    }
+
+    .golden-egg__links a:hover,
+    .golden-egg__links a:focus-visible {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    import { goldenRatio } from '../utils/golden-ratio';
+    import { GOLDEN_REVEAL_EVENT } from '../utils/golden-events';
+
+    (() => {
+        const w = window as typeof window & {
+            __goldenEggInitialized?: boolean;
+            __goldenRatio?: () => void;
+        };
+        if (w.__goldenEggInitialized) {
+            return;
+        }
+        w.__goldenEggInitialized = true;
+
+        const PHI = goldenRatio();
+        const VISIBLE_CLASS = 'is-visible';
+        const DONE_CLASS = 'is-done';
+        const REVEALED_CLASS = 'is-revealed';
+        const NO_ANIM_CLASS = 'no-anim';
+        const HIDE_DELAY_MS = 10000;
+
+        let hideTimer = 0;
+
+        function egg(): HTMLElement | null {
+            return document.querySelector('[data-golden-egg]');
+        }
+
+        function armHideTimer(el: HTMLElement) {
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => {
+                reset(el);
+                hide();
+            }, HIDE_DELAY_MS);
+        }
+
+        function reset(el: HTMLElement) {
+            // Strip revealed state without animating the un-draw, so a
+            // re-reveal restarts cleanly instead of visibly un-drawing.
+            el.classList.add(NO_ANIM_CLASS);
+            el.querySelectorAll('[data-golden-square]').forEach((g) => g.classList.remove(REVEALED_CLASS));
+            void el.offsetHeight; // force reflow so the no-transition state lands before removal
+            el.classList.remove(NO_ANIM_CLASS);
+        }
+
+        function reveal() {
+            const el = egg();
+            if (!el) return;
+            if (!el.hidden) {
+                // already showing — restart cleanly without un-drawing
+                window.clearTimeout(hideTimer);
+                reset(el);
+            }
+
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const groups = el.querySelectorAll('[data-golden-square]');
+            const step = Number.parseFloat(el.dataset.step ?? '0.28') || 0.28;
+
+            el.hidden = false;
+            requestAnimationFrame(() => {
+                groups.forEach((g) => {
+                    const group = g as HTMLElement;
+                    if (reduce) group.style.setProperty('--d', '0s');
+                    group.classList.add(REVEALED_CLASS);
+                });
+                const lastDelay = reduce ? 0 : (groups.length - 1) * step + 0.35;
+                const doneDelay = reduce ? 80 : lastDelay * 1000;
+                window.setTimeout(() => el.classList.add(DONE_CLASS), doneDelay);
+            });
+
+            el.classList.add(VISIBLE_CLASS);
+            // Force a reflow so the unrevealed base state (opacity 0, arcs at
+            // full dashoffset) is established before we add is-revealed; without
+            // this the draw-in transitions skip straight to the final state.
+            void el.offsetHeight;
+            armHideTimer(el);
+        }
+
+        function hide() {
+            const el = egg();
+            if (!el) return;
+            el.classList.remove(VISIBLE_CLASS, DONE_CLASS);
+            window.setTimeout(() => {
+                el.hidden = true;
+            }, 420);
+        }
+
+        function onRevealRequest() {
+            reveal();
+        }
+
+        function onKeydown(event: KeyboardEvent) {
+            if (event.key === 'Escape') {
+                const el = egg();
+                if (el && !el.hidden) {
+                    reset(el);
+                    hide();
+                }
+            }
+        }
+
+        window.addEventListener(GOLDEN_REVEAL_EVENT, onRevealRequest);
+        document.addEventListener('keydown', onKeydown);
+
+        // Pause the auto-dismiss while the pointer/keyboard is on the reveal
+        // (card + caption) so the resource links can be clicked. Delegated so
+        // it survives re-renders.
+        const wrapSelector = '.golden-egg__wrap';
+        function isInWrap(target: EventTarget | null) {
+            return target instanceof Element && target.closest(wrapSelector) !== null;
+        }
+        function pauseHide() {
+            window.clearTimeout(hideTimer);
+        }
+        function resumeHide() {
+            const el = egg();
+            if (!el || el.hidden) return;
+            armHideTimer(el);
+        }
+        document.addEventListener('mouseover', (e) => {
+            if (isInWrap(e.target)) pauseHide();
+        });
+        document.addEventListener('mouseout', (e) => {
+            if (isInWrap(e.target) && !isInWrap(e.relatedTarget)) resumeHide();
+        });
+        document.addEventListener('focusin', (e) => {
+            if (isInWrap(e.target)) pauseHide();
+        });
+        document.addEventListener('focusout', (e) => {
+            if (!isInWrap(e.relatedTarget)) resumeHide();
+        });
+
+        // Close button. Bound here because the overlay is re-rendered per page.
+        document.addEventListener(
+            'click',
+            (event) => {
+                if (!(event.target instanceof Element)) return;
+                if (!event.target.closest('[data-golden-close]')) return;
+                const el = egg();
+                if (!el) return;
+                reset(el);
+                hide();
+            },
+            true
+        );
+
+        // Developer-console path.
+        w.__goldenRatio = () => {
+            window.console.log(`%cφ = ${PHI}`, 'font-family:monospace;font-weight:bold');
+            window.dispatchEvent(new CustomEvent(GOLDEN_REVEAL_EVENT));
+        };
+
+        if (import.meta.env.DEV) {
+            window.console.log('%cφ', 'font-family:monospace;color:currentColor');
+        }
+    })();
+</script>

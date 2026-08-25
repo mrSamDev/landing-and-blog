@@ -72,6 +72,8 @@
 
 :root {
     --shadow-rgb: 0 71 71; /* teal-tinted shadow in light mode */
+    --golden-ratio: 1.6180339887; /* φ — subtle easter egg theme */
+    --golden-inverse: 0.6180339887; /* 1/φ */
 }
 .dark {
     --shadow-rgb: 0 0 0; /* pure black shadow in dark mode */
