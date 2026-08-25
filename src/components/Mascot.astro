@@ -87,21 +87,31 @@ const SHELL_SCALE = 1.6;
         // are φ-derived.
         const PAUSE_FRACTION = 0.618;
         const PAUSE_MS = 1618;
-        const SPEED = 0.4; // px per frame at 60fps
+        const SPEED_PX_PER_SECOND = 30; // frame-rate independent
         const PAUSED = 'paused';
         const WALKING = 'walking';
+
+        let snailW = 0;
+        function measure() {
+            snailW = el.offsetWidth;
+        }
+        measure();
+        window.addEventListener('resize', measure);
 
         let x = 0;
         let dir = 1;
         let phase: string = WALKING;
         let pauseUntil = 0;
         let pausedThisPass = false;
+        let lastTs = 0;
 
-        function walk() {
-            const maxX = window.innerWidth - el.offsetWidth;
+        function walk(ts: number) {
+            const maxX = window.innerWidth - snailW;
+            const dt = Math.min((ts - lastTs) / 1000, 0.1); // clamp large gaps
+            lastTs = ts;
 
             if (phase === WALKING) {
-                x += SPEED * dir;
+                x += SPEED_PX_PER_SECOND * dt * dir;
                 if (dir === 1 && !pausedThisPass && x >= PAUSE_FRACTION * maxX) {
                     x = PAUSE_FRACTION * maxX;
                     phase = PAUSED;
@@ -121,7 +131,8 @@ const SHELL_SCALE = 1.6;
                 }
             }
 
-            el.style.transform = `translateX(${x.toFixed(1)}px) scaleX(${dir})`;
+            // scaleX flips the art (head is drawn on the left) to face travel direction
+            el.style.transform = `translateX(${x.toFixed(1)}px) scaleX(${-dir})`;
             requestAnimationFrame(walk);
         }
 
