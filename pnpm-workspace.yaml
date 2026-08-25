@@ -7,3 +7,8 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+
+minimumReleaseAgeExclude:
+  - '@astrojs/cloudflare@14.2.1'
+  - '@astrojs/underscore-redirects@1.0.4'
+  - astro@7.2.1

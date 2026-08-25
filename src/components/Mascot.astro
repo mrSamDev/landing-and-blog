@@ -1,5 +1,4 @@
 ---
-// WalkingAnimal.astro
 ---
 
 <div id="animalContainer" class="fixed bottom-0 left-0 w-full z-50" style="height: 120px;">
@@ -215,7 +214,7 @@
 </style>
 
 <script>
-    // Define interfaces for better type safety
+    import { $ } from 'domsure';
     interface Position {
         x: number;
         y: number;
@@ -241,11 +240,10 @@
         private moodIndicator: HTMLElement | null;
 
         constructor(elementId: string, containerId: string, speed: number = 2) {
-            // Initialize properties
-            this.element = document.getElementById(elementId);
-            this.container = document.getElementById(containerId);
-            this.effectsContainer = document.getElementById('effectsContainer');
-            this.moodIndicator = document.getElementById('moodIndicator');
+            this.element = $.optional('#' + elementId);
+            this.container = $.optional('#' + containerId);
+            this.effectsContainer = $('#effectsContainer');
+            this.moodIndicator = $('#moodIndicator');
             this.position = 0;
             this.direction = 1;
             this.speed = speed;
@@ -254,7 +252,6 @@
             this.moodLevel = 0;
             this.isBouncing = false;
 
-            // Check if required elements exist
             if (!this.element || !this.container) {
                 console.error('Required elements not found');
                 return;

@@ -1,3 +1,5 @@
+import { $, $$ } from 'domsure';
+
 type ContentMenuNodes = {
     container: HTMLElement;
     menuButton: HTMLButtonElement;
@@ -25,7 +27,7 @@ function setMenuOpen(container: HTMLElement | null, isOpen: boolean) {
 function getMarkdown(trigger: HTMLElement) {
     const title = trigger.dataset.title || '';
     const selector = trigger.dataset.selector || '.prose';
-    const content = document.querySelector<HTMLElement>(selector);
+    const content = $(selector);
     if (!content) return '';
     return `${title ? `# ${title}\n\n` : ''}${content.innerText}`;
 }
@@ -87,7 +89,7 @@ function showMarkdownModal(markdown: string) {
 }
 function updateExternalLinks() {
     const encodedUrl = encodeURIComponent(window.location.href);
-    for (const container of document.querySelectorAll<HTMLElement>('.content-menu-container')) {
+    for (const container of $$('.content-menu-container')) {
         container.querySelector<HTMLAnchorElement>('.open-claude-btn')?.setAttribute(
             'href',
             `https://claude.ai/new?q=Read%20from%20${encodedUrl}%20so%20I%20can%20ask%20questions%20about%20it.`
@@ -142,7 +144,7 @@ export function initContentMenu() {
             return;
         }
         if (!target?.closest('.content-menu-container')) {
-            for (const menu of document.querySelectorAll<HTMLElement>('.content-menu-container')) {
+            for (const menu of $$('.content-menu-container')) {
                 setMenuOpen(menu, false);
             }
         }

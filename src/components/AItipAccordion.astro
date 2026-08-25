@@ -36,7 +36,7 @@ const postKey = post.data.key || `tip-${post.id}`;
     <summary class="p-3 cursor-pointer flex justify-between items-center gap-2 list-none">
         <h2 class="font-display font-bold text-base md:text-lg leading-tight truncate">{post.data.title}</h2>
         <div class="flex items-center gap-2 shrink-0">
-            <Button id={'copy-button-' + postKey}>Copy</Button>
+            <Button id={'copy-button-' + postKey} data-ai-tip-key={postKey} data-ai-tip-body={postBody}>Copy</Button>
             <span class="text-ink/60 transition-transform duration-200 group-open:rotate-180">&#9660;</span>
         </div>
     </summary>
@@ -56,35 +56,47 @@ const postKey = post.data.key || `tip-${post.id}`;
     </div>
 </details>
 
-<script define:vars={{ postBody, postKey }}>
-    const copyButton = document.getElementById('copy-button-' + postKey);
-    const accordion = document.getElementById(postKey);
+<script>
+    import { $, $$ } from 'domsure';
 
-    if (window.location.hash === '#' + postKey && accordion instanceof HTMLDetailsElement) {
-        accordion.open = true;
-    }
+    const bound = new WeakSet<HTMLElement>();
 
-    if (copyButton) {
-        copyButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            const accordionContent = accordion?.querySelector('.accordion-content');
-            if (accordionContent) {
-                navigator.clipboard
-                    .writeText(postBody)
-                    .then(() => {
-                        const originalText = copyButton.innerText;
-                        copyButton.innerText = 'Copied';
-                        setTimeout(() => {
-                            copyButton.innerText = originalText;
-                        }, 1000);
-                    })
-                    .catch((err) => {
-                        console.error('Failed to copy:', err);
-                    });
-            } else {
-                console.error('Accordion content not found');
+    function initAiTipAccordions() {
+        for (const copyButton of $$('[data-ai-tip-key]')) {
+            const postKey = copyButton.getAttribute('data-ai-tip-key') || '';
+            const postBody = copyButton.getAttribute('data-ai-tip-body') || '';
+            const accordion = $('#' + postKey);
+
+            if (window.location.hash === '#' + postKey && accordion instanceof HTMLDetailsElement) {
+                accordion.open = true;
             }
-        });
+
+            if (bound.has(copyButton)) continue;
+            bound.add(copyButton);
+
+            copyButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const accordionContent = accordion?.querySelector('.accordion-content');
+                if (accordionContent) {
+                    navigator.clipboard
+                        .writeText(postBody)
+                        .then(() => {
+                            const originalText = copyButton.innerText;
+                            copyButton.innerText = 'Copied';
+                            setTimeout(() => {
+                                copyButton.innerText = originalText;
+                            }, 1000);
+                        })
+                        .catch((err) => {
+                            console.error('Failed to copy:', err);
+                        });
+                } else {
+                    console.error('Accordion content not found');
+                }
+            });
+        }
     }
+
+    document.addEventListener('astro:page-load', initAiTipAccordions);
 </script>

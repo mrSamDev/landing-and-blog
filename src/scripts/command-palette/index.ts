@@ -1,5 +1,6 @@
 import type Fuse from 'fuse.js';
 import { navigate } from 'astro:transitions/client';
+import { $ } from 'domsure';
 
 import { createFuse, getAllItems, getResults, normalize } from './search';
 import { renderResults } from './render';
@@ -26,7 +27,7 @@ const state: CommandPaletteState = {
     previousFocus: null
 };
 function bindElements() {
-    const root = document.querySelector<HTMLElement>('[data-command-palette-root]');
+    const root = $('[data-command-palette-root]');
     const input = root?.querySelector<HTMLInputElement>('#command-palette-input');
     const results = root?.querySelector<HTMLElement>('[data-command-palette-results]');
     const status = root?.querySelector<HTMLElement>('[data-command-palette-status]');
