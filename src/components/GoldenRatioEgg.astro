@@ -102,6 +102,12 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         stroke-dashoffset: 0;
     }
 
+    .golden-egg.no-anim .golden-egg__square,
+    .golden-egg.no-anim .golden-egg__rect,
+    .golden-egg.no-anim .golden-egg__arc {
+        transition: none !important;
+    }
+
     .golden-egg__caption {
         position: absolute;
         left: 50%;
@@ -188,6 +194,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
         const VISIBLE_CLASS = 'is-visible';
         const DONE_CLASS = 'is-done';
         const REVEALED_CLASS = 'is-revealed';
+        const NO_ANIM_CLASS = 'no-anim';
         const HIDE_DELAY_MS = 6500;
 
         let hideTimer = 0;
@@ -196,18 +203,22 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             return document.querySelector('[data-golden-egg]');
         }
 
-        function reset(groups: NodeListOf<Element>) {
-            groups.forEach((g) => g.classList.remove(REVEALED_CLASS));
+        function reset(el: HTMLElement) {
+            // Strip revealed state without animating the un-draw, so a
+            // re-reveal restarts cleanly instead of visibly un-drawing.
+            el.classList.add(NO_ANIM_CLASS);
+            el.querySelectorAll('[data-golden-square]').forEach((g) => g.classList.remove(REVEALED_CLASS));
+            void el.offsetHeight; // force reflow so the no-transition state lands before removal
+            el.classList.remove(NO_ANIM_CLASS);
         }
 
         function reveal() {
             const el = egg();
             if (!el) return;
             if (!el.hidden) {
-                // already showing — restart cleanly
+                // already showing — restart cleanly without un-drawing
                 window.clearTimeout(hideTimer);
-                const gs = el.querySelectorAll('[data-golden-square]');
-                reset(gs);
+                reset(el);
             }
 
             const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -229,9 +240,8 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             el.classList.add(VISIBLE_CLASS);
             window.clearTimeout(hideTimer);
             hideTimer = window.setTimeout(() => {
+                reset(el);
                 hide();
-                const gs = el.querySelectorAll('[data-golden-square]');
-                reset(gs);
             }, HIDE_DELAY_MS);
         }
 
@@ -252,8 +262,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             if (event.key === 'Escape') {
                 const el = egg();
                 if (el && !el.hidden) {
-                    const gs = el.querySelectorAll('[data-golden-square]');
-                    reset(gs);
+                    reset(el);
                     hide();
                 }
             }
@@ -270,8 +279,7 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
                 if (!event.target.closest('[data-golden-close]')) return;
                 const el = egg();
                 if (!el) return;
-                const gs = el.querySelectorAll('[data-golden-square]');
-                reset(gs);
+                reset(el);
                 hide();
             },
             true
