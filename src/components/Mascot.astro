@@ -1,7 +1,7 @@
 ---
 ---
 
-<div class="snail-ground" data-snail-ground aria-hidden="true"></div>
+<canvas class="snail-ground" data-snail-ground aria-hidden="true"></canvas>
 <div class="snail" data-snail aria-hidden="true">
     <canvas class="snail__canvas"></canvas>
 </div>
@@ -28,20 +28,13 @@
     .snail-ground {
         position: fixed;
         left: 0;
-        right: 0;
         bottom: 0;
-        height: 1.5rem;
+        width: 100%;
+        height: 2.25rem;
         z-index: 49;
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.6s ease;
-        background: linear-gradient(
-            to top,
-            rgba(133, 95, 58, 0.28) 0%,
-            rgba(133, 95, 58, 0.1) 55%,
-            rgba(133, 95, 58, 0) 100%
-        );
-        border-top: 1px solid rgba(133, 95, 58, 0.35);
     }
 
     .snail-ground.is-visible {
@@ -53,9 +46,9 @@
     // Draw a small garden snail on canvas: a glossy spiral shell (golden/log
     // spiral), a soft shaded foot, and eye tentacles. Faces left.
     (() => {
-        const el = document.querySelector('[data-snail]');
-        const canvas = el?.querySelector('canvas');
-        if (!(el instanceof HTMLElement) || !(canvas instanceof HTMLCanvasElement)) {
+        const el = document.querySelector<HTMLElement>('[data-snail]') as HTMLElement;
+        const canvas = el?.querySelector<HTMLCanvasElement>('canvas') as HTMLCanvasElement;
+        if (!el || !canvas) {
             return;
         }
 
@@ -64,14 +57,14 @@
         const dpr = window.devicePixelRatio || 1;
         canvas.width = W * dpr;
         canvas.height = H * dpr;
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         if (!ctx) return;
         ctx.scale(dpr, dpr);
 
         const PHI = (1 + Math.sqrt(5)) / 2;
 
         // --- golden (logarithmic) spiral points, normalized to radius R ---
-        function spiralPoints(cx, cy, R, turns) {
+        function spiralPoints(cx: number, cy: number, R: number, turns: number) {
             const pts = [];
             const steps = Math.floor(turns * 40);
             let maxR = 0;
@@ -177,6 +170,101 @@
 
         draw();
 
+        // --- ground: a full-width strip of textured soil (canvas) ---
+        const ground = document.querySelector<HTMLCanvasElement>('[data-snail-ground]') as HTMLCanvasElement;
+        const GROUND_H = 36; // logical px (~2.25rem)
+
+        function mulberry32(a: number) {
+            return function () {
+                a |= 0;
+                a = (a + 0x6d2b79f5) | 0;
+                let t = Math.imul(a ^ (a >>> 15), 1 | a);
+                t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+                return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+            };
+        }
+
+        function drawSoil(g: CanvasRenderingContext2D, W: number, H: number) {
+            g.clearRect(0, 0, W, H);
+            const grad = g.createLinearGradient(0, 0, 0, H);
+            grad.addColorStop(0, 'rgba(163,118,62,0)');
+            grad.addColorStop(0.2, 'rgba(163,118,62,0.4)');
+            grad.addColorStop(0.5, 'rgba(122,82,42,0.8)');
+            grad.addColorStop(1, 'rgba(82,52,26,0.95)');
+            g.fillStyle = grad;
+            g.fillRect(0, 0, W, H);
+
+            // deterministic texture so it doesn't flicker on resize
+            const rand = mulberry32(1618);
+            const dark = Math.floor(W / 6);
+            for (let i = 0; i < dark; i++) {
+                const x = rand() * W;
+                const y = rand() * H;
+                const r = 0.5 + rand() * 1.6;
+                const a = 0.15 + rand() * 0.25;
+                g.fillStyle = `rgba(55,32,16,${a.toFixed(3)})`;
+                g.beginPath();
+                g.arc(x, y, r, 0, Math.PI * 2);
+                g.fill();
+            }
+            const light = Math.floor(W / 10);
+            for (let i = 0; i < light; i++) {
+                const x = rand() * W;
+                const y = rand() * H;
+                const r = 0.6 + rand() * 1.2;
+                const a = 0.12 + rand() * 0.2;
+                g.fillStyle = `rgba(200,152,94,${a.toFixed(3)})`;
+                g.beginPath();
+                g.arc(x, y, r, 0, Math.PI * 2);
+                g.fill();
+            }
+            const pebbles = Math.floor(W / 40);
+            for (let i = 0; i < pebbles; i++) {
+                const x = rand() * W;
+                const y = H * 0.45 + rand() * H * 0.55;
+                const r = 1.2 + rand() * 2;
+                const a = 0.3 + rand() * 0.25;
+                g.fillStyle = `rgba(70,44,24,${a.toFixed(3)})`;
+                g.beginPath();
+                g.arc(x, y, r, 0, Math.PI * 2);
+                g.fill();
+            }
+
+            // grass blades along the top edge, where ground meets the page
+            const grassRand = mulberry32(233);
+            const blades = Math.floor(W / 4);
+            for (let i = 0; i < blades; i++) {
+                const x = (i + 0.5) * (W / blades) + (grassRand() - 0.5) * 3;
+                const h = 3 + grassRand() * 6;
+                const lean = (grassRand() - 0.5) * 3;
+                g.strokeStyle = grassRand() > 0.5 ? 'rgba(88,128,56,0.6)' : 'rgba(70,112,46,0.6)';
+                g.lineWidth = 1;
+                g.beginPath();
+                g.moveTo(x, 9);
+                g.quadraticCurveTo(x + lean * 0.5, 9 - h * 0.6, x + lean, 9 - h);
+                g.stroke();
+            }
+            // soft top edge
+            g.fillStyle = 'rgba(60,35,18,0.18)';
+            g.fillRect(0, 1, W, 2);
+        }
+
+        function sizeGround() {
+            if (!ground) return;
+            const gw = Math.ceil(window.innerWidth * dpr);
+            const gh = Math.ceil(GROUND_H * dpr);
+            if (ground.width !== gw || ground.height !== gh) {
+                ground.width = gw;
+                ground.height = gh;
+            }
+            const g = ground.getContext('2d') as CanvasRenderingContext2D;
+            g.setTransform(1, 0, 0, 1, 0, 0);
+            g.scale(dpr, dpr);
+            drawSoil(g, window.innerWidth, GROUND_H);
+        }
+        sizeGround();
+        window.addEventListener('resize', sizeGround);
+
         // Hidden until the visitor double-clicks the large site name (a
         // delegated trigger so it survives view transitions).
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -201,7 +289,7 @@
         let lastTs = 0;
         let crawling = false;
 
-        function walk(ts) {
+        function walk(ts: number) {
             const maxX = window.innerWidth - snailW;
             const dt = Math.min((ts - lastTs) / 1000, 0.1);
             lastTs = ts;
