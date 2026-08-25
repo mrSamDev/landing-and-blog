@@ -1,6 +1,7 @@
 ---
 ---
 
+<div class="snail-ground" data-snail-ground aria-hidden="true"></div>
 <div class="snail" data-snail aria-hidden="true">
     <canvas class="snail__canvas"></canvas>
 </div>
@@ -9,7 +10,7 @@
     .snail {
         position: fixed;
         left: 0;
-        bottom: 0.75rem;
+        bottom: 1.5rem;
         z-index: 50;
         width: 5.5rem;
         pointer-events: none;
@@ -22,6 +23,29 @@
         display: block;
         width: 100%;
         height: auto;
+    }
+
+    .snail-ground {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1.5rem;
+        z-index: 49;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+        background: linear-gradient(
+            to top,
+            rgba(133, 95, 58, 0.28) 0%,
+            rgba(133, 95, 58, 0.1) 55%,
+            rgba(133, 95, 58, 0) 100%
+        );
+        border-top: 1px solid rgba(133, 95, 58, 0.35);
+    }
+
+    .snail-ground.is-visible {
+        opacity: 1;
     }
 </style>
 
@@ -72,6 +96,12 @@
             ctx.fillStyle = 'rgba(180, 196, 168, 0.35)';
             ctx.beginPath();
             ctx.ellipse(80, 47, 14, 3.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // contact shadow under the foot (bridges to the ground strip)
+            ctx.fillStyle = 'rgba(60, 40, 20, 0.18)';
+            ctx.beginPath();
+            ctx.ellipse(40, 52, 32, 3.5, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // --- body / foot ---
@@ -204,6 +234,10 @@
 
         function reveal() {
             el.style.opacity = '1';
+            const ground = document.querySelector('[data-snail-ground]');
+            if (ground instanceof HTMLElement) {
+                ground.classList.add('is-visible');
+            }
             if (reduce) return; // static snail under reduced motion
             if (crawling) return;
             crawling = true;
