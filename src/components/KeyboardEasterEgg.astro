@@ -60,6 +60,7 @@
 
 <script>
     import { $ } from 'domsure';
+    import { GOLDEN_REVEAL_EVENT } from '../utils/golden-events';
     (() => {
         const w = window as typeof window & { __keyboardEasterEggInitialized?: boolean };
         if (w.__keyboardEasterEggInitialized) {
@@ -117,6 +118,7 @@
 
             event.preventDefault();
             showEgg();
+            window.dispatchEvent(new CustomEvent(GOLDEN_REVEAL_EVENT));
         });
     })();
 </script>
