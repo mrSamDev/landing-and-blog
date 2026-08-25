@@ -53,14 +53,16 @@
     * {
         @variant dark {
             --color-ink: #ffffff;
-            --color-panel: #26262c;
-            --color-panel-2: #1d1d20;
-            --color-surface: #1e1e23;
-            --color-bg: #141419;
+            /* Neutral charcoal would read as a generic AI-dev dark mode. These
+               carry a subtle teal cast to echo the light-mode identity. */
+            --color-panel: #1c2524;
+            --color-panel-2: #222c2a;
+            --color-surface: #18201f;
+            --color-bg: #0f1716;
 
             --color-fontPrimary: #ffffff;
-            --color-main: #141419;
-            --color-muted: #1e1e23;
+            --color-main: #0f1716;
+            --color-muted: #18201f;
             --color-borderprimary: #ffffff;
 
             --color-pink-error: #ff8caa;
