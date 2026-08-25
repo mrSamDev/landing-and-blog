@@ -34,9 +34,30 @@ const { href } = Astro.url;
 const { post, prevPost, nextPost } = Astro.props;
 const { title, publishDate, updatedDate, excerpt, tags = [], seo } = post.data;
 const { Content } = await render(post);
+
+const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: excerpt ?? seo?.description ?? '',
+    datePublished: publishDate.toISOString(),
+    ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+    author: {
+        '@type': 'Person',
+        name: 'Sijo Sam',
+        url: 'https://sijosam.in'
+    },
+    publisher: {
+        '@type': 'Person',
+        name: 'Sijo Sam',
+        url: 'https://sijosam.in'
+    },
+    mainEntityOfPage: 'https://sijosam.in' + new URL(href).pathname,
+    ...(seo?.image?.src && { image: new URL(seo.image.src, 'https://sijosam.in').toString() })
+};
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" showHeader={false}>
+<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" showHeader={false} jsonLd={articleJsonLd}>
     <article class="mb-16 sm:mb-24">
         <ContentHeader title={title} publishDate={publishDate} />
 

@@ -41,7 +41,7 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
     title: 'Sijo Sam',
-    subtitle: 'Software engineer',
+    subtitle: 'Developer',
     description: 'Technical leader specializing in React, AWS, and modern web development with expertise in video business product solutions',
     image: {
         src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
@@ -81,26 +81,12 @@ const siteConfig: SiteConfig = {
         {
             text: 'Contact',
             href: '/contact'
-        },
-        {
-            text: 'Code',
-            href: 'https://github.com/mrSamDev/landing-and-blog',
-            target: '_blank'
-        },
-        {
-            text: 'Rss feed',
-            href: '/rss.xml',
-            target: '_blank'
-        },
-        {
-            text: 'Carbon',
-            href: '/carbon'
         }
     ],
     socialLinks: [
         { text: 'LinkedIn', href: 'https://www.linkedin.com/in/sijo-sam/' },
         { text: 'GitHub', href: 'https://github.com/mrSamDev' },
-        { text: 'Email', href: 'mailto:dev.sijo.sam@gmail.com' },
+        { text: 'Email', href: 'mailto:sijo@sijosam.com' },
         { text: 'BlueSky', href: 'https://bsky.app/profile/sijosam.in' }
     ],
     hero: {

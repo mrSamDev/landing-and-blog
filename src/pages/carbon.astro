@@ -5,7 +5,7 @@ import siteConfig from '../data/site-config';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const title = 'Carbon';
+const title = 'Carbon Score';
 const description = `Carbon footprint of ${siteConfig.title}, measured by Website Carbon. Cleaner pages mean a greener web.`;
 
 // Fallbacks from last successful test; overridden by the live API
@@ -52,7 +52,7 @@ if (Astro.site) {
 <BaseLayout title={title} description={description}>
     <article class="mb-16 sm:mb-24 max-w-2xl mx-auto">
         <header class="mb-8">
-            <h1 class="text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">Carbon</h1>
+            <h1 class="text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">Carbon Score</h1>
             <p class="mt-3 text-ink/70">The carbon footprint of this website, measured per page view.</p>
         </header>
 
@@ -114,6 +114,7 @@ if (Astro.site) {
             <div class="mt-4 relative aspect-video">
                 <iframe
                     class="absolute inset-0 w-full h-full rounded-2xl border-2 border-ink"
+                    loading="lazy"
                     src="https://www.youtube-nocookie.com/embed/UNmusfWlhTk"
                     title="The Green Web - Website Carbon Footprint"
                     frameborder="0"

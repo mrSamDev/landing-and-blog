@@ -10,7 +10,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div>
                     <h1 class="font-display font-extrabold text-3xl text-ink">Sijo Sam</h1>
-                    <p class="text-lg text-fontPrimary/80 mt-0.5" data-variant-subtitle>
+                    <p class="text-lg text-fontPrimary/80 mt-0.5">
                         Technical Lead &amp; Full-Stack Engineer
                     </p>
 
@@ -20,10 +20,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
                     <div class="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm">
                         <a
-                            href="mailto:dev.sijo.sam@gmail.com"
+                            href="mailto:sijo@sijosam.com"
                             class="text-fontPrimary/80 hover:text-fontPrimary underline decoration-solid"
                         >
-                            dev.sijo.sam@gmail.com
+                            sijo@sijosam.com
                         </a>
 
                         <a
@@ -66,73 +66,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
         </header>
 
-        <nav class="mb-9" data-variant-tabs aria-label="Resume variant">
-            <div class="inline-flex flex-wrap gap-1 p-1 rounded-pill border border-fontPrimary/25 bg-panel-2">
-                <button
-                    type="button"
-                    data-variant-tab="fullstack"
-                    class="px-4 py-1.5 rounded-pill text-sm font-semibold text-fontPrimary/70 hover:text-fontPrimary transition-colors"
-                >
-                    Full Stack
-                </button>
-                <button
-                    type="button"
-                    data-variant-tab="fe"
-                    class="px-4 py-1.5 rounded-pill text-sm font-semibold text-fontPrimary/70 hover:text-fontPrimary transition-colors"
-                >
-                    Frontend
-                </button>
-                <button
-                    type="button"
-                    data-variant-tab="be"
-                    class="px-4 py-1.5 rounded-pill text-sm font-semibold text-fontPrimary/70 hover:text-fontPrimary transition-colors"
-                >
-                    Backend
-                </button>
-            </div>
-        </nav>
-
         <section class="mb-9">
             <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/70 border-b border-fontPrimary/35 pb-2 mb-4">
                 Professional Summary
             </h2>
 
-            <div data-variant="fullstack" class="resume-variant">
-                <p class="text-base text-fontPrimary/85 leading-relaxed">
-                    Technical Lead and Full-Stack Engineer with 8+ years building and
-                    modernising enterprise web platforms using Node.js, React, React
-                    Native, TypeScript, GraphQL, and cloud infrastructure. I've
-                    re-architected large legacy codebases, shipped performance
-                    improvements of 30%+ across production systems, and owned complex
-                    API and backend integrations end to end. I also lead teams when
-                    the work calls for it, but the code is where I live.
-                </p>
-            </div>
-
-            <div data-variant="fe" class="resume-variant hidden">
-                <p class="text-base text-fontPrimary/85 leading-relaxed">
-                    Frontend Engineer and Technical Lead with 8+ years building and
-                    modernising enterprise web platforms using Node.js, React, React
-                    Native, TypeScript, GraphQL, and cloud infrastructure. I've
-                    re-architected large legacy codebases, shipped performance
-                    improvements of 30%+ across production systems, and owned complex
-                    API and backend integrations end to end. I also lead teams when
-                    the work calls for it, but the code is where I live.
-                </p>
-            </div>
-
-            <div data-variant="be" class="resume-variant hidden">
-                <p class="text-base text-fontPrimary/85 leading-relaxed">
-                    Technical Lead and Full-Stack Engineer with 8+ years building and
-                    scaling backend services and enterprise web platforms in Node.js
-                    and TypeScript, with React and React Native on the frontend. I
-                    own API design, event-driven architecture, and distributed
-                    systems end to end, have re-architected large legacy codebases,
-                    and have shipped production performance gains of 30%+. I lead
-                    teams, mentor engineers, and stay hands-on with architecture and
-                    code.
-                </p>
-            </div>
+            <p class="text-base text-fontPrimary/85 leading-relaxed">
+                Technical Lead and Full-Stack Engineer with 8+ years building and
+                modernising enterprise web platforms using Node.js, React, React
+                Native, TypeScript, GraphQL, and cloud infrastructure. I've
+                re-architected large legacy codebases, shipped performance
+                improvements of 30%+ across production systems, and owned complex
+                API and backend integrations end to end. I also lead teams when
+                the work calls for it, but the code is where I live.
+            </p>
         </section>
 
         <section class="mb-9">
@@ -140,91 +87,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 Technologies &amp; Skills
             </h2>
 
-            <div data-variant="fullstack" class="resume-variant">
-                <div class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Languages</span>
-                    <span class="text-fontPrimary/90">TypeScript, JavaScript, Go, Python, Lua, GraphQL</span>
+            <div class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Languages</span>
+                <span class="text-fontPrimary/90">TypeScript, JavaScript, Go, Python, Lua, GraphQL</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Frontend</span>
-                    <span class="text-fontPrimary/90">React 19, React Native, Next.js, Remix, Svelte, SolidJS, Tailwind CSS, Redux Toolkit, RTK Query, Vite, Webpack</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Frontend</span>
+                <span class="text-fontPrimary/90">React 19, React Native, Next.js, Remix, Svelte, SolidJS, Tailwind CSS, Redux Toolkit, RTK Query, Vite, Webpack</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Backend</span>
-                    <span class="text-fontPrimary/90">Node.js, REST APIs, GraphQL, FastAPI, event-driven architecture, message queues, payment integrations</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Backend</span>
+                <span class="text-fontPrimary/90">Node.js, REST APIs, GraphQL, FastAPI, event-driven architecture, message queues, payment integrations</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Data / Infra</span>
-                    <span class="text-fontPrimary/90">PostgreSQL, MongoDB, AWS (EC2, CloudFront, ALB, ACM), GCP, Docker, Kubernetes, Terraform, Nginx</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Data / Infra</span>
+                <span class="text-fontPrimary/90">PostgreSQL, MongoDB, AWS (EC2, CloudFront, ALB, ACM), GCP, Docker, Kubernetes, Terraform, Nginx</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Observability</span>
-                    <span class="text-fontPrimary/90">Grafana, Ollama, structured logging, production monitoring</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Observability</span>
+                <span class="text-fontPrimary/90">Grafana, Ollama, structured logging, production monitoring</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Testing</span>
-                    <span class="text-fontPrimary/90">Jest, Vitest, Cypress, React Testing Library, Storybook</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Testing</span>
+                <span class="text-fontPrimary/90">Jest, Vitest, Cypress, React Testing Library, Storybook</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Practices</span>
-                    <span class="text-fontPrimary/90">System design, CSR/SSR/ISR, microservices, CI/CD, TDD, SOLID, Agile (CSM)</span>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Practices</span>
+                <span class="text-fontPrimary/90">System design, CSR/SSR/ISR, microservices, CI/CD, TDD, SOLID, Agile (CSM)</span>
 
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Performance</span>
-                    <span class="text-fontPrimary/90">LCP, INP, FCP, Core Web Vitals, Lighthouse, technical SEO</span>
-                </div>
-            </div>
-
-            <div data-variant="fe" class="resume-variant hidden">
-                <div class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Languages</span>
-                    <span class="text-fontPrimary/90">TypeScript, JavaScript, Go, Python, Lua, GraphQL</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Web</span>
-                    <span class="text-fontPrimary/90">HTML, CSS, HTTP/HTTPS, CORS, caching, CDNs, Critical Rendering Path, responsive design, accessibility, technical SEO</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Frontend</span>
-                    <span class="text-fontPrimary/90">React 19, React Native, Next.js, Remix, Svelte, SolidJS, Tailwind CSS, Redux Toolkit, RTK Query, Vite, Webpack</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Backend</span>
-                    <span class="text-fontPrimary/90">Node.js, REST APIs, GraphQL, C#/.NET, FastAPI, event-driven architecture, message queues, payment integrations</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Data / Infra</span>
-                    <span class="text-fontPrimary/90">PostgreSQL, MongoDB, AWS (EC2, CloudFront, ALB, ACM), GCP, Docker, Kubernetes, Terraform, Nginx</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Observability</span>
-                    <span class="text-fontPrimary/90">Grafana, Ollama, structured logging, production monitoring</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Testing</span>
-                    <span class="text-fontPrimary/90">Jest, Vitest, Cypress, React Testing Library, Storybook</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Practices</span>
-                    <span class="text-fontPrimary/90">System design, CSR/SSR/ISR, microservices, CI/CD, TDD, SOLID, Agile (CSM), Accessibility, Internationalisation</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Performance</span>
-                    <span class="text-fontPrimary/90">LCP, INP, FCP, Core Web Vitals, Lighthouse, Caching, CDN optimisation</span>
-                </div>
-            </div>
-
-            <div data-variant="be" class="resume-variant hidden">
-                <div class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Backend</span>
-                    <span class="text-fontPrimary/90">Node.js, REST APIs, GraphQL, FastAPI, .NET, Pimcore (PHP CMS), Spring Boot, event-driven architecture, message queues, payment integrations, distributed systems</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Languages</span>
-                    <span class="text-fontPrimary/90">TypeScript, JavaScript, Go, Java, Python, PHP, C#, Lua, GraphQL</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Data / Infra</span>
-                    <span class="text-fontPrimary/90">PostgreSQL, MongoDB, AWS (EC2, CloudFront, ALB, ACM), GCP, Docker, Kubernetes, Terraform, Nginx</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Frontend</span>
-                    <span class="text-fontPrimary/90">React 19, React Native, Next.js, Remix, Vue, Svelte, SolidJS, Tailwind CSS, Vite, Webpack</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Observability</span>
-                    <span class="text-fontPrimary/90">Grafana, structured logging, production monitoring</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Testing</span>
-                    <span class="text-fontPrimary/90">Jest, Vitest, Cypress, React Testing Library, Storybook</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Practices</span>
-                    <span class="text-fontPrimary/90">System design, CSR/SSR/ISR, microservices, CI/CD, TDD, SOLID, Agile (CSM)</span>
-
-                    <span class="font-semibold text-fontPrimary whitespace-nowrap">Performance</span>
-                    <span class="text-fontPrimary/90">LCP, INP, FCP, Core Web Vitals, Lighthouse, technical SEO</span>
-                </div>
+                <span class="font-semibold text-fontPrimary whitespace-nowrap">Performance</span>
+                <span class="text-fontPrimary/90">LCP, INP, FCP, Core Web Vitals, Lighthouse, technical SEO</span>
             </div>
         </section>
 
@@ -273,7 +159,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                             sessions; directly mentored three developers into independent
                             ownership of complex feature areas
                         </li>
-                        <li data-variant="be" class="resume-variant hidden">
+                        <li>
                             Leading a team migrating features from an acquired platform
                             (Pimcore, PHP, Vue) into the core product, working across a
                             mixed stack including Blazor and .NET to integrate and
@@ -282,9 +168,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     </ul>
 
                     <p class="mt-3 text-xs text-fontPrimary/80">
-                        <span data-variant="fullstack" class="resume-variant">Stack: React 19, Node.js, Python, Zustand, MUI, Docker, GCP, AWS, Terraform</span>
-                        <span data-variant="fe" class="resume-variant hidden">Stack: React 19, Node.js, Python, Zustand, MUI, Docker, GCP, AWS, Terraform</span>
-                        <span data-variant="be" class="resume-variant hidden">Stack: React 19, Node.js, Python, Zustand, MUI, Docker, GCP, AWS, Terraform, Pimcore, PHP, Vue, Blazor, .NET, Spring Boot</span>
+                        Stack: React 19, Node.js, Python, Zustand, MUI, Docker, GCP, AWS, Terraform, Pimcore, PHP, Vue, Blazor, .NET, Spring Boot
                     </p>
                 </article>
 
@@ -313,9 +197,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                             organic search rankings by 50%
                         </li>
                         <li>
-                            <span data-variant="fullstack" class="resume-variant">Designed and led API integration work connecting streaming clients to backend content delivery and licensing services via GraphQL and REST</span>
-                            <span data-variant="fe" class="resume-variant hidden">Designed and led API integration work connecting streaming clients to backend content delivery and licensing services via GraphQL and REST</span>
-                            <span data-variant="be" class="resume-variant hidden">Designed and led backend API integration work connecting streaming clients to content delivery and licensing services via GraphQL and REST</span>
+                            Designed and led API integration work connecting streaming clients to backend content delivery and licensing services via GraphQL and REST
                         </li>
                         <li>
                             Fast-tracked to Technical Lead after 18 months; led distributed
@@ -421,112 +303,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </section>
 
         <section class="mb-9">
-            <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/70 border-b border-fontPrimary/35 pb-2 mb-5">
-                Projects &amp; Open Source
-            </h2>
-
-            <div class="space-y-6">
-
-                <article class="pl-4 border-l-2 border-fontPrimary/30">
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="font-semibold text-fontPrimary">agentic-kanban</span>
-                        <span class="text-xs text-fontPrimary/70">AI Agent Coordination Protocol · Open Source</span>
-                        <a
-                            href="https://github.com/mrSamDev/agentic-kanban"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-xs text-fontPrimary/70 hover:text-fontPrimary underline decoration-solid ml-auto"
-                        >
-                            GitHub ↗
-                        </a>
-                    </div>
-
-                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
-                        <li>
-                            Built a SQLite-backed task coordination protocol for concurrent
-                            AI agents, replacing a markdown-based approach that broke under
-                            write contention. Two agents calling claim-next simultaneously
-                            always get different tasks because SQLite serialises writes
-                        </li>
-                        <li>
-                            Lease-based crash recovery: claimed tasks hold a 15-minute lease
-                            renewed by log-progress. If an agent dies, the lease expires and
-                            the next agent picks it up automatically — no orphaned work
-                        </li>
-                        <li>
-                            Role-based workflow (manager, worker, reviewer) with dependency
-                            modelling, batch operations, a hooks system for shell scripts on
-                            task events, and WAL mode for safe live backups. Ships as a
-                            single Go binary
-                        </li>
-                        <li>
-                            Agent-agnostic: works with Claude Code, Codex, Gemini, or any
-                            agent that can call a CLI. Tested with 3 to 50 concurrent
-                            agents; documented scale limits and recommended alternatives
-                            past 1000 workers
-                        </li>
-                    </ul>
-                </article>
-
-                <article class="pl-4 border-l-2 border-fontPrimary/30">
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="font-semibold text-fontPrimary">llm-moat</span>
-                        <span class="text-xs text-fontPrimary/70">LLM Security Toolkit · Open Source</span>
-                        <a
-                            href="https://github.com/mrSamDev/llm-moat"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-xs text-fontPrimary/70 hover:text-fontPrimary underline decoration-solid ml-auto"
-                        >
-                            GitHub ↗
-                        </a>
-                    </div>
-
-                    <ul class="list-disc ml-4 space-y-1.5 text-sm text-fontPrimary/85 leading-relaxed">
-                        <li>
-                            TypeScript toolkit that detects and blocks prompt injection in
-                            production LLM systems, combining rule-based filters with
-                            semantic classification across OpenAI, Anthropic, and Ollama
-                            adapters
-                        </li>
-                        <li>
-                            Implements input sanitisation and trust boundary enforcement to
-                            prevent tool misuse and data exfiltration. Streaming-aware
-                            detection handles large real-time inputs without buffering the
-                            full payload
-                        </li>
-                        <li>
-                            Extensible adapter and telemetry hook design lets teams plug in
-                            their own observability stack without forking the core library
-                        </li>
-                    </ul>
-                </article>
-
-                <article class="pl-4 border-l-2 border-fontPrimary/30">
-                    <div class="flex items-baseline gap-2 mb-2">
-                        <span class="font-semibold text-fontPrimary">My Silent Thoughts</span>
-                        <span class="text-xs text-fontPrimary/70">Technical Blogging</span>
-                        <a
-                            href="https://sijosam.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-xs text-fontPrimary/70 hover:text-fontPrimary underline decoration-solid ml-auto"
-                        >
-                            Live ↗
-                        </a>
-                    </div>
-
-                    <p class="text-sm text-fontPrimary/85 leading-relaxed">
-                        Writes on frontend architecture, TypeScript patterns, performance
-                        trade-offs, and AI/LLM tooling. Published pieces include 'Why Your
-                        Frontend Needs a Safety Net' and 'Network-Aware Development'.
-                    </p>
-                </article>
-
-            </div>
-        </section>
-
-        <section class="mb-9">
             <h2 class="text-xs font-semibold uppercase tracking-widest text-fontPrimary/70 border-b border-fontPrimary/35 pb-2 mb-4">
                 Certifications
             </h2>
@@ -544,71 +320,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
 </BaseLayout>
 
-<script>
-    const variantConfig = {
-        fullstack: {
-            subtitle: 'Technical Lead & Full-Stack Engineer',
-            label: 'Full Stack'
-        },
-        fe: {
-            subtitle: 'Frontend Engineer & Technical Lead',
-            label: 'Frontend'
-        },
-        be: {
-            subtitle: 'Technical Lead & Full-Stack Engineer',
-            label: 'Backend'
-        }
-    };
-
-    const tabs = document.querySelectorAll('[data-variant-tab]');
-    const variants = document.querySelectorAll('.resume-variant');
-    const subtitle = document.querySelector('[data-variant-subtitle]');
-
-    function selectVariant(v) {
-        variants.forEach((el) => {
-            el.classList.toggle('hidden', el.dataset.variant !== v);
-        });
-        tabs.forEach((tab) => {
-            const active = tab.dataset.variantTab === v;
-            tab.classList.toggle('bg-ink', active);
-            tab.classList.toggle('text-bg', active);
-            tab.classList.toggle('text-fontPrimary/70', !active);
-            tab.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        if (subtitle) subtitle.textContent = variantConfig[v].subtitle;
-        document.title = `Sijo Sam — Resume (${variantConfig[v].label})`;
-        history.replaceState(null, '', `#${v}`);
-    }
-
-    tabs.forEach((tab) => {
-        tab.addEventListener('click', () => selectVariant(tab.dataset.variantTab));
-    });
-
-    // Re-select on back/forward or manual hash edits (Astro's ClientRouter
-    // swaps pages without re-running this script).
-    window.addEventListener('hashchange', () => {
-        const h = window.location.hash.slice(1);
-        if (['fullstack', 'fe', 'be'].includes(h)) selectVariant(h);
-    });
-
-    const hash = window.location.hash.slice(1);
-    selectVariant(['fullstack', 'fe', 'be'].includes(hash) ? hash : 'fullstack');
-</script>
-
 <style>
     @media print {
-        button {
-            display: none !important;
-        }
-
-        [data-variant-tabs] {
-            display: none !important;
-        }
-
-        .resume-variant.hidden {
-            display: none !important;
-        }
-
         article {
             max-width: 100% !important;
         }
