@@ -11,7 +11,7 @@ const STEP = 0.28; // seconds between squares during the build-up
 const stageAspect = `${viewWidth} / ${viewHeight}`;
 ---
 
-<div class="golden-egg" data-golden-egg hidden aria-live="polite" data-step={STEP}>
+<div class="golden-egg fixed inset-0 z-[4800] grid place-items-center p-6 pointer-events-none" data-golden-egg hidden aria-live="polite" data-step={STEP}>
     <div class="golden-egg__wrap flex w-full flex-col items-center gap-3">
         <div class="golden-egg__stage relative w-[min(94vw,36rem)] rounded-lg p-3 pointer-events-auto" style={`aspect-ratio:${stageAspect}`}>
             <svg class="golden-egg__svg block h-auto w-full" viewBox={viewBox} aria-hidden="true">
