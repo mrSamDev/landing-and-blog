@@ -204,6 +204,10 @@ const stageAspect = `${viewWidth} / ${viewHeight}`;
             });
 
             el.classList.add(VISIBLE_CLASS);
+            // Force a reflow so the unrevealed base state (opacity 0, arcs at
+            // full dashoffset) is established before we add is-revealed; without
+            // this the draw-in transitions skip straight to the final state.
+            void el.offsetHeight;
             armHideTimer(el);
         }
 
