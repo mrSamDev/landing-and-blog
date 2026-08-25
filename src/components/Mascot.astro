@@ -1,28 +1,8 @@
 ---
-import { goldenSpiralSquares } from '../utils/golden-ratio';
-
-// Shell = a golden spiral, reused from the same math module as the reveal.
-const shell = goldenSpiralSquares(7);
-const shellPath = shell.squares.map((s) => s.arc.d).join(' ');
-const SHELL_SCALE = 1.6;
 ---
 
 <div class="snail" data-snail aria-hidden="true">
-    <svg class="snail__art" viewBox="0 0 72 44">
-        <!-- Shell: the golden spiral, scaled into the upper-right -->
-        <g transform={`translate(34 7) scale(${SHELL_SCALE})`}>
-            <path class="snail__shell" d={shellPath} />
-        </g>
-        <!-- Body: a simple rounded foot -->
-        <path
-            class="snail__body"
-            d="M 2 36 Q 22 28 46 34 Q 49 39 28 39 Q 6 39 2 36 Z"
-        />
-        <!-- Eye stalks -->
-        <path class="snail__stalks" d="M 8 34 L 8 25 M 16 34 L 16 25" />
-        <circle class="snail__eye" cx="8" cy="24" r="1.6" />
-        <circle class="snail__eye" cx="16" cy="24" r="1.6" />
-    </svg>
+    <canvas class="snail__canvas"></canvas>
 </div>
 
 <style>
@@ -31,63 +11,148 @@ const SHELL_SCALE = 1.6;
         left: 0;
         bottom: 0.75rem;
         z-index: 50;
-        width: 3.5rem;
+        width: 5.5rem;
         pointer-events: none;
         will-change: transform;
     }
 
-    .snail__art {
+    .snail__canvas {
         display: block;
         width: 100%;
         height: auto;
     }
-
-    .snail__shell {
-        fill: none;
-        stroke: var(--color-ink);
-        stroke-width: 0.8;
-        stroke-linecap: round;
-        opacity: 0.8;
-    }
-
-    .snail__body {
-        fill: color-mix(in srgb, var(--color-ink) 12%, transparent);
-        stroke: var(--color-ink);
-        stroke-width: 1;
-        stroke-linejoin: round;
-        opacity: 0.85;
-    }
-
-    .snail__stalks {
-        fill: none;
-        stroke: var(--color-ink);
-        stroke-width: 1.2;
-        stroke-linecap: round;
-        opacity: 0.85;
-    }
-
-    .snail__eye {
-        fill: var(--color-ink);
-        opacity: 0.9;
-    }
 </style>
 
 <script>
+    // Draw a small garden snail on canvas: a glossy spiral shell (golden/log
+    // spiral), a soft shaded foot, and eye tentacles. Faces left.
     (() => {
         const el = document.querySelector('[data-snail]');
-        if (!(el instanceof HTMLElement)) return;
-
-        // Static on reduced-motion: no rAF loop, shell still visible.
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const canvas = el?.querySelector('canvas');
+        if (!(el instanceof HTMLElement) || !(canvas instanceof HTMLCanvasElement)) {
             return;
         }
 
-        // Golden-ratio motion: the snail pauses at 0.618 × viewport width for
-        // 1.618 seconds before continuing — both pause location and duration
-        // are φ-derived.
+        const W = 88; // logical art size (px)
+        const H = 56;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.scale(dpr, dpr);
+
+        const PHI = (1 + Math.sqrt(5)) / 2;
+
+        // --- golden (logarithmic) spiral points, normalized to radius R ---
+        function spiralPoints(cx, cy, R, turns) {
+            const pts = [];
+            const steps = Math.floor(turns * 40);
+            let maxR = 0;
+            const raw = [];
+            for (let i = 0; i <= steps; i++) {
+                const t = (i / steps) * turns * 2 * Math.PI;
+                const r = Math.pow(PHI, t / Math.PI); // grows by φ² each turn
+                raw.push([t, r]);
+                if (r > maxR) maxR = r;
+            }
+            for (const [t, r] of raw) {
+                const nr = (r / maxR) * R;
+                pts.push([cx + nr * Math.cos(t), cy + nr * Math.sin(t)]);
+            }
+            return pts;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            // slime trail (behind, to the right of the shell)
+            ctx.fillStyle = 'rgba(180, 196, 168, 0.35)';
+            ctx.beginPath();
+            ctx.ellipse(80, 47, 14, 3.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // --- body / foot ---
+            const footGrad = ctx.createLinearGradient(0, 26, 0, 54);
+            footGrad.addColorStop(0, '#ecd9b2');
+            footGrad.addColorStop(1, '#c9af83');
+            ctx.fillStyle = footGrad;
+            ctx.strokeStyle = 'rgba(90, 62, 34, 0.45)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(5, 40);
+            ctx.quadraticCurveTo(3, 51, 20, 52); // tail, under
+            ctx.quadraticCurveTo(44, 54, 66, 51); // belly under shell
+            ctx.quadraticCurveTo(74, 49, 70, 42); // back under shell
+            ctx.quadraticCurveTo(52, 30, 24, 34); // top of body toward head
+            ctx.quadraticCurveTo(10, 36, 5, 40);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // --- shell (drawn over the rear of the body) ---
+            const sx = 52;
+            const sy = 25;
+            const R = 19;
+            const shellGrad = ctx.createRadialGradient(sx - 5, sy - 6, 2, sx, sy, R);
+            shellGrad.addColorStop(0, '#e3bb82');
+            shellGrad.addColorStop(0.55, '#c08a4f');
+            shellGrad.addColorStop(1, '#7c4f28');
+            ctx.fillStyle = shellGrad;
+            ctx.beginPath();
+            ctx.arc(sx, sy, R, 0, Math.PI * 2);
+            ctx.fill();
+            // spiral seam / growth lines
+            ctx.strokeStyle = 'rgba(86, 52, 26, 0.7)';
+            ctx.lineWidth = 1.1;
+            ctx.beginPath();
+            const pts = spiralPoints(sx, sy, R, 2.4);
+            pts.forEach((p, i) => (i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1])));
+            ctx.stroke();
+            // rim + glossy highlight
+            ctx.strokeStyle = 'rgba(70, 40, 18, 0.55)';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(sx, sy, R - 0.5, -0.4, 4.4);
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(255, 244, 220, 0.45)';
+            ctx.beginPath();
+            ctx.ellipse(sx - 6, sy - 8, 5.5, 3, -0.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // --- eye tentacles (front, left) ---
+            ctx.strokeStyle = 'rgba(150, 112, 70, 0.9)';
+            ctx.lineWidth = 2.6;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(13, 32);
+            ctx.quadraticCurveTo(9, 22, 11, 15);
+            ctx.moveTo(24, 30);
+            ctx.quadraticCurveTo(22, 20, 25, 14);
+            ctx.stroke();
+            // eyes + glints
+            ctx.fillStyle = '#2e2014';
+            ctx.beginPath();
+            ctx.arc(11, 15, 2.4, 0, Math.PI * 2);
+            ctx.arc(25, 14, 2.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(10.3, 14.2, 0.8, 0, Math.PI * 2);
+            ctx.arc(24.3, 13.2, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        draw();
+
+        // --- motion: idle until discovered is optional; for now always crawls ---
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return; // static snail
+        }
+
         const PAUSE_FRACTION = 0.618;
         const PAUSE_MS = 1618;
-        const SPEED_PX_PER_SECOND = 30; // frame-rate independent
+        const SPEED_PX_PER_SECOND = 28;
         const PAUSED = 'paused';
         const WALKING = 'walking';
 
@@ -100,14 +165,14 @@ const SHELL_SCALE = 1.6;
 
         let x = 0;
         let dir = 1;
-        let phase: string = WALKING;
+        let phase = WALKING;
         let pauseUntil = 0;
         let pausedThisPass = false;
         let lastTs = 0;
 
-        function walk(ts: number) {
+        function walk(ts) {
             const maxX = window.innerWidth - snailW;
-            const dt = Math.min((ts - lastTs) / 1000, 0.1); // clamp large gaps
+            const dt = Math.min((ts - lastTs) / 1000, 0.1);
             lastTs = ts;
 
             if (phase === WALKING) {
@@ -131,7 +196,7 @@ const SHELL_SCALE = 1.6;
                 }
             }
 
-            // scaleX flips the art (head is drawn on the left) to face travel direction
+            // The art faces left; flip to face the travel direction.
             el.style.transform = `translateX(${x.toFixed(1)}px) scaleX(${-dir})`;
             requestAnimationFrame(walk);
         }
