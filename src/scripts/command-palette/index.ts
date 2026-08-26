@@ -84,6 +84,10 @@ async function runAction(item: SearchItem) {
         window.dispatchEvent(new CustomEvent('site:toggle-theme'));
         return;
     }
+    if (item.actionId === 'open-ai-chat') {
+        $('#sijo-ai-fab')?.click();
+        return;
+    }
     if (item.actionId === 'copy-url') {
         try {
             await navigator.clipboard.writeText(window.location.href);

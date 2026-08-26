@@ -47,8 +47,8 @@ export function renderResults(elements: CommandPaletteElements, state: CommandPa
     }
 
     if (!state.results.length) {
-        elements.results.innerHTML = '<li class="command-palette-empty">No matches</li>';
-        elements.status.textContent = 'No matches';
+        elements.results.innerHTML = '<li class="command-palette-empty">Nothing here — try a different word.</li>';
+        elements.status.textContent = 'Nothing here — try a different word.';
         return;
     }
 

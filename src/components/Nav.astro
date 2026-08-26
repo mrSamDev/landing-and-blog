@@ -1,7 +1,6 @@
 ---
 import NavLink from './NavLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
-import AnnouncementBanner from './AnnouncementBanner.astro';
 import siteConfig from '../data/site-config';
 
 const navLinks = siteConfig.headerNavLinks || [];
@@ -80,10 +79,27 @@ const navLinks = siteConfig.headerNavLinks || [];
                     />
                 </svg>
             </button>
+            <button
+                type="button"
+                id="sijo-ai-fab"
+                class="group inline-flex items-center justify-center w-8 h-8 p-0 border border-ink/25 rounded-pill bg-panel-2 text-ink hover:bg-surface hover:-translate-y-px transition"
+                aria-label="Open Sijo AI assistant"
+                aria-expanded="false"
+                aria-controls="sijo-ai-panel"
+            >
+                <svg class="sijo-ai-fab__icon sijo-ai-fab__icon--chat inline-flex group-data-[open=true]:hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 2.5l1.9 5.1 5.1 1.9-5.1 1.9L12 16.5l-1.9-5.1L5 9.5l5.1-1.9L12 2.5Z" fill="currentColor" />
+                    <path d="M19 13.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" fill="currentColor" opacity="0.75" />
+                    <path d="M5 14.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6Z" fill="currentColor" opacity="0.5" />
+                </svg>
+                <svg class="sijo-ai-fab__icon sijo-ai-fab__icon--close hidden group-data-[open=true]:inline-flex" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
             <ThemeToggle />
         </div>
       </div>
-      <AnnouncementBanner />
+
     </div>
 </nav>
 

@@ -16,6 +16,17 @@ export const ACTIONS: SearchItem[] = [
         keywords: ['home', 'start', 'landing']
     },
     {
+        id: 'action:ai-chat',
+        type: 'action',
+        title: 'Ask Sijo AI',
+        href: '#ask-sijo-ai',
+        actionId: 'open-ai-chat',
+        description: 'Open the AI chat about Sijo',
+        section: 'Action',
+        priority: 115,
+        keywords: ['ai', 'chat', 'ask', 'assistant', 'bot', 'sijo']
+    },
+    {
         id: 'action:theme',
         type: 'action',
         title: 'Toggle Theme',

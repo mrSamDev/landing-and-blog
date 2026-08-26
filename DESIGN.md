@@ -19,10 +19,10 @@ colors:
   link: '#a8205a'
 colors-dark:
   ink: '#ffffff'
-  panel: '#26262c'
-  panel-2: '#1d1d20'
-  surface: '#1e1e23'
-  bg: '#1a1a1f'
+  panel: '#1c2524'
+  panel-2: '#222c2a'
+  surface: '#18201f'
+  bg: '#0f1716'
   yellow: '#f9d84a'
   pink: '#c92d68'
   pink-cta: '#c92d68'
@@ -256,13 +256,13 @@ The palette uses warm teal ink as the structural color, with pastel accents appl
 
 ### Dark theme
 
-Neutral charcoal grays — soft layered dark palette so surfaces separate without harsh pure-black contrast.
+Soft layered teal-warm dark palette. The neutrals carry a subtle teal cast (echoing the light-mode identity) instead of neutral charcoal, so dark mode reads as the same site rather than a generic AI-era developer theme.
 
 - **Ink (#ffffff):** Pure white for all text and borders.
-- **Panel (#26262c):** Lifted charcoal panel for header and modal.
-- **Panel-2 (#1d1d20):** Card surface. Toned down ~5% from near-black — sits just above the page bg for soft layering.
-- **Surface (#1e1e23):** Recessed charcoal for chips and secondary containers.
-- **BG (#1a1a1f):** Page background — the deepest layer, with panel and cards stepping up from it.
+- **Panel (#1c2524):** Lifted teal-charcoal panel for header and modal.
+- **Panel-2 (#222c2a):** Card surface. Toned down ~5% from the page bg — sits just above it for soft layering.
+- **Surface (#18201f):** Recessed teal-charcoal for chips and secondary containers.
+- **BG (#0f1716):** Page background — the deepest teal-black layer, with panel and cards stepping up from it.
 - **Yellow (#f9d84a):** Unchanged. Uses fixed black text (#000000) in dark mode for contrast.
 - **Pink (#c92d68):** Unchanged from light — dark enough for white text on black.
 - **Pink-CTA (#c92d68 → #a8205a):** Unchanged gradient. White text passes AA.
@@ -270,7 +270,7 @@ Neutral charcoal grays — soft layered dark palette so surfaces separate withou
 - **Mint (#2d7d6a):** Muted green for selected/category chips.
 - **Bluey (#3f5bff):** Unchanged from light — white text passes AA on black.
 
-In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme uses soft layered charcoal grays — no teal tints — with surfaces stepping up gently from the page bg.
+In dark mode, shadows use pure black (`rgb(0 0 0 / ...)`). The dark theme uses soft layered teal-charcoal grays (a subtle cast of the light-mode identity), with surfaces stepping up gently from the page bg.
 
 ## Typography
 

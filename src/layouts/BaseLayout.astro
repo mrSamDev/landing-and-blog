@@ -67,5 +67,17 @@ const { showHeader = true, fullWidth = false, chrome = true, ...head } = Astro.p
         <GoldenRatioEgg />
         <Mascot />
         <SijoChatWidget />
+
+        <script is:inline>
+            // Add lazy loading + async decoding to content images that don't
+            // already have explicit loading attributes. Runs on every page
+            // load (including view transitions) to cover markdown content.
+            (function () {
+                document.querySelectorAll('img:not([loading])').forEach(function (img) {
+                    img.setAttribute('loading', 'lazy');
+                    img.setAttribute('decoding', 'async');
+                });
+            })();
+        </script>
     </body>
 </html>

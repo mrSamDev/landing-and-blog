@@ -6,9 +6,11 @@ export type Props = {
     description?: string;
     image?: { src: string; alt?: string };
     pageType?: 'website' | 'article';
+    /** JSON-LD structured data object; rendered as a <script type="application/ld+json"> block. */
+    jsonLd?: Record<string, unknown>;
 };
 
-const { description = '', image = siteConfig.image, pageType = 'website' } = Astro.props;
+const { description = '', image = siteConfig.image, pageType = 'website', jsonLd } = Astro.props;
 const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' | ');
 const resolvedImage = image?.src
     ? {
@@ -62,3 +64,7 @@ function formatCanonicalURL(url: string | URL) {
 <meta property="twitter:description" content={description} />
 {resolvedImage?.src && <meta property="twitter:image" content={resolvedImage.src} />}
 {resolvedImage?.alt && <meta name="twitter:image:alt" content={resolvedImage?.alt} />}
+
+{jsonLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

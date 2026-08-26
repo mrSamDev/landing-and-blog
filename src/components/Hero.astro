@@ -1,43 +1,36 @@
 ---
-import Button from './Button.astro';
 import siteConfig from '../data/site-config';
 
 const hero = siteConfig.hero;
 ---
 
 {
-    (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
-        <section class="flex flex-col gap-6 mt-4 sm:mt-8 mb-16 sm:mb-24">
-            {hero.title && (
-                <h1 class="font-display font-extrabold text-4xl leading-tight sm:text-5xl sm:leading-tight" data-mascot-trigger>
-                    {hero.title}
-                </h1>
-            )}
+    hero?.text && (
+        <section class="mt-12 sm:mt-20 mb-24 sm:mb-36">
+            <div class="max-w-3xl">
+                <p class="font-display font-bold text-3xl sm:text-5xl lg:text-6xl leading-[1.25] text-ink" data-mascot-trigger>
+                    {hero.text}
+                </p>
 
-            {
-                hero.text && (
-                    <blockquote class="border-l-2 border-ink/20 pl-4 py-1">
-                        <p class="italic text-lg sm:text-xl text-ink/70 leading-relaxed font-display">
-                            {hero.text}
+                {hero.subtitle && (
+                    <p class="mt-6 sm:mt-8 text-base sm:text-lg text-ink/55 leading-relaxed max-w-xl">
+                        {hero.subtitle}
+                    </p>
+                )}
+
+                {hero.title && (
+                    <div class="mt-10 sm:mt-14">
+                        <p class="text-sm tracking-wide text-ink/70 font-display">
+                            — {hero.title}
                         </p>
-                        {hero.subtitle && (
-                            <p class="mt-2 text-sm text-ink/90 leading-relaxed">
-                                {hero.subtitle}
+                        {siteConfig.subtitle && (
+                            <p class="mt-1 text-xs tracking-[0.2em] uppercase text-ink/45">
+                                {siteConfig.subtitle}
                             </p>
                         )}
-                    </blockquote>
-                )
-            }
-
-            {hero.actions && hero.actions.length > 0 && (
-                <div class="flex flex-wrap gap-4">
-                    {hero.actions.map((action) => (
-                        <Button href={action.href} variant={action.primary ? 'primary' : 'secondary'}>
-                            {action.text}
-                        </Button>
-                    ))}
-                </div>
-            )}
+                    </div>
+                )}
+            </div>
         </section>
     )
 }

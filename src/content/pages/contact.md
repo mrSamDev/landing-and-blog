@@ -11,6 +11,7 @@ Reach out if you want to talk about fixing a pixel-perfect UI that refuses to be
 
 ### Find me online
 
-- [Email](mailto:sijosam1905@gmail.com)
+- [Email](mailto:sijo@sijosam.com)
 - [BlueSky](https://bsky.app/profile/sijosam.in)
 - [LinkedIn](https://www.linkedin.com/in/sijo-sam/)
+- [GitHub](https://github.com/mrSamDev)

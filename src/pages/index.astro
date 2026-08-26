@@ -12,9 +12,24 @@ const featuredPosts = posts.filter(({ data }) => data.isFeatured);
 
 const projects = (await getCollection('projects')).filter(({ data }) => data.isPublished).sort(sortItemsByDateDesc);
 const featuredProjects = projects.filter(({ data }) => data.isFeatured);
+
+const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: siteConfig.title,
+    jobTitle: 'Technical Lead & Full-Stack Engineer',
+    url: 'https://sijosam.in',
+    image: siteConfig.image?.src,
+    description: siteConfig.description,
+    sameAs: [
+        'https://www.linkedin.com/in/sijo-sam/',
+        'https://github.com/mrSamDev',
+        'https://bsky.app/profile/sijosam.in'
+    ]
+};
 ---
 
-<BaseLayout description={siteConfig.description} image={siteConfig.image}>
+<BaseLayout description={siteConfig.description} image={siteConfig.image} jsonLd={personJsonLd}>
     <Hero />
     {
         featuredProjects?.length > 0 && (

@@ -1,5 +1,5 @@
 export type SearchItemType = 'page' | 'blog' | 'guide' | 'project' | 'aitip' | 'action';
-export type CommandActionId = 'toggle-theme' | 'copy-url';
+export type CommandActionId = 'toggle-theme' | 'copy-url' | 'open-ai-chat';
 
 export type SearchItem = {
     id: string;
