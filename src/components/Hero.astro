@@ -1,35 +1,62 @@
 ---
 import siteConfig from '../data/site-config';
+import SocialIconList from './SocialIconList.astro';
 
 const hero = siteConfig.hero;
+const locationMapsUrl = hero?.location
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hero.location)}`
+    : '';
 ---
 
 {
     hero?.text && (
-        <section class="mt-12 sm:mt-20 mb-24 sm:mb-36">
-            <div class="max-w-3xl">
-                <p class="font-display font-bold text-3xl sm:text-5xl lg:text-6xl leading-[1.25] text-ink" data-mascot-trigger>
+        <section class="mt-12 sm:mt-20 mb-6">
+            <div class="grid max-w-5xl gap-y-12 sm:gap-y-14 lg:grid-cols-[1fr_1.25fr] lg:gap-x-12 lg:gap-y-8">
+                <p class="lg:row-start-1 font-display font-bold text-3xl sm:text-5xl lg:text-6xl leading-[1.25] text-ink" data-mascot-trigger>
                     {hero.text}
                 </p>
 
-                {hero.subtitle && (
-                    <p class="mt-6 sm:mt-8 text-base sm:text-lg text-ink/55 leading-relaxed max-w-xl">
-                        {hero.subtitle}
-                    </p>
-                )}
-
-                {hero.title && (
-                    <div class="mt-10 sm:mt-14">
-                        <p class="text-sm tracking-wide text-ink/70 font-display">
-                            — {hero.title}
+                <div class="lg:row-start-2 lg:col-start-1">
+                    {hero.subtitle && (
+                        <p class="text-base sm:text-lg text-ink/55 leading-relaxed max-w-xl">
+                            {hero.subtitle}
                         </p>
-                        {siteConfig.subtitle && (
-                            <p class="mt-1 text-xs tracking-[0.2em] uppercase text-ink/45">
-                                {siteConfig.subtitle}
+                    )}
+
+                    {hero.title && (
+                        <div class="mt-4">
+                            <p class="text-sm tracking-wide font-display">
+                                <span class="text-ink/70">— {hero.title}</span>
+                                {hero.location && (
+                                    <span class="text-ink/45"> · <a href={locationMapsUrl} target="_blank" rel="noopener noreferrer" aria-label="View Kochi, India on Google Maps" class="underline decoration-ink/25 underline-offset-4 transition-colors hover:text-ink/75 hover:decoration-ink/60">{hero.location}</a></span>
+                                )}
                             </p>
-                        )}
+                            {siteConfig.subtitle && (
+                                <p class="mt-1 text-xs tracking-[0.2em] uppercase text-ink/45">
+                                    {siteConfig.subtitle}
+                                </p>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div class="lg:row-start-2 lg:col-start-2 lg:self-start">
+                    {hero.bio?.map((paragraph, index) => (
+                        <p class:list={['mt-5 first:mt-0 text-sm sm:text-base leading-relaxed', index === 0 ? 'text-ink/55' : 'text-ink/80']}>
+                            {paragraph}
+                        </p>
+                    ))}
+
+                    {hero.meta && (
+                        <p class="mt-6 text-sm tracking-wide text-ink/45 font-display">
+                            {hero.meta.join(' · ')}
+                        </p>
+                    )}
+
+                    <div class="mt-6">
+                        <SocialIconList variant="text" />
                     </div>
-                )}
+                </div>
             </div>
         </section>
     )

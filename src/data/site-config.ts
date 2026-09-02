@@ -14,8 +14,10 @@ export type Hero = {
     title?: string;
     text?: string;
     image?: Image;
-    actions?: Link[];
     subtitle?: string;
+    bio?: string[];
+    meta?: string[];
+    location?: string;
 };
 
 export type Subscribe = {
@@ -41,7 +43,7 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
     title: 'Sijo Sam',
-    subtitle: 'Developer',
+    subtitle: 'Technical Lead · Software Engineer',
     description: 'Technical leader specializing in React, AWS, and modern web development with expertise in video business product solutions',
     image: {
         src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
@@ -93,15 +95,16 @@ const siteConfig: SiteConfig = {
         title: 'Sijo Sam',
         text: 'നദിക്ക് വള്ളവും മനുഷ്യർക്ക് സ്വപ്നവും ഒരുപോലെയാണ്.',
         subtitle: 'A boat carries us across a river; a dream carries us through life.',
+        bio: [
+            "I'm a Technical Lead and software engineer with 8+ years of experience.",
+            "I build software, tools, and occasionally things that probably didn't need to exist."
+        ],
+        meta: ['TypeScript', 'JavaScript', 'Go'],
+        location: 'Kochi, India',
         image: {
             src: 'https://res.cloudinary.com/dnmuyrcd7/image/upload/f_auto,q_auto/iotd6l0if1gixlitydpq',
             alt: 'Sijo Sam - Technical Lead'
-        },
-        actions: [
-            { text: 'About Me!', href: '/about' },
-            { text: 'Cool Stuff!', href: '/projects' },
-            { text: 'Say Hi!', href: '/contact' }
-        ]
+        }
     },
     postsPerPage: 8,
     projectsPerPage: 8
