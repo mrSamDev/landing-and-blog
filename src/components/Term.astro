@@ -1,0 +1,48 @@
+---
+interface Props {
+    definition: string;
+}
+const { definition } = Astro.props;
+---
+
+<span class="term" tabindex="0">
+    <slot />
+    <span class="def" role="tooltip">{definition}</span>
+</span>
+
+<style>
+    .term {
+        position: relative;
+        border-bottom: 1px dotted currentColor;
+        cursor: help;
+        outline: none;
+    }
+    .def {
+        position: absolute;
+        bottom: 130%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: 280px;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--color-borderprimary);
+        border-radius: 0.5rem;
+        background: var(--color-main);
+        color: var(--color-fontPrimary);
+        font-size: 0.85em;
+        line-height: 1.4;
+        text-align: left;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 20;
+        white-space: normal;
+    }
+    .term:hover .def,
+    .term:focus-visible .def,
+    .term:focus .def {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
