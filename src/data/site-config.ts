@@ -67,10 +67,6 @@ const siteConfig: SiteConfig = {
             href: '/guides'
         },
         {
-            text: 'AI Tips',
-            href: '/ai-tips'
-        },
-        {
             text: 'Resume',
             href: '/resume'
         }
@@ -83,6 +79,10 @@ const siteConfig: SiteConfig = {
         {
             text: 'Contact',
             href: '/contact'
+        },
+        {
+            text: 'AI Notebook',
+            href: '/notebook'
         }
     ],
     socialLinks: [

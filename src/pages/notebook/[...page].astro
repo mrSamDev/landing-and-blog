@@ -4,33 +4,33 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Pagination from '../../components/Pagination.astro';
 import Subscribe from '../../components/Subscribe.astro';
-import AItipAccordion from '../../components/AItipAccordion.astro';
+import NotebookAccordion from '../../components/NotebookAccordion.astro';
 import siteConfig from '../../data/site-config';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = await getCollection('aitips');
+    const posts = await getCollection('notebook');
     return paginate(posts, { pageSize: siteConfig.postsPerPage || 4 });
 }
 
-type Props = { page: Page<CollectionEntry<'aitips'>> };
+type Props = { page: Page<CollectionEntry<'notebook'>> };
 
 const { page } = Astro.props;
 const blog = page.data.filter((i) => i.data.isPublished);
 ---
 
 <BaseLayout
-    title="AI Tips & Insights"
-    description="Explore practical AI tips, guides, and insights to enhance your understanding and application of artificial intelligence."
+    title="AI Notebook"
+    description="Prompts, rules, and notes I've collected for working with AI tools, with credit to the original writers."
     image={{ src: '/sijo-preview.jpg', alt: 'The preview of the site' }}
     showHeader={false}
 >
-    <h1 class="mb-4 font-display font-extrabold text-2xl sm:mb-6 sm:text-4xl">AI Tips Archive</h1>
+    <h1 class="mb-4 font-display font-extrabold text-2xl sm:mb-6 sm:text-4xl">AI Notebook</h1>
     <p class="mb-8 sm:mb-12 text-sm leading-relaxed text-ink/80 max-w-2xl">
         These are not all my original works. I’ll be adding links to the original articles I found. This is just my archive to organize interesting prompts I’ve
         discovered, sharing them with the world while giving full credit to the real writers.
     </p>
     <div class="flex flex-col gap-3">
-        {blog.map((post) => <AItipAccordion post={post} />)}
+        {blog.map((post) => <NotebookAccordion post={post} />)}
     </div>
     <Pagination page={page} class="my-12 sm:my-16" />
     <Subscribe class="my-12 sm:my-16" />

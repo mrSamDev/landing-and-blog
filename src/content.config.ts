@@ -61,8 +61,8 @@ const projects = defineCollection({
     })
 });
 
-const aitips = defineCollection({
-    loader: glob({ pattern: '**/*.md', base: './src/content/ai-tips' }),
+const notebook = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/notebook' }),
     schema: z.object({
         title: z.string(),
         publishDate: z.coerce.date(),
@@ -72,4 +72,4 @@ const aitips = defineCollection({
     })
 });
 
-export const collections = { blog, pages, guides, projects, aitips };
+export const collections = { blog, pages, guides, projects, notebook };

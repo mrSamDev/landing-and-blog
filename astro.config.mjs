@@ -33,6 +33,10 @@ export default defineConfig({
 
     output: 'static',
     adapter: vercel(),
+    // Old nav label; page renamed to /notebook.
+    redirects: {
+        '/ai-tips': '/notebook'
+    },
     vite: {
         plugins: [tailwindcss()]
     }

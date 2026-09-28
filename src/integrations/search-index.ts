@@ -30,18 +30,12 @@ export default function searchIndex(): AstroIntegration {
 
                 const items: SearchItem[] = [];
 
-                // Nav links
-                for (const link of siteConfig.headerNavLinks) {
-                    items.push({
-                        id: `nav:${link.href}`,
-                        type: 'page',
-                        title: link.text,
-                        href: link.href,
-                        section: 'Navigation',
-                        priority: 100,
-                        keywords: normalizeKeywords([link.text, 'navigation', link.href])
-                    });
-                }
+                // Nav links. Header outranks footer so the dedupe below keeps
+                // richer page entries (About Me, 95) over bare footer labels.
+                items.push(
+                    ...navLinkItems(siteConfig.headerNavLinks, 100),
+                    ...navLinkItems(siteConfig.footerNavLinks, 90)
+                );
 
                 // Pages
                 for (const page of readCollection(contentDir, 'pages')) {
@@ -102,16 +96,16 @@ export default function searchIndex(): AstroIntegration {
                     });
                 }
 
-                // AI Tips
-                for (const tip of readCollection(contentDir, 'aitips')) {
+                // AI Notebook
+                for (const tip of readCollection(contentDir, 'notebook')) {
                     if (tip.data.isPublished === false) continue;
                     items.push({
-                        id: `aitip:${tip.id}`,
-                        type: 'aitip',
+                        id: `notebook:${tip.id}`,
+                        type: 'notebook',
                         title: tip.data.title || '',
-                        href: `/ai-tips#${tip.data.key}`,
+                        href: `/notebook#${tip.data.key}`,
                         description: tip.data.reference,
-                        section: 'AI Tip',
+                        section: 'Notebook',
                         priority: 50,
                         keywords: normalizeKeywords([tip.data.title, tip.data.key, tip.data.reference, 'ai', 'tip', 'prompt'])
                     });
@@ -197,14 +191,34 @@ function parseFrontmatter(content: string): { data: Record<string, any> } {
     return { data };
 }
 
-function parseSiteConfig(content: string): { headerNavLinks: Array<{ text: string; href: string }> } {
-    const match = content.match(/headerNavLinks:\s*\[([\s\S]*?)\]/);
-    if (!match) return { headerNavLinks: [] };
+function navLinkItems(links: Array<{ text: string; href: string }>, priority: number): SearchItem[] {
+    return links.map((link) => ({
+        id: `nav:${link.href}`,
+        type: 'page',
+        title: link.text,
+        href: link.href,
+        section: 'Navigation',
+        priority,
+        keywords: normalizeKeywords([link.text, 'navigation', link.href])
+    }));
+}
+
+function parseSiteConfig(content: string): {
+    headerNavLinks: Array<{ text: string; href: string }>;
+    footerNavLinks: Array<{ text: string; href: string }>;
+} {
+    return {
+        headerNavLinks: parseNavArray(content, 'headerNavLinks'),
+        footerNavLinks: parseNavArray(content, 'footerNavLinks')
+    };
+}
+
+function parseNavArray(content: string, key: string): Array<{ text: string; href: string }> {
+    const match = content.match(new RegExp(`${key}:\\s*\\[([\\s\\S]*?)\\]`));
+    if (!match) return [];
 
     const texts = [...match[1].matchAll(/text:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
     const hrefs = [...match[1].matchAll(/href:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
 
-    return {
-        headerNavLinks: texts.map((text, i) => ({ text, href: hrefs[i] }))
-    };
+    return texts.map((text, i) => ({ text, href: hrefs[i] }));
 }
