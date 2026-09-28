@@ -2,7 +2,7 @@ import Fuse from 'fuse.js';
 
 import type { SearchItem, SearchItemType } from './types';
 
-const PINNED_PATHS = new Set(['/', '/blog', '/projects', '/guides', '/ai-tips', '/resume', '/about', '/contact']);
+const PINNED_PATHS = new Set(['/', '/blog', '/projects', '/guides', '/notebook', '/resume', '/about', '/contact']);
 
 export const ACTIONS: SearchItem[] = [
     {
@@ -67,7 +67,7 @@ export function getTypeLabel(item: SearchItem) {
         blog: 'Blog',
         guide: 'Guide',
         project: 'Project',
-        aitip: 'AI Tip',
+        notebook: 'Notebook',
         action: 'Action'
     };
 

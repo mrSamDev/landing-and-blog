@@ -15,7 +15,7 @@ declare global {
 
 const STORAGE_KEY = 'command-palette-search-index';
 const STORAGE_VERSION_KEY = 'command-palette-version';
-const INDEX_VERSION = 1;
+const INDEX_VERSION = 3;
 const INDEX_URL = '/search-index.json';
 const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 let elements: CommandPaletteElements | null = null;

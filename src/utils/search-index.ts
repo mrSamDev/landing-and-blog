@@ -26,12 +26,12 @@ function makeItem(item: SearchItem) {
 }
 
 export async function getSearchIndex() {
-    const [pages, blogPosts, guides, projects, aiTips] = await Promise.all([
+    const [pages, blogPosts, guides, projects, notebook] = await Promise.all([
         getCollection('pages'),
         getCollection('blog'),
         getCollection('guides'),
         getCollection('projects'),
-        getCollection('aitips')
+        getCollection('notebook')
     ]);
 
     const items: SearchItem[] = [];
@@ -110,15 +110,15 @@ export async function getSearchIndex() {
         );
     }
 
-    for (const tip of aiTips.filter((entry) => entry.data.isPublished)) {
+    for (const tip of notebook.filter((entry) => entry.data.isPublished)) {
         items.push(
             makeItem({
                 id: `aitip:${tip.id}`,
                 type: 'aitip',
                 title: tip.data.title,
-                href: `/ai-tips#${tip.data.key}`,
+                href: `/notebook#${tip.data.key}`,
                 description: tip.data.reference,
-                section: 'AI Tip',
+                section: 'Notebook',
                 priority: 50,
                 keywords: [tip.data.title, tip.data.key, tip.data.reference, 'ai', 'tip', 'prompt']
             })

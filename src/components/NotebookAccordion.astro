@@ -3,7 +3,7 @@ import { type CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
 import Button from './Button.astro';
 
-type Props = { post: CollectionEntry<'aitips'> };
+type Props = { post: CollectionEntry<'notebook'> };
 const { post } = Astro.props;
 const { Content } = await render(post);
 const postBody = post.body || '';
