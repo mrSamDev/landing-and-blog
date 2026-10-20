@@ -17,14 +17,41 @@ export type ResumeProject = {
     technologies?: string;
 };
 
+export const profile = {
+    name: 'Sijo Sam',
+    title: 'Team Lead and Full-Stack Engineer',
+    summary:
+        'Team Lead and hands-on Software Engineer with 8+ years of experience building scalable web platforms and distributed systems. Strong expertise in TypeScript, Node.js and modern software architecture. Experienced in coaching developers, leading agile teams and driving code quality through mentoring, reviews and best engineering practices.',
+    contact: {
+        phone: '+91-9562299603',
+        email: 'sijo@sijosam.com',
+        website: 'https://www.sijosam.com/',
+        linkedin: 'https://www.linkedin.com/in/sijo-sam/',
+        portfolio: 'https://github.com/mrSamDev'
+    }
+} as const;
+
+export const education = {
+    degree: 'B.Tech in Computer Science',
+    institution: 'University of Cochin, India',
+    year: '2018'
+} as const;
+
+export const certifications = [
+    'Certified Scrum Master (CSM), Scrum Alliance',
+    'Certified Secure Web Application Engineer (CSWAE), Mile2'
+] as const;
+
 export const skillGroups = [
-    ['Languages', 'JavaScript, TypeScript, Go, Python, Lua'],
-    ['Frontend', 'React, Vue, TypeScript, React Native; Next.js, Tailwind CSS, Webpack, Vite'],
-    ['Backend', 'Node.js, REST APIs, GraphQL, Microservices'],
-    ['Data / Infra', 'PostgreSQL, MongoDB, AWS, GCP, Docker, Terraform, Kubernetes, Grafana, Ollama'],
-    ['Testing', 'Jest, Vitest, Cypress; React Testing Library; Storybook'],
-    ['Practices', 'CSR, SSR, ISR, CI/CD, TDD, SOLID, Technical Leadership, Team Mentoring, Agile (CSM)'],
-    ['Performance', 'LCP, INP, FCP Optimization, Lighthouse, Technical SEO']
+    [
+        'Leadership',
+        'Team Leadership, Coaching & Mentoring, Performance Development, Stakeholder Management, Technical Roadmaps, Cross-functional Collaboration'
+    ],
+    ['Core', 'TypeScript, Node.js, React, Next.js, REST APIs, GraphQL'],
+    ['Architecture', 'System Design, SOLID, TDD'],
+    ['Delivery', 'Code Reviews, Pair Programming, CI/CD, Scrum / Agile Delivery'],
+    ['Infra', 'AWS, Docker'],
+    ['Languages', 'English (Native), Malayalam (Native)']
 ] as const;
 
 export const workExperience: ResumeEntry[] = [
@@ -32,12 +59,13 @@ export const workExperience: ResumeEntry[] = [
         role: 'Technical Lead',
         company: 'Gadgeon',
         period: '2025 – Present',
-        location: 'SaaS Products Team · Kochi, Kerala',
+        location: 'Kochi, India',
         achievements: [
-            'Led adoption of React 19 across the SaaS organization, managing a team of 8 engineers across multiple products',
-            'Directed incremental migration of a 100k+ line Angular monolith to React 19 using a strangler-fig approach, delivering zero downtime across 3 product teams',
-            'Established code review and knowledge-sharing practices that improved delivery quality and reduced onboarding friction for new team members',
-            'Championed AI tooling adoption (Claude Code, Windsurf) with hands-on workshops, boosting developer productivity by 35%'
+            'Lead architecture and technical design for enterprise software platforms',
+            'Migrated a 100k+ line Angular application to React 19, defining standards and state management practices',
+            'Introduced AI-assisted development tools, increasing team delivery throughput by 10%',
+            'Built a shared analytics framework adopted across multiple product lines',
+            'Mentor developers, conduct code reviews and drive engineering best practices'
         ],
         technologies: 'React, Vue, Zustand, MUI, Python, TanStack, Docker, Node.js, GCP, AWS, Terraform'
     },
@@ -45,24 +73,27 @@ export const workExperience: ResumeEntry[] = [
         role: 'Technical Lead',
         company: 'Diagnal Technologies',
         period: '2022 – 2025',
-        location: 'Digital Media & Streaming Products · Remote (London, UK)',
+        location: 'London, UK',
         achievements: [
-            'Modernized legacy React codebases into functional-component architecture, improving load times by 30% and overall frontend performance by 25%',
-            'Led distributed engineering teams across time zones and earned fast-track promotion to Front-End Technical Lead',
-            'Mentored engineers through code reviews and 1:1 coaching, reducing defects and improving team productivity by 35%',
-            'Boosted app search rankings by 50% via technical SEO, SSE platform migration, and content/meta tag optimisation'
+            'Led international engineering teams and coached developers through regular feedback and mentoring',
+            'Modernised large-scale streaming platforms, improving load performance by 30%',
+            'Designed and delivered scalable GraphQL and REST integrations',
+            'Improved code quality processes, reducing defects by 35%',
+            'Drove SSR migration and technical SEO improvements, increasing organic traffic by 50%'
         ],
         technologies: 'React, React Native, GraphQL, Node.js, Next.js, Tailwind CSS, Redux, AWS, Netlify, Astro'
     },
     {
-        role: 'Software Developer',
+        role: 'Software Developer / Scrum Master',
         company: 'HyperBlox',
         period: '2020 – 2022',
-        location: 'IDE Products Team · Bangalore, India',
+        location: 'Bangalore, India',
         achievements: [
-            'Architected a web-based IDE for the company&apos;s IoT and 5G platform, reducing application development time by 30%',
-            'Partnered with the CTO on compiler workflows and IDE integration for core platform capabilities',
-            'Served as Project Owner and Scrum Master, improving sprint execution and cross-functional delivery'
+            'Designed and developed a browser-based IDE for IoT and 5G platforms',
+            'Built reusable frontend and backend components that accelerated product delivery',
+            'Collaborated with the CTO on platform architecture and runtime design',
+            'Reduced application development time by 30% through platform automation',
+            'Served as Scrum Master, facilitating delivery planning and agile ceremonies'
         ],
         technologies: 'React, Node.js, MUI, Redux, Docker, Lua, Shell Script, Kubernetes, MongoDB'
     },
@@ -70,11 +101,13 @@ export const workExperience: ResumeEntry[] = [
         role: 'Software Developer',
         company: '7th Pillar Ventures',
         period: '2018 – 2020',
-        location: 'SaaS Products Team · Kochi, India',
+        location: 'Kochi, India',
         achievements: [
-            'Built scalable SaaS solutions for healthcare, retail, and travel industries',
-            'Designed business-critical applications that improved operational efficiency by 20% and reduced manual cost through automation',
-            'Accelerated product delivery for startup clients across multiple domains through reusable frontend and backend systems'
+            'Developed full-stack SaaS applications using TypeScript, Node.js, React and Next.js',
+            'Delivered solutions for healthcare, retail and travel clients',
+            'Built business-critical frontend and backend features',
+            'Improved client operational efficiency by 20% through process automation',
+            'Collaborated directly with stakeholders to translate business requirements into software solutions'
         ],
         technologies: 'React, React Native, Node.js, Next.js, MUI, SCSS, Redux, AWS, GCP, Firebase, MongoDB'
     }
