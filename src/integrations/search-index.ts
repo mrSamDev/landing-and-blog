@@ -53,7 +53,8 @@ export default function searchIndex(): AstroIntegration {
 
                 // Blog posts
                 for (const post of readCollection(contentDir, 'blog')) {
-                    if (!post.data.isPublished) continue;
+                    // Frontmatter parsing skips zod defaults, so a missing flag means published.
+                    if (post.data.isPublished === false) continue;
                     items.push({
                         id: `blog:${post.id}`,
                         type: 'blog',
@@ -153,7 +154,7 @@ function readCollection(contentDir: string, collection: string): any[] {
     });
 }
 
-function parseFrontmatter(content: string): { data: Record<string, any> } {
+export function parseFrontmatter(content: string): { data: Record<string, any> } {
     const match = content.match(/^---\n([\s\S]*?)\n---/);
     if (!match) return { data: {} };
 

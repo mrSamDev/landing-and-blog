@@ -1,0 +1,148 @@
+---
+---
+
+<style is:global>
+    /* Keeps the button out of <pre> so copied text is only the code. */
+    .code-block {
+        position: relative;
+    }
+
+    .code-copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 1;
+        padding: 0.2rem 0.6rem;
+        font-family: var(--font-sans);
+        font-size: 0.7rem;
+        font-weight: 800;
+        line-height: 1.5;
+        color: var(--color-ink);
+        background-color: var(--color-panel-2);
+        border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: opacity 150ms ease;
+    }
+
+    .code-copy-button:hover {
+        background-color: var(--color-surface);
+    }
+
+    @media (hover: hover) {
+        .code-copy-button {
+            opacity: 0;
+        }
+
+        .code-block:hover .code-copy-button,
+        .code-copy-button:focus-visible,
+        .code-copy-button[data-active] {
+            opacity: 1;
+        }
+    }
+
+    /* Reserved so code never sits under the button, scrolled to the end or not. */
+    .code-block pre {
+        padding-right: 4.5rem;
+    }
+
+    .code-copy-status {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    @media print {
+        .code-copy-button {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    import { $$ } from 'domsure';
+
+    import { stripTrailingNewline } from '../utils/code-copy';
+
+    const COPY_LABEL = 'Copy';
+    const COPIED_LABEL = 'Copied';
+    const FAILED_LABEL = 'Copy failed';
+    const COPIED_STATUS = 'Copied to clipboard';
+    const FAILED_STATUS = 'Copy failed, copy the code manually';
+    const REVERT_MS = 2500;
+
+    const revertTimers = new WeakMap<HTMLButtonElement, number>();
+
+    // Status sits outside the button so `textContent` on the button stays safe.
+    // NVDA and JAWS announce `role="status"` changes, not name swaps on a
+    // focused button.
+    function show(button: HTMLButtonElement, label: string, status: string): void {
+        const statusEl = button.nextElementSibling;
+        clearTimeout(revertTimers.get(button));
+
+        button.textContent = label;
+        button.dataset.active = 'true';
+        if (statusEl) statusEl.textContent = status;
+
+        revertTimers.set(
+            button,
+            window.setTimeout(() => {
+                button.textContent = COPY_LABEL;
+                delete button.dataset.active;
+                if (statusEl) statusEl.textContent = '';
+                revertTimers.delete(button);
+            }, REVERT_MS)
+        );
+    }
+
+    function wrap(pre: HTMLElement): void {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'code-copy-button';
+        button.textContent = COPY_LABEL;
+        button.setAttribute('aria-label', 'Copy code to clipboard');
+
+        const status = document.createElement('span');
+        status.className = 'code-copy-status';
+        status.setAttribute('role', 'status');
+
+        const container = document.createElement('div');
+        container.className = 'code-block';
+
+        pre.replaceWith(container);
+        container.append(pre, button, status);
+        pre.dataset.copyEnhanced = 'true';
+    }
+
+    function decorate(): void {
+        for (const pre of $$('.prose pre.astro-code')) {
+            if (!pre.dataset.copyEnhanced) wrap(pre);
+        }
+    }
+
+    // Registered once: document survives view transitions, so per-load
+    // listeners would stack.
+    document.addEventListener('click', async (event) => {
+        const button = (event.target as Element | null)?.closest?.<HTMLButtonElement>('.code-copy-button');
+        const pre = button?.parentElement?.querySelector('pre');
+        if (!button || !pre) return;
+
+        const code = pre.querySelector('code') ?? pre;
+
+        try {
+            await navigator.clipboard.writeText(stripTrailingNewline(code.textContent ?? ''));
+            show(button, COPIED_LABEL, COPIED_STATUS);
+        } catch {
+            show(button, FAILED_LABEL, FAILED_STATUS);
+        }
+    });
+
+    document.addEventListener('astro:page-load', decorate);
+
+    // Module can resolve after astro:page-load fires on a cold load.
+    if (document.readyState !== 'loading') decorate();
+</script>
