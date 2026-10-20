@@ -10,6 +10,7 @@ import Subscribe from '../../components/Subscribe.astro';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import { slugify } from '../../utils/common-utils';
 import Comment from '../../components/Utterances.astro';
+import CodeCopy from '../../components/CodeCopy.astro';
 
 export async function getStaticPaths() {
     const allPosts = (await getCollection('guides')).sort(sortItemsByDateDesc);
@@ -43,6 +44,8 @@ const { Content } = await render(post);
         <div class="prose prose-sijo sm:prose-lg max-w-4xl mx-auto">
             <Content />
         </div>
+
+        <CodeCopy />
 
         <div class="mt-8 flex flex-wrap items-center gap-6 text-sm justify-between sm:mt-12 sm:text-base">
             {
